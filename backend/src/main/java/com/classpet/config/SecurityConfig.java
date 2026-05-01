@@ -21,6 +21,12 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // Exact same paths as SpaController @GetMapping to ensure they all hit permitAll
+    private static final String[] SPA_ROUTES = {
+        "/", "/home", "/activate", "/history",
+        "/exchange-history", "/leaderboard", "/shop", "/settings"
+    };
+
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -37,12 +43,18 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/index.html", "/*.html", "/*.js", "/*.css", "/*.ico", "/*.png", "/*.jpg", "/*.svg").permitAll()
-                .requestMatchers("/assets/**", "/static/**").permitAll()
+                // SPA frontend routes - must match SpaController exactly
+                .requestMatchers(SPA_ROUTES).permitAll()
+                // Static resources from Vite build
+                .requestMatchers("/assets/**", "/static/**",
+                    "/*.html", "/*.js", "/*.css", "/*.ico",
+                    "/*.png", "/*.jpg", "/*.svg").permitAll()
+                // Public APIs (no auth needed)
+                .requestMatchers("/api/settings").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/pets").permitAll()
-                .requestMatchers("/api/pets/**").permitAll()
+                .requestMatchers("/api/pets", "/api/pets/**").permitAll()
                 .requestMatchers("/error").permitAll()
+                // All other API endpoints require authentication
                 .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex

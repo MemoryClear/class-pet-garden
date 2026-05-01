@@ -2,31 +2,21 @@ package com.classpet.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 /**
- * SPA 路由转发控制器
- * 将 Vue Router 路由转发到 index.html，避免刷新页面时 404
+ * SPA routing forward controller.
+ * Forwards Vue Router paths to index.html to avoid 404 on page refresh.
  */
 @Controller
+@RequestMapping("/")
 public class SpaController {
 
-    // Vue Router 路径转发到 index.html
     @GetMapping(value = {
-        "/",
-        "/home",
-        "/home/**",
-        "/activate",
-        "/activate/**",
-        "/history",
-        "/history/**",
-        "/exchange-history",
-        "/exchange-history/**",
-        "/leaderboard",
-        "/leaderboard/**",
-        "/shop",
-        "/shop/**",
-        "/settings",
-        "/settings/**"
+        "/", "/home", "/activate", "/history",
+        "/exchange-history", "/leaderboard", "/shop", "/settings"
     })
     public String forwardToIndex() {
         return "forward:/index.html";

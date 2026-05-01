@@ -17,8 +17,19 @@ public class SettingsController {
 
     @Autowired private AuthService authService;
 
+    // Public endpoint for login page — no auth required, returns system name/theme only
+    // Must be kept in sync with SecurityConfig.requestMatchers("/api/settings").permitAll()
     @GetMapping
     public ResponseEntity<?> getSettings(@AuthenticationPrincipal AuthenticatedTeacher principal) {
+        if (principal == null) {
+            // Return a minimal public config for unauthenticated requests (login page)
+            return ResponseEntity.ok(Map.of(
+                    "systemName", "课堂宠物乐园",
+                    "className", "",
+                    "theme", "pink",
+                    "publicOnly", true
+            ));
+        }
         return authService.findById(principal.teacherId())
                 .map(t -> ResponseEntity.ok(Map.of(
                         "systemName", t.getSystemName(),
@@ -33,6 +44,9 @@ public class SettingsController {
     public ResponseEntity<?> updateSettings(
             @AuthenticationPrincipal AuthenticatedTeacher principal,
             @RequestBody SettingsDto.UpdateRequest req) {
+        if (principal == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "Not authenticated"));
+        }
         return authService.findById(principal.teacherId())
                 .map(t -> {
                     if (req.systemName != null && !req.systemName.isBlank()) t.setSystemName(req.systemName);

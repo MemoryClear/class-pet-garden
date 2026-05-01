@@ -8,8 +8,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      # Persist SQLite database
-      - pet-data:/app/data
+      # 映射数据目录到本地 ./data/ 文件夹
+      - ./data:/app/data
     environment:
       # Database path (inside container)
       - DB_PATH=/app/data/classpet.db
@@ -25,6 +25,4 @@ services:
       start_period: 15s
       retries: 3
 
-volumes:
-  pet-data:
-    driver: local
+
