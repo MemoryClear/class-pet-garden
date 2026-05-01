@@ -38,8 +38,30 @@ export const useAuthStore = defineStore('auth', {
       this.setAuth(data.token, data)
       return data
     },
+    async validateToken() {
+      try {
+        const { data } = await api.get('/auth/validate')
+        if (!data.valid) {
+          this.clearAuth()
+          return false
+        }
+        return true
+      } catch (e) {
+        this.clearAuth()
+        return false
+      }
+    },
     logout() {
       this.clearAuth()
+    },
+    async checkAuth() {
+      if (!this.token) return false
+      const valid = await this.validateToken()
+      if (!valid) return false
+      if (!this.user?.activated) {
+        return { needActivate: true }
+      }
+      return true
     }
   }
 })

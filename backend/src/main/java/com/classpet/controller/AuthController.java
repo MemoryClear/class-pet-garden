@@ -76,4 +76,16 @@ public class AuthController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateToken(
+            @AuthenticationPrincipal AuthenticatedTeacher principal) {
+        if (principal == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "Invalid or expired token"));
+        }
+        return ResponseEntity.ok(Map.of(
+                "valid", true,
+                "username", principal.username(),
+                "teacherId", principal.teacherId()));
+    }
 }

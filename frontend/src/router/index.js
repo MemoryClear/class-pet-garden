@@ -57,8 +57,19 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach(async (to, from) => {
   const auth = useAuthStore()
+  // 验证 token 有效性
+  if (auth.token) {
+    const checkResult = await auth.checkAuth()
+    if (checkResult === false) {
+      // token 无效，清除并跳转登录页
+      return { name: 'Login' }
+    }
+    if (checkResult?.needActivate) {
+      return { name: 'Activate' }
+    }
+  }
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
     return { name: 'Login' }
   }
