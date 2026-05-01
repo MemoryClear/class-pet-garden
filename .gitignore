@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build outputs
+backend/target/
+frontend/dist/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database files (keep schema, exclude data)
+*.db
+*.db-shm
+*.db-wal
+*.db.bak
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local

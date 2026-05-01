@@ -1,0 +1,30 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+*.iml
+.vscode
+
+# Database files (use Docker volume instead)
+*.db
+*.db-shm
+*.db-wal
+*.db.bak
+
+# Build artifacts
+backend/target
+frontend/dist
+frontend/node_modules
+
+# Data directory (use Docker volume)
+data/
+
+# Documentation
+SPEC.md
+README.md
+
+# Docker files (don't include in context)
+docker-compose.yml
+.dockerignore
