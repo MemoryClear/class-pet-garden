@@ -16,7 +16,7 @@ env:
   DOCKERHUB_REGISTRY: docker.io
   DOCKERHUB_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/class-pet-garden
   
-  # Alibaba Cloud ACR (鏉窞鍖哄煙)
+  # Alibaba Cloud ACR (杭州区域)
   ACR_REGISTRY: registry.cn-hangzhou.aliyuncs.com
   ACR_IMAGE: ${{ secrets.ACR_NAMESPACE }}/class-pet-garden
 
@@ -34,7 +34,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # GitHub Container Registry 鐧诲綍
+      # GitHub Container Registry 登录
       - name: Log in to GitHub Container Registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -43,7 +43,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # DockerHub 鐧诲綍
+      # DockerHub 登录
       - name: Log in to DockerHub
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -52,7 +52,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 闃块噷浜?ACR 鐧诲綍
+      # 阿里云 ACR 登录
       - name: Log in to Alibaba Cloud ACR
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -61,7 +61,8 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      # 鎻愬彇 GHCR 闀滃儚鍏冩暟鎹?      - name: Extract metadata for GHCR
+      # 提取 GHCR 镜像元数据
+      - name: Extract metadata for GHCR
         id: meta-ghcr
         uses: docker/metadata-action@v5
         with:
@@ -72,7 +73,8 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha
 
-      # 鎻愬彇 DockerHub 闀滃儚鍏冩暟鎹?      - name: Extract metadata for DockerHub
+      # 提取 DockerHub 镜像元数据
+      - name: Extract metadata for DockerHub
         id: meta-dockerhub
         uses: docker/metadata-action@v5
         with:
@@ -83,7 +85,8 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha
 
-      # 鎻愬彇 ACR 闀滃儚鍏冩暟鎹?      - name: Extract metadata for ACR
+      # 提取 ACR 镜像元数据
+      - name: Extract metadata for ACR
         id: meta-acr
         uses: docker/metadata-action@v5
         with:
@@ -94,7 +97,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha
 
-      # 鏋勫缓骞舵帹閫佸埌鎵€鏈夋敞鍐岃〃
+      # 构建并推送到所有注册表
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
