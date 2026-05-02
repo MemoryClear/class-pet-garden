@@ -27,3 +27,8 @@ Thumbs.db
 # Environment
 .env
 .env.local
+Script files
+*.ps1
+*.bat
+*.cmd
+
