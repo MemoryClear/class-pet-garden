@@ -1,12 +1,11 @@
 package com.classpet.controller;
 
 import com.classpet.dto.AuthDto;
+import com.classpet.security.JwtTokenProvider;
 import com.classpet.service.AuthService;
 import com.classpet.service.ScoreItemService;
-import com.classpet.security.JwtAuthenticationFilter.AuthenticatedTeacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -16,6 +15,7 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired private AuthService authService;
+    @Autowired private JwtTokenProvider tokenProvider;
     @Autowired private ScoreItemService scoreItemService;
     @Autowired private com.classpet.service.ShopService shopService;
 
@@ -66,11 +66,19 @@ public class AuthController {
 
     @PostMapping("/activate")
     public ResponseEntity<?> activate(
-            @AuthenticationPrincipal AuthenticatedTeacher principal,
+            @RequestHeader(value = "Authorization", required = false) String authHeader,
             @RequestBody Map<String, String> body) {
         try {
-            AuthDto.LoginResponse resp = authService.activate(
-                    principal.username(), principal.teacherId(), body.get("code"));
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return ResponseEntity.status(401).body(Map.of("error", "Missing token"));
+            }
+            String token = authHeader.substring(7);
+            if (!tokenProvider.validateToken(token)) {
+                return ResponseEntity.status(401).body(Map.of("error", "Invalid token"));
+            }
+            String username = tokenProvider.getUsernameFromToken(token);
+            String teacherId = tokenProvider.getTeacherIdFromToken(token);
+            AuthDto.LoginResponse resp = authService.activate(username, teacherId, body.get("code"));
             return ResponseEntity.ok(resp);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
@@ -79,13 +87,17 @@ public class AuthController {
 
     @GetMapping("/validate")
     public ResponseEntity<?> validateToken(
-            @AuthenticationPrincipal AuthenticatedTeacher principal) {
-        if (principal == null) {
-            return ResponseEntity.status(401).body(Map.of("error", "Invalid or expired token"));
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(Map.of("valid", false, "error", "Missing token"));
         }
-        return ResponseEntity.ok(Map.of(
-                "valid", true,
-                "username", principal.username(),
-                "teacherId", principal.teacherId()));
+        String token = authHeader.substring(7);
+        if (tokenProvider.validateToken(token)) {
+            return ResponseEntity.ok(Map.of(
+                    "valid", true,
+                    "username", tokenProvider.getUsernameFromToken(token),
+                    "teacherId", tokenProvider.getTeacherIdFromToken(token)));
+        }
+        return ResponseEntity.status(401).body(Map.of("valid", false, "error", "Invalid token"));
     }
 }
