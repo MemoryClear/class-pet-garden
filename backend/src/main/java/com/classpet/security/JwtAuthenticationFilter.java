@@ -30,11 +30,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
         String uri = request.getRequestURI();
-        log.info("[JWT Filter] {} {} - Auth header: {}", request.getMethod(), uri, 
+        log.debug("[JWT Filter] {} {} - Auth header: {}", request.getMethod(), uri, 
             request.getHeader("Authorization") != null ? "present" : "missing");
         String token = getJwtFromRequest(request);
         if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-            log.info("[JWT Filter] Token valid for URI: {}", uri);
+            log.debug("[JWT Filter] Token valid for URI: {}", uri);
             String username = tokenProvider.getUsernameFromToken(token);
             String teacherId = tokenProvider.getTeacherIdFromToken(token);
             AuthenticatedTeacher principal = new AuthenticatedTeacher(username, teacherId);
