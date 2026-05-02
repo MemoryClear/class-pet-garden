@@ -66,7 +66,7 @@ router.beforeEach(async (to, from) => {
       // token 无效，清除并跳转登录页
       return { name: 'Login' }
     }
-    if (checkResult?.needActivate) {
+    if (checkResult?.needActivate && to.name !== 'Activate') {
       return { name: 'Activate' }
     }
   }
