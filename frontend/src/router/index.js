@@ -12,43 +12,55 @@ const routes = [
     path: '/activate',
     name: 'Activate',
     component: () => import('../views/ActivateView.vue'),
-    meta: { requiresAuth: true, notActivated: true }
+    meta: { requiresAuth: true, notActivated: true, teacherOnly: true }
   },
   {
     path: '/home',
     name: 'Home',
     component: () => import('../views/HomeView.vue'),
-    meta: { requiresAuth: true, activated: true }
+    meta: { requiresAuth: true, activated: true, teacherOnly: true }
+  },
+  {
+    path: '/student-home',
+    name: 'StudentHome',
+    component: () => import('../views/StudentHomeView.vue'),
+    meta: { requiresAuth: true, studentOnly: true }
   },
   {
     path: '/history',
     name: 'History',
     component: () => import('../views/HistoryView.vue'),
-    meta: { requiresAuth: true, activated: true }
+    meta: { requiresAuth: true, activated: true, teacherOnly: true }
   },
   {
     path: '/exchange-history',
     name: 'ExchangeHistory',
     component: () => import('../views/ExchangeHistoryView.vue'),
-    meta: { requiresAuth: true, activated: true }
+    meta: { requiresAuth: true, activated: true, teacherOnly: true }
   },
   {
     path: '/leaderboard',
     name: 'Leaderboard',
     component: () => import('../views/LeaderboardView.vue'),
-    meta: { requiresAuth: true, activated: true }
+    meta: { requiresAuth: true, activated: true, teacherOnly: true }
   },
   {
     path: '/shop',
     name: 'Shop',
     component: () => import('../views/ShopView.vue'),
-    meta: { requiresAuth: true, activated: true }
+    meta: { requiresAuth: true, activated: true, teacherOnly: true }
   },
   {
     path: '/settings',
     name: 'Settings',
     component: () => import('../views/SettingsView.vue'),
-    meta: { requiresAuth: true, activated: true }
+    meta: { requiresAuth: true, activated: true, teacherOnly: true }
+  },
+  {
+    path: '/classroom',
+    name: 'Classroom',
+    component: () => import('../views/ClassroomView.vue'),
+    meta: { requiresAuth: true }
   }
 ]
 
@@ -59,21 +71,34 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const auth = useAuthStore()
-  // 验证 token 有效性
   if (auth.token) {
     const checkResult = await auth.checkAuth()
     if (checkResult === false) {
-      // token 无效，清除并跳转登录页
       return { name: 'Login' }
     }
-    if (checkResult?.needActivate && to.name !== 'Activate') {
+    // 学生角色路由守卫
+    if (auth.isStudent) {
+      if (to.name === 'StudentHome') return true
+      if (to.meta.studentOnly) return true
+      // 学生访问其他页面 → 重定向到学生首页
+      if (to.name !== 'Login' && to.name !== 'StudentHome') {
+        return { name: 'StudentHome' }
+      }
+    }
+    // 教师角色路由守卫
+    if (!auth.isStudent && checkResult?.needActivate && to.name !== 'Activate') {
       return { name: 'Activate' }
     }
+  }
+  // 学生专属页面，非学生不能进
+  if (to.meta.studentOnly && !auth.isStudent) {
+    return { name: 'Login' }
   }
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
     return { name: 'Login' }
   }
   if (to.meta.guest && auth.isLoggedIn) {
+    if (auth.isStudent) return { name: 'StudentHome' }
     if (!auth.isActivated) return { name: 'Activate' }
     return { name: 'Home' }
   }
@@ -82,6 +107,9 @@ router.beforeEach(async (to, from) => {
   }
   if (to.meta.activated && !auth.isActivated) {
     return { name: 'Activate' }
+  }
+  if (to.meta.teacherOnly && auth.isStudent) {
+    return { name: 'StudentHome' }
   }
 })
 

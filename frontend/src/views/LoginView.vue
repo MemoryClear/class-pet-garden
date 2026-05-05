@@ -1,14 +1,15 @@
 <template>
   <div class="auth-page">
     <div class="logo">🐱</div>
-    <h1 class="title">{{ authStore.user?.systemName || '课堂宠物乐园' }}</h1>
+    <h1 class="title">{{ systemName }}</h1>
     <p class="subtitle">让学习变得更有趣</p>
     <div class="auth-card">
       <div class="auth-tabs">
-        <div class="auth-tab" :class="{ active: tab === 'login' }" @click="tab = 'login'">登录</div>
+        <div class="auth-tab" :class="{ active: tab === 'login' }" @click="tab = 'login'">教师登录</div>
         <div class="auth-tab" :class="{ active: tab === 'register' }" @click="tab = 'register'">注册</div>
+        <div class="auth-tab" :class="{ active: tab === 'student' }" @click="tab = 'student'">学生登录</div>
       </div>
-      <!-- 登录表单 -->
+      <!-- 教师登录表单 -->
       <div class="auth-form" v-if="tab === 'login'">
         <div class="form-group">
           <label class="form-label">用户名</label>
@@ -22,7 +23,6 @@
           <div class="input-wrapper">
             <span class="input-icon">🔑</span>
             <input type="password" class="form-input" v-model="loginForm.password" placeholder="请输入密码" @keyup.enter="handleLogin">
-            <span class="eye-icon" @click="togglePwd('loginPwd')">👁️</span>
           </div>
         </div>
         <p v-if="error" class="error-msg show">{{ error }}</p>
@@ -63,15 +63,40 @@
         </button>
         <div class="form-footer">已有账号？<a @click="tab = 'login'">立即登录</a></div>
       </div>
+      <!-- 学生登录表单 -->
+      <div class="auth-form" v-if="tab === 'student'">
+        <div class="student-login-tip">
+          <span>🎓 输入学号和班级密码即可登录</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">学号</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔢</span>
+            <input type="text" class="form-input" v-model="studentForm.studentNo" placeholder="请输入学号，如 S0001" @keyup.enter="handleStudentLogin">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">班级密码</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔑</span>
+            <input type="password" class="form-input" v-model="studentForm.password" placeholder="请输入老师的密码" @keyup.enter="handleStudentLogin">
+          </div>
+        </div>
+        <p v-if="error" class="error-msg show">{{ error }}</p>
+        <button class="btn student-btn" @click="handleStudentLogin" :disabled="loading">
+          {{ loading ? '登录中...' : '🎓 学生登录' }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth.js'
 import { useAppStore } from '../stores/app.js'
 import { useRouter } from 'vue-router'
+import api from '../api/index.js'
 
 const authStore = useAuthStore()
 const appStore = useAppStore()
@@ -80,9 +105,18 @@ const router = useRouter()
 const tab = ref('login')
 const loading = ref(false)
 const error = ref('')
+const systemName = ref('课堂宠物乐园')
 
 const loginForm = reactive({ username: '', password: '' })
 const regForm = reactive({ username: '', password: '', confirmPassword: '' })
+const studentForm = reactive({ studentNo: '', password: '' })
+
+onMounted(async () => {
+  try {
+    const { data } = await api.get('/settings')
+    if (data.systemName) systemName.value = data.systemName
+  } catch (e) {}
+})
 
 async function handleLogin() {
   error.value = ''
@@ -116,9 +150,19 @@ async function handleRegister() {
   }
 }
 
-function togglePwd(id) {
-  const el = document.getElementById(id)
-  if (el) el.type = el.type === 'password' ? 'text' : 'password'
+async function handleStudentLogin() {
+  error.value = ''
+  if (!studentForm.studentNo) { error.value = '请输入学号'; return }
+  if (!studentForm.password) { error.value = '请输入班级密码'; return }
+  loading.value = true
+  try {
+    await authStore.studentLogin(studentForm.studentNo, studentForm.password)
+    loading.value = false
+    router.push('/student-home')
+  } catch (e) {
+    loading.value = false
+    error.value = e.response?.data?.error || e.message || '登录失败'
+  }
 }
 </script>
 
@@ -129,7 +173,7 @@ function togglePwd(id) {
 .subtitle { color:#666; margin-bottom:30px; font-size:14px; }
 .auth-card { background:white; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,0.1); width:100%; max-width:400px; overflow:hidden; }
 .auth-tabs { display:flex; border-bottom:1px solid #eee; }
-.auth-tab { flex:1; padding:16px; text-align:center; cursor:pointer; color:#666; font-weight:500; }
+.auth-tab { flex:1; padding:14px; text-align:center; cursor:pointer; color:#666; font-weight:500; font-size:0.9rem; }
 .auth-tab.active { color:#ff6b9d; position:relative; }
 .auth-tab.active::after { content:""; position:absolute; bottom:-1px; left:0; width:100%; height:2px; background:#ff6b9d; }
 .auth-form { padding:30px; }
@@ -137,14 +181,15 @@ function togglePwd(id) {
 .form-label { display:block; margin-bottom:8px; color:#333; font-size:14px; font-weight:500; }
 .input-wrapper { position:relative; }
 .input-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#a0aec0; }
-.eye-icon { position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:#a0aec0; }
-.form-input { width:100%; padding:12px 16px 12px 40px; border:1px solid #ddd; border-radius:8px; font-size:14px; }
+.form-input { width:100%; padding:12px 16px 12px 40px; border:1px solid #ddd; border-radius:8px; font-size:14px; box-sizing:border-box; }
 .form-input:focus { outline:none; border-color:#ff6b9d; }
 .btn { width:100%; padding:14px; background: linear-gradient(90deg, #f04e98 0%, #ed266e 100%); color:white; border:none; border-radius:8px; font-weight:500; cursor:pointer; font-size:15px; }
+.student-btn { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
 .btn:disabled { opacity:0.6; cursor:not-allowed; }
 .form-tip-list { padding-left:20px; margin-top:6px; font-size:12px; color:#718096; }
 .form-footer { margin-top:20px; text-align:center; font-size:14px; color:#666; }
 .form-footer a { color:#ff6b9d; cursor:pointer; }
 .error-msg { color:#ff4444; font-size:12px; margin-top:4px; display:none; }
 .error-msg.show { display:block; }
+.student-login-tip { background:#f0f0ff; padding:10px 14px; border-radius:8px; margin-bottom:16px; text-align:center; color:#8b5cf6; font-size:0.9rem; }
 </style>

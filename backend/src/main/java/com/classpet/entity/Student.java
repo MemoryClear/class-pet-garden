@@ -13,6 +13,10 @@ public class Student {
     @Column(nullable = false, length = 20)
     private String name;
 
+    // 学号，唯一标识，用于学生登录
+    @Column(name = "student_no", unique = true, length = 20)
+    private String studentNo;
+
     @Column(nullable = false)
     private String teacherId;
 
@@ -41,6 +45,8 @@ public class Student {
     public void setId(String id) { this.id = id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+    public String getStudentNo() { return studentNo; }
+    public void setStudentNo(String studentNo) { this.studentNo = studentNo; }
     public String getTeacherId() { return teacherId; }
     public void setTeacherId(String teacherId) { this.teacherId = teacherId; }
     public Integer getPetId() { return petId; }

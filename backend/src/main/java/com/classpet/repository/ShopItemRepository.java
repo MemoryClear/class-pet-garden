@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ShopItemRepository extends JpaRepository<ShopItem, String> {
     List<ShopItem> findByTeacherIdOrderByCreatedAtDesc(String teacherId);
+    List<ShopItem> findByTeacherId(String teacherId);
     void deleteByIdAndTeacherId(String id, String teacherId);
 }

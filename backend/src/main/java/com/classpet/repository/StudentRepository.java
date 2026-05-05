@@ -14,4 +14,5 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     boolean existsByTeacherIdAndNameAndIdNot(String teacherId, String name, String id);
     java.util.Optional<Student> findByIdAndTeacherId(String id, String teacherId);
     List<Student> findByTeacherIdOrderByFoodDesc(String teacherId);
+    Optional<Student> findByStudentNo(String studentNo);
 }

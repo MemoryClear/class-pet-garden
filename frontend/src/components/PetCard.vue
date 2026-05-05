@@ -53,6 +53,7 @@
         <span v-if="level >= 3" class="title-badge">{{ levelTitle }}</span>
       </div>
       <div class="student-name">{{ student.name }}</div>
+        <div v-if="student.studentNo" class="student-no">{{ student.studentNo }}</div>
     </div>
 
     <div class="pet-food">
@@ -71,6 +72,7 @@
       </button>
       <button class="action-btn exchange-btn" @click="$emit('exchange', student)" title="兑换商品">🏪</button>
       <button class="action-btn history-btn" @click="$emit('history', student)" title="查看明细">📋</button>
+      <button class="action-btn edit-btn" @click="$emit('edit', student)" title="编辑">✏️</button>
     </div>
   </div>
 </template>
@@ -392,6 +394,11 @@ onMounted(async () => {
 .food-emoji { font-size: 12px; }
 .food-val { font-size: 12px; font-weight: 600; color: #b87323; min-width: 20px; }
 .pet-card.level-4 .food-val { color: #b7791f; }
+.student-no {
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
 .pet-card-badge {
   font-size: 10px;
   background: #e0f2fe;

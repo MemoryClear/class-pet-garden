@@ -23,13 +23,34 @@ public class JwtTokenProvider {
     }
 
     public String generateToken(String username, String teacherId) {
+        return generateToken(username, teacherId, "teacher");
+    }
+
+    public String generateToken(String username, String teacherId, String role) {
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + expirationMs);
-        return Jwts.builder()
+        // 学生token有效期365天，老师24小时
+        long expiry = "student".equals(role) ? 365L * 24 * 60 * 60 * 1000 : expirationMs;
+        Date expiryDate = new Date(now.getTime() + expiry);
+        var builder = Jwts.builder()
                 .subject(username)
                 .claim("teacherId", teacherId)
+                .claim("role", role)
                 .issuedAt(now)
-                .expiration(expiry)
+                .expiration(expiryDate);
+        return builder.signWith(key).compact();
+    }
+
+    // 学生专用token，包含studentId
+    public String generateStudentToken(String studentName, String teacherId, String studentId) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + 365L * 24 * 60 * 60 * 1000);
+        return Jwts.builder()
+                .subject(studentName)
+                .claim("teacherId", teacherId)
+                .claim("role", "student")
+                .claim("studentId", studentId)
+                .issuedAt(now)
+                .expiration(expiryDate)
                 .signWith(key)
                 .compact();
     }
@@ -42,6 +63,24 @@ public class JwtTokenProvider {
     public String getTeacherIdFromToken(String token) {
         return Jwts.parser().verifyWith(key).build()
                 .parseSignedClaims(token).getPayload().get("teacherId", String.class);
+    }
+
+    public String getRoleFromToken(String token) {
+        try {
+            return Jwts.parser().verifyWith(key).build()
+                    .parseSignedClaims(token).getPayload().get("role", String.class);
+        } catch (Exception e) {
+            return "teacher"; // 兼容旧token
+        }
+    }
+
+    public String getStudentIdFromToken(String token) {
+        try {
+            return Jwts.parser().verifyWith(key).build()
+                    .parseSignedClaims(token).getPayload().get("studentId", String.class);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean validateToken(String token) {

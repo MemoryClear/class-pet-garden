@@ -24,7 +24,8 @@ public class SecurityConfig {
     // Exact same paths as SpaController @GetMapping to ensure they all hit permitAll
     private static final String[] SPA_ROUTES = {
         "/", "/home", "/activate", "/history",
-        "/exchange-history", "/leaderboard", "/shop", "/settings"
+        "/exchange-history", "/leaderboard", "/shop", "/settings",
+        "/student-home", "/classroom"
     };
 
     @Autowired
@@ -77,6 +78,7 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("X-New-Token"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

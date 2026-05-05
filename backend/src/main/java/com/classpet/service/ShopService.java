@@ -235,7 +235,7 @@ public class ShopService {
         petCard.setDescription("使用后可更换宠物");
         petCard.setStock(99);
         petCard.setTeacherId(teacherId);
-        petCard.setItemType("petCard");
+        petCard.setItemType("pet_change_card");
         shopItemRepo.save(petCard);
     }
 }

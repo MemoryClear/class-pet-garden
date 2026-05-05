@@ -11,6 +11,8 @@ public class StudentDto {
     public static class UpdateRequest {
         @Size(max = 10)
         public String name;
+        @Size(max = 20)
+        public String studentNo;
     }
     public static class BatchCreateRequest {
         @NotBlank

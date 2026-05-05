@@ -1,7 +1,7 @@
 package com.classpet.controller;
 
 import com.classpet.entity.ScoreHistory;
-import com.classpet.security.JwtAuthenticationFilter.AuthenticatedTeacher;
+import com.classpet.security.JwtAuthenticationFilter.AuthenticatedUser;
 import com.classpet.service.HistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,7 +21,7 @@ public class HistoryController {
 
     @GetMapping
     public ResponseEntity<List<ScoreHistory>> getHistory(
-            @AuthenticationPrincipal AuthenticatedTeacher principal,
+            @AuthenticationPrincipal AuthenticatedUser principal,
             @RequestParam(required = false) String studentId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
@@ -31,7 +31,7 @@ public class HistoryController {
     @PostMapping("/{id}/revoke")
     public ResponseEntity<?> revokeScore(
             @PathVariable String id,
-            @AuthenticationPrincipal AuthenticatedTeacher principal) {
+            @AuthenticationPrincipal AuthenticatedUser principal) {
         try {
             return ResponseEntity.ok(historyService.revokeScore(id, principal.teacherId()));
         } catch (IllegalArgumentException e) {

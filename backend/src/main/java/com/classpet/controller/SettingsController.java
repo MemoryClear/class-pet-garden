@@ -2,7 +2,7 @@ package com.classpet.controller;
 
 import com.classpet.dto.SettingsDto;
 import com.classpet.entity.Teacher;
-import com.classpet.security.JwtAuthenticationFilter.AuthenticatedTeacher;
+import com.classpet.security.JwtAuthenticationFilter.AuthenticatedUser;
 import com.classpet.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class SettingsController {
     // Public endpoint for login page — no auth required, returns system name/theme only
     // Must be kept in sync with SecurityConfig.requestMatchers("/api/settings").permitAll()
     @GetMapping
-    public ResponseEntity<?> getSettings(@AuthenticationPrincipal AuthenticatedTeacher principal) {
+    public ResponseEntity<?> getSettings(@AuthenticationPrincipal AuthenticatedUser principal) {
         if (principal == null) {
             // Return a minimal public config for unauthenticated requests (login page)
             return ResponseEntity.ok(Map.of(
@@ -42,7 +42,7 @@ public class SettingsController {
 
     @PutMapping
     public ResponseEntity<?> updateSettings(
-            @AuthenticationPrincipal AuthenticatedTeacher principal,
+            @AuthenticationPrincipal AuthenticatedUser principal,
             @RequestBody SettingsDto.UpdateRequest req) {
         if (principal == null) {
             return ResponseEntity.status(401).body(Map.of("error", "Not authenticated"));

@@ -2,7 +2,7 @@ package com.classpet.controller;
 
 import com.classpet.dto.StudentDto;
 import com.classpet.entity.Student;
-import com.classpet.security.JwtAuthenticationFilter.AuthenticatedTeacher;
+import com.classpet.security.JwtAuthenticationFilter.AuthenticatedUser;
 import com.classpet.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,25 +23,25 @@ public class StudentController {
 
     @GetMapping
     public ResponseEntity<List<Student>> getStudents(
-            @AuthenticationPrincipal AuthenticatedTeacher principal) {
+            @AuthenticationPrincipal AuthenticatedUser principal) {
         return ResponseEntity.ok(studentService.getStudents(principal.teacherId()));
     }
 
     @GetMapping("/leaderboard")
     public ResponseEntity<List<Student>> getLeaderboard(
-            @AuthenticationPrincipal AuthenticatedTeacher principal) {
+            @AuthenticationPrincipal AuthenticatedUser principal) {
         return ResponseEntity.ok(studentService.getLeaderboard(principal.teacherId()));
     }
 
     @GetMapping("/leaderboard/total")
     public ResponseEntity<List<Map<String, Object>>> getTotalScoreLeaderboard(
-            @AuthenticationPrincipal AuthenticatedTeacher principal) {
+            @AuthenticationPrincipal AuthenticatedUser principal) {
         return ResponseEntity.ok(studentService.getTotalScoreLeaderboard(principal.teacherId()));
     }
 
     @PostMapping
     public ResponseEntity<?> createStudent(
-            @AuthenticationPrincipal AuthenticatedTeacher principal,
+            @AuthenticationPrincipal AuthenticatedUser principal,
             @Valid @RequestBody StudentDto.CreateRequest req) {
         try {
             return ResponseEntity.ok(studentService.createStudent(req.name, principal.teacherId()));
@@ -52,7 +52,7 @@ public class StudentController {
 
     @PostMapping("/batch")
     public ResponseEntity<?> batchCreate(
-            @AuthenticationPrincipal AuthenticatedTeacher principal,
+            @AuthenticationPrincipal AuthenticatedUser principal,
             @Valid @RequestBody StudentDto.BatchCreateRequest req) {
         try {
             List<String> names = Arrays.stream(req.names.split("\n"))
@@ -71,10 +71,10 @@ public class StudentController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStudent(
             @PathVariable String id,
-            @AuthenticationPrincipal AuthenticatedTeacher principal,
+            @AuthenticationPrincipal AuthenticatedUser principal,
             @Valid @RequestBody StudentDto.UpdateRequest req) {
         try {
-            return ResponseEntity.ok(studentService.updateStudent(id, principal.teacherId(), req.name));
+            return ResponseEntity.ok(studentService.updateStudent(id, principal.teacherId(), req.name, req.studentNo));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -83,7 +83,7 @@ public class StudentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteStudent(
             @PathVariable String id,
-            @AuthenticationPrincipal AuthenticatedTeacher principal) {
+            @AuthenticationPrincipal AuthenticatedUser principal) {
         try {
             studentService.deleteStudent(id, principal.teacherId());
             return ResponseEntity.ok(Map.of("success", true));
@@ -95,7 +95,7 @@ public class StudentController {
     @PostMapping("/{id}/adopt")
     public ResponseEntity<?> adoptPet(
             @PathVariable String id,
-            @AuthenticationPrincipal AuthenticatedTeacher principal,
+            @AuthenticationPrincipal AuthenticatedUser principal,
             @RequestBody StudentDto.AdoptRequest req) {
         try {
             return ResponseEntity.ok(studentService.adoptPet(
@@ -107,7 +107,7 @@ public class StudentController {
 
     @PostMapping("/assign-pets")
     public ResponseEntity<?> assignPetsRandomly(
-            @AuthenticationPrincipal AuthenticatedTeacher principal) {
+            @AuthenticationPrincipal AuthenticatedUser principal) {
         return ResponseEntity.ok(studentService.assignPetsRandomly(principal.teacherId()));
     }
 
@@ -115,7 +115,7 @@ public class StudentController {
     @PostMapping("/{id}/equip")
     public ResponseEntity<?> equipItem(
             @PathVariable String id,
-            @AuthenticationPrincipal AuthenticatedTeacher principal,
+            @AuthenticationPrincipal AuthenticatedUser principal,
             @RequestBody StudentDto.EquipRequest req) {
         try {
             return ResponseEntity.ok(studentService.equipItem(id, principal.teacherId(), req.itemId));
@@ -129,7 +129,7 @@ public class StudentController {
     public ResponseEntity<?> unequipItem(
             @PathVariable String id,
             @PathVariable String itemId,
-            @AuthenticationPrincipal AuthenticatedTeacher principal) {
+            @AuthenticationPrincipal AuthenticatedUser principal) {
         try {
             return ResponseEntity.ok(studentService.unequipItem(id, principal.teacherId(), itemId));
         } catch (IllegalArgumentException e) {
@@ -140,7 +140,7 @@ public class StudentController {
     @PostMapping("/{id}/score")
     public ResponseEntity<?> applyScore(
             @PathVariable String id,
-            @AuthenticationPrincipal AuthenticatedTeacher principal,
+            @AuthenticationPrincipal AuthenticatedUser principal,
             @RequestBody StudentDto.ScoreRequest req) {
         try {
             return ResponseEntity.ok(studentService.applyScore(id, principal.teacherId(), req.scoreItemId));

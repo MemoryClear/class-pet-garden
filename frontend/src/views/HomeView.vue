@@ -15,6 +15,7 @@
           <LevelGuide />
           <button class="nav-btn" @click="router.push('/history')">📜 历史</button>
           <button class="nav-btn" @click="router.push('/exchange-history')">📦 明细</button>
+          <button class="nav-btn" @click="router.push('/classroom')">📚 课堂</button>
           <button class="nav-btn" @click="router.push('/settings')">⚙️ 设置</button>
         </div>
       </div>
@@ -36,6 +37,7 @@
           @adopt="openAdoptModal(stu)"
           @exchange="openExchangeModal(stu)"
           @history="openHistoryDetail(stu)"
+          @edit="openEditModal(stu)"
         />
       </div>
     </div>
@@ -47,6 +49,7 @@
     <!-- 兑换商品弹窗 -->
     <ExchangeModal v-if="exchangeModalVisible" :student="currentStudent" @close="exchangeModalVisible = false" @exchanged="onExchanged" />
     <!-- 学生明细弹窗 -->
+    <StudentEditModal v-if="editModalVisible" :student="currentEditingStudent" @close="editModalVisible = false" @updated="onStudentUpdated" />
     <StudentDetailModal v-if="detailModalVisible" :student="currentStudent" @close="detailModalVisible = false" />
   </div>
 </template>
@@ -61,6 +64,7 @@ import ScoreModal from '../components/ScoreModal.vue'
 import PetSelectModal from '../components/PetSelectModal.vue'
 import ExchangeModal from '../components/ExchangeModal.vue'
 import StudentDetailModal from '../components/StudentDetailModal.vue'
+import StudentEditModal from '../components/StudentEditModal.vue'
 import LevelGuide from '../components/LevelGuide.vue'
 
 const appStore = useAppStore()
@@ -71,8 +75,11 @@ const searchKw = ref('')
 const scoreModalVisible = ref(false)
 const adoptModalVisible = ref(false)
 const exchangeModalVisible = ref(false)
+const editModalVisible = ref(false)
+const currentEditingStudent = ref(null)
 const detailModalVisible = ref(false)
 const currentStudent = ref(null)
+// 道具相关
 
 const themeMap = {
   pink:'rgba(255,107,157,0.08)', purple:'rgba(168,85,247,0.08)',
@@ -108,6 +115,16 @@ function openExchangeModal(stu) {
   exchangeModalVisible.value = true
 }
 
+function openEditModal(stu) {
+  currentEditingStudent.value = stu
+  editModalVisible.value = true
+}
+function onStudentUpdated(updated) {
+  const idx = appStore.students.findIndex(s => s.id === updated.id)
+  if (idx !== -1) {
+    appStore.students[idx] = { ...appStore.students[idx], ...updated }
+  }
+}
 function openHistoryDetail(stu) {
   currentStudent.value = stu
   detailModalVisible.value = true

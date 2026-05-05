@@ -14,8 +14,10 @@ import java.util.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.classpet.repository.ShopItemRepository;
+import com.classpet.entity.ExchangeRecord;
 import com.classpet.entity.ShopItem;
+import com.classpet.repository.ShopItemRepository;
+import com.classpet.repository.ExchangeRecordRepository;
 
 @Service
 public class StudentService {
@@ -24,6 +26,7 @@ public class StudentService {
     @Autowired private ScoreItemRepository scoreItemRepository;
     @Autowired private ScoreHistoryRepository scoreHistoryRepository;
     @Autowired private ShopItemRepository shopItemRepository;
+    @Autowired private ExchangeRecordRepository exchangeRecordRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<Student> getStudents(String teacherId) {
@@ -35,23 +38,48 @@ public class StudentService {
         Student stu = new Student();
         stu.setName(name.trim());
         stu.setTeacherId(teacherId);
+        stu.setStudentNo(generateStudentNo(teacherId));
         return studentRepository.save(stu);
     }
 
     @Transactional
     public List<Student> batchCreateStudents(List<String> names, String teacherId) {
-        return studentRepository.saveAll(names.stream().map(n -> {
+        int counter = getNextStudentNoCounter(teacherId);
+        List<Student> students = new ArrayList<>();
+        for (String n : names) {
             Student s = new Student();
             s.setName(n.trim());
             s.setTeacherId(teacherId);
-            return s;
-        }).toList());
+            s.setStudentNo(String.format("S%04d", counter++));
+            students.add(s);
+        }
+        return studentRepository.saveAll(students);
+    }
+
+    private String generateStudentNo(String teacherId) {
+        int counter = getNextStudentNoCounter(teacherId);
+        return String.format("S%04d", counter);
+    }
+
+    private int getNextStudentNoCounter(String teacherId) {
+        List<Student> existing = studentRepository.findByTeacherIdOrderByCreatedAtAsc(teacherId);
+        int max = 0;
+        for (Student s : existing) {
+            if (s.getStudentNo() != null && s.getStudentNo().startsWith("S")) {
+                try {
+                    int num = Integer.parseInt(s.getStudentNo().substring(1));
+                    if (num > max) max = num;
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return max + 1;
     }
 
     @Transactional
-    public Student updateStudent(String id, String teacherId, String name) {
+    public Student updateStudent(String id, String teacherId, String name, String studentNo) {
         Student stu = findByIdAndTeacherId(id, teacherId);
-        stu.setName(name.trim());
+        if (name != null) stu.setName(name.trim());
+        if (studentNo != null) stu.setStudentNo(studentNo.trim());
         return studentRepository.save(stu);
     }
 
@@ -112,6 +140,24 @@ public class StudentService {
 
     public List<Student> getLeaderboard(String teacherId) {
         return studentRepository.findByTeacherIdOrderByFoodDesc(teacherId);
+    }
+
+    // 学生答题加分（无需教师身份验证，仅限课堂答题使用）
+    @Transactional
+    public Student addScoreForQuiz(String studentId, int points, String reason) {
+        Student stu = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("未找到该学生"));
+        stu.setFood(Math.max(0, stu.getFood() + points));
+        studentRepository.save(stu);
+
+        ScoreHistory history = new ScoreHistory(
+            stu.getId(), stu.getName(),
+            reason != null ? reason : "\uD83D\uDCDA 课堂答题",
+            "\uD83D\uDCDA",
+            points, stu.getTeacherId()
+        );
+        scoreHistoryRepository.save(history);
+        return stu;
     }
 
     // 总积分排名：历史所有加分 - 历史所有扣分（不包括道具消耗）
@@ -195,7 +241,77 @@ public class StudentService {
             Map.of("id", 7, "icon", "🦁", "name", "小狮子"),
             Map.of("id", 8, "icon", "🐯", "name", "小老虎"),
             Map.of("id", 9, "icon", "🐨", "name", "考拉"),
-            Map.of("id", 10, "icon", "🐮", "name", "奶牛")
+            Map.of("id", 10, "icon", "\uD83D\uDC2E", "name", "奶牛")
         );
+    }
+
+    // 学生自助领养/更换宠物（无需更换卡，首次领养免费）
+    @Transactional
+    public Student studentAdoptPet(String studentId, String teacherId, Integer petId, String petName, String petIcon) {
+        Student stu = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
+        if (!stu.getTeacherId().equals(teacherId)) {
+            throw new IllegalArgumentException("无权限");
+        }
+        // 如果已有宠物，需要消耗宠物更换卡
+        if (stu.getPetId() != null) {
+            int cards = stu.getPetChangeCards() != null ? stu.getPetChangeCards() : 0;
+            if (cards <= 0) {
+                throw new RuntimeException("请先购买宠物更换卡");
+            }
+            stu.setPetChangeCards(cards - 1);
+        }
+        stu.setPetId(petId);
+        stu.setPetName(petName);
+        stu.setPetIcon(petIcon);
+        return studentRepository.save(stu);
+    }
+
+    // 学生自助兑换商品
+    @Transactional
+    public Map<String, Object> studentExchange(String studentId, String teacherId, String itemId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
+        if (!student.getTeacherId().equals(teacherId)) {
+            throw new IllegalArgumentException("无权限");
+        }
+        ShopItem item = shopItemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("商品不存在"));
+        if (!item.getTeacherId().equals(teacherId)) {
+            throw new IllegalArgumentException("无权限");
+        }
+        int food = student.getFood() != null ? student.getFood() : 0;
+        if (food < item.getPrice()) {
+            throw new IllegalArgumentException("积分不足，需要 " + item.getPrice() + " 分");
+        }
+        student.setFood(food - item.getPrice());
+
+        if ("pet_change_card".equals(item.getItemType()) || "petCard".equals(item.getItemType())) {
+            int cards = student.getPetChangeCards() != null ? student.getPetChangeCards() : 0;
+            student.setPetChangeCards(cards + 1);
+            ScoreHistory history = new ScoreHistory(student.getId(), student.getName(),
+                item.getIcon() + " 购买「" + item.getName() + "」",
+                item.getIcon(), -item.getPrice(), teacherId);
+            scoreHistoryRepository.save(history);
+            studentRepository.save(student);
+            return Map.of("success", true, "food", student.getFood(), "petChangeCards", student.getPetChangeCards());
+        }
+
+        ExchangeRecord record = new ExchangeRecord();
+        record.setStudentId(student.getId());
+        record.setStudentName(student.getName());
+        record.setItemId(item.getId());
+        record.setItemName(item.getName());
+        record.setItemIcon(item.getIcon());
+        record.setFoodSpent(item.getPrice());
+        record.setTeacherId(teacherId);
+        exchangeRecordRepository.save(record);
+
+        ScoreHistory history = new ScoreHistory(student.getId(), student.getName(),
+            item.getIcon() + " 购买「" + item.getName() + "」",
+            item.getIcon(), -item.getPrice(), teacherId);
+        scoreHistoryRepository.save(history);
+        studentRepository.save(student);
+        return Map.of("success", true, "food", student.getFood());
     }
 }

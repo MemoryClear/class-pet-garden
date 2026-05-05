@@ -2,7 +2,7 @@ package com.classpet.controller;
 
 import com.classpet.dto.ScoreItemDto;
 import com.classpet.entity.ScoreItem;
-import com.classpet.security.JwtAuthenticationFilter.AuthenticatedTeacher;
+import com.classpet.security.JwtAuthenticationFilter.AuthenticatedUser;
 import com.classpet.service.ScoreItemService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,13 @@ public class ScoreItemController {
 
     @GetMapping
     public ResponseEntity<List<ScoreItem>> getScoreItems(
-            @AuthenticationPrincipal AuthenticatedTeacher principal) {
+            @AuthenticationPrincipal AuthenticatedUser principal) {
         return ResponseEntity.ok(scoreItemService.getScoreItems(principal.teacherId()));
     }
 
     @PostMapping
     public ResponseEntity<?> createScoreItem(
-            @AuthenticationPrincipal AuthenticatedTeacher principal,
+            @AuthenticationPrincipal AuthenticatedUser principal,
             @Valid @RequestBody ScoreItemDto.CreateRequest req) {
         return ResponseEntity.ok(scoreItemService.createScoreItem(
                 req.icon, req.name, req.point, principal.teacherId()));
@@ -36,7 +36,7 @@ public class ScoreItemController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteScoreItem(
             @PathVariable String id,
-            @AuthenticationPrincipal AuthenticatedTeacher principal) {
+            @AuthenticationPrincipal AuthenticatedUser principal) {
         scoreItemService.deleteScoreItem(id, principal.teacherId());
         return ResponseEntity.ok(Map.of("success", true));
     }
