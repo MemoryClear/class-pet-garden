@@ -148,15 +148,17 @@ function getScore(stu) {
 
 function getLevel(stu) {
   const food = stu.food ?? 0
-  if (food >= 50) return 4
-  if (food >= 25) return 3
+  if (food >= 200) return 6
+  if (food >= 100) return 5
+  if (food >= 60) return 4
+  if (food >= 30) return 3
   if (food >= 10) return 2
   return 1
 }
 
 function getLevelTitle(stu) {
   const lv = getLevel(stu)
-  const titles = { 1: '幼崽期', 2: '少年期', 3: '成年期', 4: '传说期' }
+  const titles = { 1: '幼崽期', 2: '少年期', 3: '成长期', 4: '精英期', 5: '大师期', 6: '传说期' }
   return titles[lv]
 }
 
@@ -237,10 +239,12 @@ onMounted(() => loadData())
 .podium-name { font-size: 15px; font-weight: 600; margin: 8px 0 4px; }
 .podium-score { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #ffd700, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .podium-level { font-size: 11px; padding: 2px 8px; border-radius: 8px; display: inline-block; margin-top: 6px; }
-.podium-level.lv-1 { background: rgba(255,255,255,0.1); color: #aaa; }
-.podium-level.lv-2 { background: rgba(96,165,250,0.2); color: #60a5fa; }
-.podium-level.lv-3 { background: rgba(168,85,247,0.2); color: #a855f7; }
-.podium-level.lv-4 { background: rgba(255,215,0,0.2); color: #ffd700; }
+.podium-level.lv-1 { background: rgba(134,239,172,0.2); color: #86efac; }
+.podium-level.lv-2 { background: rgba(147,197,253,0.2); color: #93c5fd; }
+.podium-level.lv-3 { background: rgba(196,181,253,0.2); color: #c4b5fd; }
+.podium-level.lv-4 { background: rgba(96,165,250,0.2); color: #60a5fa; }
+.podium-level.lv-5 { background: rgba(249,115,22,0.2); color: #f97316; }
+.podium-level.lv-6 { background: rgba(255,215,0,0.25); color: #fbbf24; }
 .podium-rank { position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.1); font-size: 11px; padding: 2px 10px; border-radius: 10px; font-weight: 600; }
 
 /* 单人冠军 */
@@ -264,10 +268,12 @@ onMounted(() => loadData())
 .rank-info { flex: 1; }
 .rank-name { font-size: 14px; font-weight: 600; }
 .rank-level { font-size: 11px; padding: 1px 6px; border-radius: 6px; display: inline-block; margin-top: 2px; }
-.rank-level.lv-1 { background: rgba(255,255,255,0.08); color: #888; }
-.rank-level.lv-2 { background: rgba(96,165,250,0.15); color: #60a5fa; }
-.rank-level.lv-3 { background: rgba(168,85,247,0.15); color: #a855f7; }
-.rank-level.lv-4 { background: rgba(255,215,0,0.15); color: #ffd700; }
+.rank-level.lv-1 { background: rgba(134,239,172,0.1); color: #86efac; }
+.rank-level.lv-2 { background: rgba(147,197,253,0.15); color: #93c5fd; }
+.rank-level.lv-3 { background: rgba(196,181,253,0.15); color: #c4b5fd; }
+.rank-level.lv-4 { background: rgba(96,165,250,0.15); color: #60a5fa; }
+.rank-level.lv-5 { background: rgba(249,115,22,0.15); color: #f97316; }
+.rank-level.lv-6 { background: rgba(255,215,0,0.2); color: #fbbf24; }
 .rank-score { text-align: right; min-width: 60px; }
 .score-val { font-size: 18px; font-weight: 700; color: #ffd700; }
 .score-unit { font-size: 12px; color: #999; margin-left: 2px; }
