@@ -106,6 +106,8 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/index.js'
+import $confirm from '../composables/useConfirmModal.js'
+
 const router = useRouter()
 const items = ref([])
 const records = ref([])
@@ -149,7 +151,7 @@ const saveItem = async () => {
     closeModal()
     fetchItems()
   } catch (e) {
-    alert('保存失败: ' + (e.response?.data?.message || e.message))
+    $confirm.error('保存失败: ' + (e.response?.data?.message || e.message))
   }
 }
 
@@ -160,12 +162,12 @@ const editItem = (item) => {
 }
 
 const deleteItem = async (id) => {
-  if (!confirm('确定删除此商品?')) return
+  if (!await $confirm.confirm('确定删除此商品?')) return
   try {
     await api.delete(`/shop/items/${id}`)
     fetchItems()
   } catch (e) {
-    alert('删除失败')
+    $confirm.error('删除失败')
   }
 }
 

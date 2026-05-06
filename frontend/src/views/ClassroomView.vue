@@ -390,6 +390,8 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { classroomApi, studentApi2 } from '../api/index.js'
 import { useAuthStore } from '../stores/auth.js'
 import { pinyin as py } from 'pinyin'
+import $confirm from '../composables/useConfirmModal.js'
+
 
 // 拼音辅助函数：将 pinyin 数组转为空格分隔的字符串
 function toPinyin(text) {
@@ -578,7 +580,7 @@ async function addPoem() {
 }
 
 async function deletePoem(poem) {
-  if (!confirm(`确定删除《${poem.title}》吗？`)) return
+  if (!await $confirm.confirm(`确定删除《${poem.title}》吗？`)) return
   if (!chineseClassroomId.value) return
   try {
     const res = await classroomApi.removePoem(chineseClassroomId.value, poem.title)
@@ -586,7 +588,7 @@ async function deletePoem(poem) {
     poems.value = config.poems || []
     selectedPoem.value = null
   } catch (e) {
-    alert(e.response?.data?.error || '删除失败')
+    $confirm.error(e.response?.data?.error || '删除失败')
   }
 }
 
@@ -676,7 +678,7 @@ function _makeOneProblem() {
 }
 
 function generateMathProblems() {
-  if (!mathConfig.operations.length) return alert('请选择运算')
+  if (!mathConfig.operations.length) { $confirm.alert('请选择运算'); return }
   const cnt = Math.max(1, Math.min(50, mathConfig.count))
   mathProblems.value = Array.from({ length: cnt }, () => _makeOneProblem())
 }

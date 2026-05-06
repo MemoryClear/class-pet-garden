@@ -100,6 +100,8 @@ import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '../stores/app.js'
 import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
+import $confirm from '../composables/useConfirmModal.js'
+
 
 const appStore = useAppStore()
 const authStore = useAuthStore()
@@ -153,7 +155,7 @@ async function addBatch() {
 }
 
 async function deleteStudent(id) {
-  if (!confirm('确认删除？')) return
+  if (!await $confirm.confirm('确认删除？')) return
   try { await appStore.deleteStudent(id) } catch (e) { manageError.value = e.message }
 }
 

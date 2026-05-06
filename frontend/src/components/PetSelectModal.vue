@@ -45,6 +45,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useAppStore } from '../stores/app.js'
+import $confirm from '../composables/useConfirmModal.js'
+
 
 const props = defineProps({ student: { type: Object, required: true } })
 const emit = defineEmits(['close'])
@@ -52,12 +54,12 @@ const appStore = useAppStore()
 const selected = ref(props.student.petId || null)
 const loading = ref(false)
 
-async function confirm() {
+async function handleConfirm() {
   if (!selected.value || loading.value) return
   
   // 检查更换卡
   if (props.student.petId && (props.student.petChangeCards ?? 0) <= 0) {
-    alert('请先到小卖部购买宠物更换卡')
+    $confirm.alert('请先到小卖部购买宠物更换卡', {type:'warn', title:'提示'})
     return
   }
   
@@ -67,7 +69,7 @@ async function confirm() {
     emit('close')
   } catch (e) {
     const msg = e.response?.data?.message || e.message || '操作失败'
-    alert(msg)
+    $confirm.error(msg)
   } finally {
     loading.value = false
   }
