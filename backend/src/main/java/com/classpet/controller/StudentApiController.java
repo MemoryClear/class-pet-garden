@@ -47,9 +47,11 @@ public class StudentApiController {
         // 计算宠物等级
         int food = stu.getFood() != null ? stu.getFood() : 0;
         String level;
-        if (food >= 50) level = "传说期 🌟";
-        else if (food >= 25) level = "成年期 💪";
-        else if (food >= 10) level = "少年期 🎒";
+        if (food >= 200) level = "传说期 👑";
+        else if (food >= 100) level = "大师期 🔥";
+        else if (food >= 60) level = "精英期 💎";
+        else if (food >= 30) level = "成长期 ⚡";
+        else if (food >= 10) level = "少年期 🌱";
         else level = "幼崽期 🥚";
         
         return ResponseEntity.ok(Map.of(
@@ -88,10 +90,12 @@ public class StudentApiController {
     @GetMapping("/level-guide")
     public ResponseEntity<?> getLevelGuide() {
         return ResponseEntity.ok(List.of(
-                Map.of("level", "幼崽期 🥚", "range", "0-9分", "desc", "刚刚破壳，未来可期！"),
-                Map.of("level", "少年期 🎒", "range", "10-24分", "desc", "茁壮成长，天天向上！"),
-                Map.of("level", "成年期 💪", "range", "25-49分", "desc", "实力满满，独当一面！"),
-                Map.of("level", "传说期 🌟", "range", "50分以上", "desc", "传说中的存在，无人能及！")
+                Map.of("level", "幼崽期 🥚", "range", "0-9分", "desc", "刚刚破壳，可可爱爱！", "color", "#86efac"),
+                Map.of("level", "少年期 🌱", "range", "10-29分", "desc", "茁壮成长，闪闪发光！✨", "color", "#93c5fd"),
+                Map.of("level", "成长期 ⚡", "range", "30-59分", "desc", "实力提升，神秘光环环绕！💫", "color", "#c4b5fd"),
+                Map.of("level", "精英期 💎", "range", "60-99分", "desc", "精英气质，晶体边框闪耀！💠", "color", "#60a5fa"),
+                Map.of("level", "大师期 🔥", "range", "100-199分", "desc", "大师风范，烈焰燃烧！🔥", "color", "#f97316"),
+                Map.of("level", "传说期 👑", "range", "200分以上", "desc", "传说降临，金色荣耀！👑🌟", "color", "#fbbf24")
         ));
     }
 

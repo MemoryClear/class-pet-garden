@@ -21,34 +21,52 @@
               <div class="level-info">
                 <div class="level-name">Lv.1 幼崽期</div>
                 <div class="level-range">0 - 9 分</div>
-                <div class="level-desc">刚领养的小可爱，需要多多关爱</div>
+                <div class="level-desc">刚刚破壳的小可爱，需要多多关爱！🥚</div>
               </div>
             </div>
-            
+
             <div class="level-item level-2">
-              <div class="level-icon">🌟</div>
+              <div class="level-icon">🌱</div>
               <div class="level-info">
                 <div class="level-name">Lv.2 少年期</div>
-                <div class="level-range">10 - 24 分</div>
-                <div class="level-desc">开始散发光芒，出现星星装饰✨</div>
+                <div class="level-range">10 - 29 分</div>
+                <div class="level-desc">开始散发光芒，出现星星装饰！✨</div>
               </div>
             </div>
-            
+
             <div class="level-item level-3">
-              <div class="level-icon">💫</div>
+              <div class="level-icon">⚡</div>
               <div class="level-info">
-                <div class="level-name">Lv.3 成年期</div>
-                <div class="level-range">25 - 49 分</div>
-                <div class="level-desc">成熟稳重，获得神秘光环💫</div>
+                <div class="level-name">Lv.3 成长期</div>
+                <div class="level-range">30 - 59 分</div>
+                <div class="level-desc">实力提升，获得神秘光环！💫</div>
               </div>
             </div>
-            
+
             <div class="level-item level-4">
+              <div class="level-icon">💎</div>
+              <div class="level-info">
+                <div class="level-name">Lv.4 精英期</div>
+                <div class="level-range">60 - 99 分</div>
+                <div class="level-desc">精英气质，晶体边框闪耀！💠</div>
+              </div>
+            </div>
+
+            <div class="level-item level-5">
+              <div class="level-icon">🔥</div>
+              <div class="level-info">
+                <div class="level-name">Lv.5 大师期</div>
+                <div class="level-range">100 - 199 分</div>
+                <div class="level-desc">大师风范，烈焰燃烧特效！</div>
+              </div>
+            </div>
+
+            <div class="level-item level-6">
               <div class="level-icon">👑</div>
               <div class="level-info">
-                <div class="level-name">Lv.4 传说期</div>
-                <div class="level-range">50 分以上</div>
-                <div class="level-desc">金色荣耀！拥有专属皇冠👑和光效</div>
+                <div class="level-name">Lv.6 传说期</div>
+                <div class="level-range">200 分以上</div>
+                <div class="level-desc">传说降临，金色荣耀光环！🌟</div>
               </div>
             </div>
           </div>
@@ -141,10 +159,12 @@ const visible = ref(false)
   border-radius: 12px;
   background: #f7fafc;
 }
-.level-item.level-1 { background: #f0fff4; }
-.level-item.level-2 { background: #ebf8ff; }
-.level-item.level-3 { background: #faf5ff; }
-.level-item.level-4 { background: #fffbe6; border: 2px solid #fbbf24; }
+.level-item.level-1 { background: linear-gradient(135deg, #f0fff4, #dcfce7); }
+.level-item.level-2 { background: linear-gradient(135deg, #ebf8ff, #dbeafe); }
+.level-item.level-3 { background: linear-gradient(135deg, #faf5ff, #ede9fe); }
+.level-item.level-4 { background: linear-gradient(135deg, #eff6ff, #dbeafe); border-left: 3px solid #60a5fa; }
+.level-item.level-5 { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-left: 3px solid #f97316; animation: master-shine 3s ease-in-out infinite; }
+.level-item.level-6 { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #fbbf24; animation: legendary-shine 2s ease-in-out infinite; }
 
 .level-icon { font-size: 32px; }
 .level-info { flex: 1; }

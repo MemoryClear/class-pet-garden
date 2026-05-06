@@ -3,7 +3,9 @@
     <div class="level-badge" v-if="student.petId">Lv.{{ level }}</div>
 
     <div class="pet-top-deco" v-if="level >= 3 || headItems.length">
-      <span v-if="level >= 4" class="deco-crown">👑</span>
+      <span v-if="level >= 6" class="deco-crown">👑</span>
+      <span v-if="level === 5" class="deco-fire-text">🔥</span>
+      <span v-if="level === 4" class="deco-crystal">💠</span>
       <span v-if="level === 3" class="deco-halo">💫</span>
       <!-- 头顶装饰 -->
       <span v-for="item in headItems" :key="item.id" class="equipped-deco head-deco" :title="item.name"> {{ item.icon }} </span>
@@ -15,6 +17,7 @@
 
       <div class="pet-avatar">
         <span v-if="level >= 2" class="deco deco-star1">✨</span>
+        <span v-if="level >= 4" class="deco deco-star3">✨</span>
         <span v-if="student.petIcon" class="pet-icon" :class="`size-${level}`">{{ student.petIcon }}</span>
         <span v-else class="pet-icon">❓</span>
         <span v-if="level >= 2" class="deco deco-star2">✨</span>
@@ -123,8 +126,10 @@ const rightItems = computed(() =>
 
 const level = computed(() => {
   const food = props.student.food ?? 0
-  if (food >= 50) return 4
-  if (food >= 25) return 3
+  if (food >= 200) return 6
+  if (food >= 100) return 5
+  if (food >= 60) return 4
+  if (food >= 30) return 3
   if (food >= 10) return 2
   return 1
 })
@@ -132,15 +137,15 @@ const level = computed(() => {
 const levelClass = computed(() => `level-${level.value}`)
 
 const levelTitle = computed(() => {
-  const titles = { 1: '', 2: '', 3: '★', 4: '★★★' }
+  const titles = { 1: '', 2: '✦', 3: '★', 4: '★★', 5: '★★★', 6: '★★★★' }
   return titles[level.value] || ''
 })
 
 const foodPct = computed(() => {
   const food = props.student.food ?? 0
-  const thresholds = [0, 10, 25, 50]
+  const thresholds = [0, 10, 30, 60, 100, 200]
   const currentLevel = level.value
-  if (currentLevel >= 4) return 100
+  if (currentLevel >= 6) return 100
   const currentMin = thresholds[currentLevel - 1]
   const nextMin = thresholds[currentLevel]
   const progress = food - currentMin
@@ -183,14 +188,54 @@ onMounted(async () => {
 
 .pet-card.level-2 { background: linear-gradient(135deg, #fff 0%, #f0f9ff 100%); }
 .pet-card.level-3 { background: linear-gradient(135deg, #fff 0%, #faf5ff 100%); }
+.pet-card.level-3 { background: linear-gradient(135deg, #fff 0%, #faf5ff 100%); }
 .pet-card.level-4 {
-  background: linear-gradient(135deg, #fffbe6 0%, #fff1b8 100%);
+  background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+  border: 1px solid rgba(96,165,250,0.3);
+  animation: elite-glow 2.5s ease-in-out infinite;
+}
+.pet-card.level-5 {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 1px solid rgba(249,115,22,0.3);
+  animation: master-glow 2s ease-in-out infinite;
+}
+.pet-card.level-6 {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1px solid rgba(255,215,0,0.5);
   animation: legendary-glow 2s ease-in-out infinite;
 }
 
+@keyframes elite-glow {
+  0%, 100% { box-shadow: 0 4px 12px rgba(96,165,250,0.25); }
+  50% { box-shadow: 0 8px 20px rgba(96,165,250,0.4); }
+}
+@keyframes master-glow {
+  0%, 100% { box-shadow: 0 4px 12px rgba(249,115,22,0.3); }
+  50% { box-shadow: 0 8px 22px rgba(249,115,22,0.5); }
+}
 @keyframes legendary-glow {
-  0%, 100% { box-shadow: 0 4px 12px rgba(250, 200, 50, 0.3); }
-  50% { box-shadow: 0 8px 25px rgba(250, 200, 50, 0.5); }
+  0%, 100% { box-shadow: 0 4px 12px rgba(255,215,0,0.35), 0 0 20px rgba(255,165,0,0.1); }
+  50% { box-shadow: 0 8px 28px rgba(255,215,0,0.55), 0 0 30px rgba(255,165,0,0.2); }
+}
+@keyframes fire-glow {
+  from { filter: drop-shadow(0 4px 16px rgba(249,115,22,0.7)) brightness(1); }
+  to { filter: drop-shadow(0 4px 20px rgba(239,68,68,0.9)) brightness(1.1); }
+}
+@keyframes legendary-pulse {
+  0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 4px 20px rgba(255,215,0,0.8)) drop-shadow(0 0 8px rgba(255,165,0,0.5)); }
+  50% { transform: scale(1.05) rotate(1deg); filter: drop-shadow(0 4px 24px rgba(255,200,0,1)) drop-shadow(0 0 12px rgba(255,165,0,0.7)); }
+}
+@keyframes gold-spin {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(15deg); }
+}
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes fire-bar {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
 }
 
 .level-badge {
@@ -200,13 +245,16 @@ onMounted(async () => {
   color: white; font-size: 11px; font-weight: 700;
   padding: 3px 8px; border-radius: 10px;
 }
-.pet-card.level-4 .level-badge {
-  background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
-  animation: badge-pulse 1.5s ease-in-out infinite;
-}
+.pet-card.level-4 .level-badge { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); animation: badge-pulse 1.5s ease-in-out infinite; }
+.pet-card.level-5 .level-badge { background: linear-gradient(135deg, #f97316 0%, #ef4444 100%); animation: badge-pulse 1.2s ease-in-out infinite; }
+.pet-card.level-6 .level-badge { background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%); animation: badge-pulse 1s ease-in-out infinite, gold-spin 3s linear infinite; }
 @keyframes badge-pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
+}
+@keyframes gold-spin {
+  0% { filter: hue-rotate(0deg) brightness(1); }
+  100% { filter: hue-rotate(15deg) brightness(1.1); }
 }
 
 .pet-top-deco {
@@ -251,10 +299,16 @@ onMounted(async () => {
 .pet-card:hover .pet-icon { transform: scale(1.1); }
 .pet-icon.size-2 { font-size: 64px; }
 .pet-icon.size-3 { font-size: 68px; filter: drop-shadow(0 2px 8px rgba(168,85,247,0.4)); }
-.pet-icon.size-4 {
+.pet-icon.size-4 { font-size: 70px; filter: drop-shadow(0 4px 12px rgba(96,165,250,0.6)); animation: icon-float 2s ease-in-out infinite; }
+.pet-icon.size-5 {
   font-size: 72px;
-  filter: drop-shadow(0 4px 12px rgba(250,200,50,0.6));
-  animation: icon-float 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 16px rgba(249,115,22,0.7));
+  animation: icon-float 1.5s ease-in-out infinite, fire-glow 0.6s ease-in-out infinite alternate;
+}
+.pet-icon.size-6 {
+  font-size: 76px;
+  filter: drop-shadow(0 4px 20px rgba(255,215,0,0.8)) drop-shadow(0 0 8px rgba(255,165,0,0.5));
+  animation: icon-float 1.2s ease-in-out infinite, legendary-pulse 1.5s ease-in-out infinite;
 }
 @keyframes icon-float {
   0%, 100% { transform: translateY(0); }
@@ -381,19 +435,28 @@ onMounted(async () => {
 
 .pet-info { text-align: center; margin-bottom: 10px; }
 .pet-name { font-size: 15px; font-weight: 600; color: #2d3748; display: flex; align-items: center; justify-content: center; gap: 4px; }
-.pet-card.level-4 .pet-name { color: #b7791f; }
+.pet-card.level-4 .pet-name { color: #1e40af; }
+.pet-card.level-5 .pet-name { color: #c2410c; }
+.pet-card.level-6 .pet-name { color: #b7791f; }
 .student-name { font-size: 12px; color: #999; margin-top: 2px; }
 .title-badge { font-size: 10px; color: #a855f7; }
+.pet-card.level-4 .title-badge { color: #3b82f6; }
+.pet-card.level-5 .title-badge { color: #ef4444; }
+.pet-card.level-6 .title-badge { color: #d97706; }
 
 .pet-food { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
 .food-bar { flex: 1; height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; position: relative; }
 .food-fill { height: 100%; background: linear-gradient(90deg, #ff9f69, #ffc168); border-radius: 3px; transition: width 0.3s; }
 .food-bar.bar-2 .food-fill { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
 .food-bar.bar-3 .food-fill { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
-.food-bar.bar-4 .food-fill { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.food-bar.bar-4 .food-fill { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+.food-bar.bar-5 .food-fill { background: linear-gradient(90deg, #f97316, #ef4444); }
+.food-bar.bar-6 .food-fill { background: linear-gradient(90deg, #ffd700, #ff8c00); animation: fire-bar 0.8s ease-in-out infinite; }
 .food-emoji { font-size: 12px; }
 .food-val { font-size: 12px; font-weight: 600; color: #b87323; min-width: 20px; }
-.pet-card.level-4 .food-val { color: #b7791f; }
+.pet-card.level-4 .food-val { color: #1e40af; }
+.pet-card.level-5 .food-val { color: #c2410c; }
+.pet-card.level-6 .food-val { color: #b7791f; }
 .student-no {
   font-size: 11px;
   color: #888;
