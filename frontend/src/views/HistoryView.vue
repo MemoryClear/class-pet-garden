@@ -71,6 +71,8 @@ import { ref, watch, onMounted } from 'vue'
 import { useAppStore } from '../stores/app.js'
 import { useRouter } from 'vue-router'
 import api from '../api/index.js'
+import $confirm from '../composables/useConfirmModal.js'
+
 
 const appStore = useAppStore()
 const router = useRouter()
@@ -101,7 +103,7 @@ async function confirmRevoke() {
     await appStore.fetchStudents()
     revokeTarget.value = null
   } catch (e) {
-    alert(e.response?.data?.error || '撤销失败')
+    $confirm.error(e.response?.data?.error || '撤销失败')
   } finally {
     revoking.value = false
   }

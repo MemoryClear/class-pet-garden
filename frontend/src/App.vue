@@ -1,8 +1,20 @@
 <template>
   <router-view />
+  <ConfirmModal ref="confirmModal" />
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+import ConfirmModal from './components/ConfirmModal.vue'
+import { setConfirmModal } from './composables/useConfirmModal.js'
+
+const confirmModal = ref(null)
+
+onMounted(() => {
+  if (confirmModal.value) {
+    setConfirmModal(confirmModal.value)
+  }
+})
 </script>
 
 <style>

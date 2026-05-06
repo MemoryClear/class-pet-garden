@@ -30,6 +30,8 @@
 import { ref, watch } from 'vue'
 import { studentApi } from '../api/index.js'
 import { useAuthStore } from '../stores/auth.js'
+import $confirm from '../composables/useConfirmModal.js'
+
 
 const props = defineProps({
   student: { type: Object, required: true }
@@ -50,7 +52,7 @@ function save() {
 
   studentApi.update(props.student.id, data)
     .then(() => { emit('updated', { ...props.student, ...data }); emit('close') })
-    .catch(e => { alert('保存失败: ' + (e.response?.data?.message || e.message)); saving.value = false })
+    .catch(e => { $confirm.error('保存失败: ' + (e.response?.data?.message || e.message)); saving.value = false })
 }
 </script>
 

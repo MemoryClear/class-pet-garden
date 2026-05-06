@@ -158,6 +158,8 @@ import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
 import api, { studentApi2 } from '../api/index.js'
 import ClassroomView from './ClassroomView.vue'
+import $confirm from '../composables/useConfirmModal.js'
+
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -230,28 +232,28 @@ async function fetchPetLibrary() {
 
 async function adoptPet(pet) {
   if (myInfo.petId && myInfo.petChangeCards <= 0) {
-    alert('更换宠物需要先购买宠物更换卡！')
+    $confirm.alert('更换宠物需要先购买宠物更换卡！', {type:'warn'})
     return
   }
-  if (myInfo.petId && !confirm('更换宠物需要消耗一张宠物更换卡，确定继续吗？')) return
+  if (myInfo.petId && !await $confirm.confirm('更换宠物需要消耗一张宠物更换卡，确定继续吗？')) return
   try {
     await studentApi2.adopt({ petId: pet.id, petName: pet.name, petIcon: pet.icon })
-    alert('领养成功！🐾')
+    $confirm.success('领养成功！🐾')
     await fetchMyInfo()
   } catch (e) {
-    alert(e.response?.data?.error || '领养失败')
+    $confirm.error(e.response?.data?.error || '领养失败')
   }
 }
 
 async function exchangeItem(item) {
-  if (!confirm(`确定花费 ${item.price} 分兑换「${item.name}」吗？`)) return
+  if (!await $confirm.confirm(`确定花费 ${item.price} 分兑换「${item.name}」吗？`)) return
   try {
     await studentApi2.exchange(item.id)
-    alert('兑换成功！')
+    $confirm.success('兑换成功！')
     await fetchMyInfo()
     await fetchShop()
   } catch (e) {
-    alert(e.response?.data?.error || '兑换失败')
+    $confirm.error(e.response?.data?.error || '兑换失败')
   }
 }
 
