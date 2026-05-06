@@ -24,6 +24,7 @@
           </div>
           <div class="poem-actions">
             <button class="add-poem-btn" @click="showAddPoemModal = true">➕ 添加诗词</button>
+            <button v-if="isStudent" class="add-poem-btn" @click="startPoemQuiz">📝 诗词测验</button>
             <div class="poem-filter">
               <button :class="['filter-btn', { active: poemFilter === 'all' }]" @click="poemFilter = 'all'">全部</button>
               <button :class="['filter-btn', { active: poemFilter === 'learned' }]" @click="poemFilter = 'learned'">已学习</button>
@@ -33,7 +34,7 @@
         </div>
         <div v-if="loading" class="loading">加载中...</div>
         <div v-else-if="poems.length === 0" class="empty">暂无诗词，点击上方按钮添加</div>
-        <div v-else class="poem-list">
+        <div v-else-if="!poemQuizActive" class="poem-list">
           <div
             v-for="(poem, index) in filteredPoems"
             :key="poem.title + poem.author"
@@ -104,6 +105,64 @@
               <button class="submit-btn" @click="addPoem" :disabled="!newPoem.title || !newPoem.author || !newPoem.content">添加</button>
               <p v-if="addError" class="error">{{ addError }}</p>
             </div>
+          </div>
+        </div>
+        <div v-if="poemQuizActive" class="poem-quiz-section">
+          <div class="quiz-header-bar">
+            <span class="quiz-progress">{{ poemQuizIndex + 1 }} / {{ poemQuizBlanks.length }}</span>
+            <span class="quiz-score-display">得分: {{ poemQuizScore }} 分</span>
+          </div>
+          <div v-if="poemQuizIndex < poemQuizBlanks.length" class="poem-quiz-card">
+            <p class="poem-quiz-title">{{ poemQuizBlanks[poemQuizIndex].poem.title }} - {{ poemQuizBlanks[poemQuizIndex].poem.author }}</p>
+            <div class="poem-quiz-content">
+              <span
+                v-for="(char, ci) in poemQuizBlanks[poemQuizIndex].poem.content.split('').filter(c => c !== '\n')"
+                :key="ci"
+              >
+                <span
+                  v-if="poemQuizBlanks[poemQuizIndex].blankPositions && poemQuizBlanks[poemQuizIndex].blankPositions.includes(ci)"
+                  class="poem-blank"
+                  :class="{ revealed: poemQuizChecked }"
+                >
+                  {{ poemQuizChecked ? char : '_' }}
+                </span>
+                <span v-else>{{ char }}</span>
+              </span>
+            </div>
+            <div class="poem-blanks-input" v-if="!poemQuizChecked">
+              <p class="poem-blanks-hint">请填写所有下划线处的汉字：</p>
+              <div class="poem-blanks-row">
+                <input
+                  v-for="(blank, bi) in poemQuizBlanks[poemQuizIndex].blanks"
+                  :key="bi"
+                  v-model="poemQuizAnswers[bi]"
+                  class="poem-blank-input"
+                  maxlength="1"
+                  placeholder="字"
+                />
+              </div>
+              <button class="submit-quiz-btn" @click="checkPoemBlanks">确定</button>
+            </div>
+            <div v-if="poemQuizChecked" class="quiz-feedback">
+              <p v-for="(blank, bi) in poemQuizBlanks[poemQuizIndex].blanks" :key="bi">
+                {{ blank.char === poemQuizAnswers[bi] ? '✓ 正确：' + blank.char : '✗ 正确：' + blank.char }}
+              </p>
+            </div>
+            <button
+              v-if="poemQuizChecked && poemQuizIndex < poemQuizBlanks.length - 1"
+              class="next-quiz-btn"
+              @click="nextPoemQuestion"
+            >下一题</button>
+            <button
+              v-if="poemQuizChecked && poemQuizIndex >= poemQuizBlanks.length - 1"
+              class="next-quiz-btn"
+              @click="poemQuizActive = false"
+            >完成！</button>
+          </div>
+          <div v-else class="quiz-finish">
+            <p class="finish-score">测验完成！得分：{{ poemQuizScore }} / {{ poemQuizBlanks.length * poemQuizBlanks[0].blanks.length }}</p>
+            <button class="gen-btn" @click="startPoemQuiz">再来一组</button>
+            <button class="gen-btn secondary" @click="poemQuizActive = false">返回诗词</button>
           </div>
         </div>
       </div>
@@ -194,7 +253,11 @@
         </div>
         <div class="quiz-summary" v-if="mathProblems.length && mathProblems.every(p => p.result !== null)">
           <p>🎉 全部完成！正确 {{ mathProblems.filter(p => p.result).length }} / {{ mathProblems.length }}</p>
-          <button class="gen-btn" @click="generateMathProblems">再来一组</button>
+          <div class="quiz-actions">
+            <button v-if="isStudent && !mathSubmitted" class="submit-score-btn" @click="submitMathScore">🏆 交卷得分</button>
+            <span v-if="mathSubmitted" class="score-submitted">✅ 已交卷 +{{ mathSubmittedScore }}分</span>
+            <button class="gen-btn" @click="generateMathProblems">再来一组</button>
+          </div>
         </div>
         <div class="wrong-records" v-if="wrongRecords.length">
           <h3>错题记录</h3>
@@ -244,7 +307,11 @@
             </div>
             <div class="quiz-summary" v-if="multiplyProblems.every(p => p.result !== null)">
               <p>🎉 全部完成！正确 {{ multiplyProblems.filter(p => p.result).length }} / {{ multiplyProblems.length }}</p>
-              <button class="gen-btn" @click="generateMultiplyQuiz">再来一组</button>
+              <div class="quiz-actions">
+                <button v-if="isStudent && !multiplySubmitted" class="submit-score-btn" @click="submitMultiplyScore">🏆 交卷得分</button>
+                <span v-if="multiplySubmitted" class="score-submitted">✅ 已交卷 +{{ multiplySubmittedScore }}分</span>
+                <button class="gen-btn" @click="generateMultiplyQuiz">再来一组</button>
+              </div>
             </div>
           </div>
         </div>
@@ -255,9 +322,13 @@
     <!-- 英语 -->
     <div v-if="activeTab === '英语'" class="tab-content">
       <div class="english-toolbar">
+        <button :class="['speak-all-btn', { active: englishMode === 'cards' }]" @click="englishMode = 'cards'">🔤 字母</button>
         <button class="speak-all-btn" @click="speakAllLetters">🔊 朗读全部</button>
+        <button :class="['speak-all-btn', { active: englishMode === 'quiz' }]" @click="startEnglishQuiz">📝 测验</button>
       </div>
-      <div class="english-cards">
+
+      <!-- 英语字母卡片模式 -->
+      <div v-if="englishMode === 'cards'" class="english-cards">
         <div v-for="letter in letters" :key="letter.upper" class="letter-card" :class="{ flipped: letter.flipped }" @click="letter.flipped = !letter.flipped">
           <div class="card-front">
             <span class="letter-char">{{ letter.lower }}</span>
@@ -268,14 +339,56 @@
           </div>
         </div>
       </div>
-      <p class="hint">点击卡片翻转显示大写 · 点击 🔊 发音</p>
+
+      <!-- 英语字母测验模式 -->
+      <div v-if="englishMode === 'quiz' && englishQuizActive" class="english-quiz-section">
+        <div class="quiz-header-bar">
+          <span class="quiz-progress">{{ englishQuizIndex + 1 }} / {{ englishQuizQuestions.length }}</span>
+          <span class="quiz-score-display">得分: {{ englishQuizScore }} 分</span>
+        </div>
+        <div v-if="englishQuizIndex < englishQuizQuestions.length" class="english-quiz-card">
+          <div class="quiz-target-letter">
+            <span class="target-char">{{ englishQuizQuestions[englishQuizIndex].letter.lower }}</span>
+            <button class="speak-btn" @click="speakLetter(englishQuizQuestions[englishQuizIndex].letter.lower)">🔊 发音</button>
+          </div>
+          <p class="quiz-prompt">请问这个字母的大写是什么？</p>
+          <div class="quiz-choices">
+            <button
+              v-for="(choice, ci) in englishQuizQuestions[englishQuizIndex].options"
+              :key="ci"
+              :class="['quiz-choice-btn', {
+                selected: englishQuizSelected === choice,
+                correct: englishQuizSubmitted && choice === englishQuizQuestions[englishQuizIndex].letter.upper,
+                wrong: englishQuizSubmitted && englishQuizSelected === choice && choice !== englishQuizQuestions[englishQuizIndex].letter.upper
+              }]"
+              :disabled="englishQuizSubmitted"
+              @click="englishQuizSelected = choice"
+            >{{ choice }}</button>
+          </div>
+          <div v-if="englishQuizSubmitted" class="quiz-feedback">
+            {{ englishQuizSelected === englishQuizQuestions[englishQuizIndex].letter.upper ? '✓ 正确！+1分' : '✗ 正确答案是 ' + englishQuizQuestions[englishQuizIndex].letter.upper }}
+          </div>
+          <button v-if="!englishQuizSubmitted" class="submit-quiz-btn" :disabled="englishQuizSelected === null" @click="submitEnglishAnswer">确定</button>
+          <button v-if="englishQuizSubmitted && englishQuizIndex < englishQuizQuestions.length - 1" class="next-quiz-btn" @click="nextEnglishQuestion">下一题 →</button>
+          <button v-if="englishQuizSubmitted && englishQuizIndex >= englishQuizQuestions.length - 1" class="next-quiz-btn" @click="englishQuizActive = false; englishMode = 'cards'">完成</button>
+        </div>
+        <div v-if="englishQuizIndex >= englishQuizQuestions.length && englishQuizActive" class="quiz-finish">
+          <p class="finish-score">🎉 测验完成！得分：{{ englishQuizScore }} / {{ englishQuizQuestions.length }}</p>
+          <button class="gen-btn" @click="startEnglishQuiz">再来一组</button>
+          <button class="gen-btn secondary" @click="englishQuizActive = false; englishMode = 'cards'">返回</button>
+        </div>
+      </div>
+      <div v-if="englishMode === 'quiz' && !englishQuizActive" class="english-quiz-placeholder">
+        <p>点击上方「测验」按钮开始英语字母测验</p>
+      </div>
     </div>
     <!-- /英语 -->
   </div>
 </template>
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
-import { classroomApi } from '../api/index.js'
+import { classroomApi, studentApi2 } from '../api/index.js'
+import { useAuthStore } from '../stores/auth.js'
 import { pinyin as py } from 'pinyin'
 
 // 拼音辅助函数：将 pinyin 数组转为空格分隔的字符串
@@ -525,6 +638,30 @@ function speakAllLetters() { letters.forEach((l, i) => setTimeout(() => speakLet
 const mathMode = ref('arithmetic')
 const mathConfig = reactive({ maxNum: 10, operations: ['+', '-'], count: 10 })
 const mathProblems = ref([])
+
+// 英语测验
+const englishMode = ref('cards')
+const englishQuizActive = ref(false)
+const englishQuizQuestions = ref([])
+const englishQuizIndex = ref(0)
+const englishQuizScore = ref(0)
+const englishQuizSelected = ref(null)
+const englishQuizSubmitted = ref(false)
+
+// 诗词填空测验
+const poemQuizActive = ref(false)
+const poemQuizBlanks = ref([])
+const poemQuizIndex = ref(0)
+const poemQuizScore = ref(0)
+const poemQuizAnswers = ref([])
+const poemQuizChecked = ref(false)
+
+// 数学交卷
+const mathSubmitted = ref(false)
+const mathSubmittedScore = ref(0)
+const multiplySubmitted = ref(false)
+const multiplySubmittedScore = ref(0)
+const isStudent = ref(false)
 const wrongRecords = ref([])
 
 function _makeOneProblem() {
@@ -587,7 +724,97 @@ function checkMultiplyOne(i) {
 // === 英语 ===
 const letters = ref('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(l => ({ upper: l, lower: l.toLowerCase(), flipped: false })))
 
-onMounted(() => { loadPoems(); generateMathProblems() })
+onMounted(() => {
+  loadPoems()
+  generateMathProblems()
+  const authStore = useAuthStore()
+  isStudent.value = authStore.isStudent
+})
+
+// === 功能函数 ===
+function startEnglishQuiz() {
+  englishMode.value = 'quiz'
+  englishQuizActive.value = true
+  englishQuizIndex.value = 0
+  englishQuizScore.value = 0
+  englishQuizSelected.value = null
+  englishQuizSubmitted.value = false
+  const shuffled = [...letters.value].sort(() => Math.random() - 0.5).slice(0, 10)
+  englishQuizQuestions.value = shuffled.map(letter => {
+    const opts = [letter.upper, ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').filter(u => u !== letter.upper).sort(() => Math.random() - 0.5).slice(0, 3)]
+    return { letter, options: opts.sort(() => Math.random() - 0.5) }
+  })
+}
+
+function submitEnglishAnswer() {
+  const q = englishQuizQuestions.value[englishQuizIndex.value]
+  if (englishQuizSelected.value === q.letter.upper) englishQuizScore.value++
+  englishQuizSubmitted.value = true
+}
+
+function nextEnglishQuestion() {
+  englishQuizIndex.value++
+  englishQuizSelected.value = null
+  englishQuizSubmitted.value = false
+  if (englishQuizIndex.value >= englishQuizQuestions.value.length) {
+    studentApi2.quizScore(englishQuizScore.value, '英语字母测验').catch(() => {})
+  }
+}
+
+function startPoemQuiz() {
+  poemQuizActive.value = true
+  poemQuizIndex.value = 0
+  poemQuizScore.value = 0
+  poemQuizChecked.value = false
+  poemQuizAnswers.value = []
+  const shuffled = [...poems.value].sort(() => Math.random() - 0.5).slice(0, 5)
+  poemQuizBlanks.value = shuffled.map(poem => {
+    const chars = poem.content.split('').filter(c => c !== '\n')
+    const blanks = []
+    const usedIdx = new Set()
+    for (let i = 0; i < Math.min(4, chars.length); i++) {
+      let idx
+      do { idx = Math.floor(Math.random() * chars.length) } while (usedIdx.has(idx) || /[，。！？、；：""''（）\s]/.test(chars[idx]))
+      usedIdx.add(idx)
+      blanks.push({ char: chars[idx], pos: idx })
+    }
+    // 关键：blanks 按位置升序排列，确保输入框顺序与下划线位置一致
+    blanks.sort((a, b) => a.pos - b.pos)
+    const blankPositions = blanks.map(b => b.pos)
+    return { poem, blanks, blankPositions }
+  })
+}
+
+function checkPoemBlanks() {
+  poemQuizChecked.value = true
+  const blanks = poemQuizBlanks.value[poemQuizIndex.value].blanks
+  blanks.forEach((blank, bi) => {
+    if (poemQuizAnswers.value[bi] === blank.char) poemQuizScore.value++
+  })
+}
+
+function nextPoemQuestion() {
+  poemQuizIndex.value++
+  poemQuizChecked.value = false
+  poemQuizAnswers.value = []
+  if (poemQuizIndex.value >= poemQuizBlanks.value.length) {
+    studentApi2.quizScore(poemQuizScore.value, '语文诗词填空测验').catch(() => {})
+  }
+}
+
+function submitMathScore() {
+  const correct = mathProblems.value.filter(p => p.result).length
+  mathSubmitted.value = true
+  mathSubmittedScore.value = correct
+  studentApi2.quizScore(correct, '数学四则运算').catch(() => {})
+}
+
+function submitMultiplyScore() {
+  const correct = multiplyProblems.value.filter(p => p.result).length
+  multiplySubmitted.value = true
+  multiplySubmittedScore.value = correct
+  studentApi2.quizScore(correct, '数学乘法练习').catch(() => {})
+}
 </script>
 <style scoped>
 .classroom-container { padding: 20px; max-width: 800px; margin: 0 auto; min-height: 100vh; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
@@ -779,4 +1006,46 @@ onMounted(() => { loadPoems(); generateMathProblems() })
 .pinyin-card.flipped .pinyin-back { transform: rotateY(0deg); }
 .pinyin-sound { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
 .pinyin-example { font-size: 12px; opacity: 0.9; }
+
+/* 诗词填空测验 */
+.poem-quiz-section { padding: 15px; animation: fadeIn 0.3s; }
+.poem-quiz-card { background: white; border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+.poem-quiz-title { color: #92400e; font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; }
+.poem-quiz-content { background: #fef3c7; padding: 20px; border-radius: 10px; font-size: 1.4rem; line-height: 2.5; font-family: 'KaiTi', serif; white-space: pre-wrap; margin-bottom: 20px; }
+.poem-blank { display: inline-block; border-bottom: 2px solid #d97706; color: #d97706; min-width: 1.8em; text-align: center; }
+.poem-blank.revealed { border-bottom-color: #059669; color: #059669; }
+.poem-blanks-hint { color: #666; font-size: 0.9rem; margin-bottom: 10px; }
+.poem-blanks-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px; }
+.poem-blank-input { width: 60px; height: 50px; text-align: center; font-size: 1.4rem; border: 2px solid #d97706; border-radius: 8px; font-family: 'KaiTi', serif; }
+.poem-blank-input:focus { outline: none; border-color: #b45309; background: #fffbeb; }
+
+/* 英语测验 */
+.english-quiz-section { padding: 15px; text-align: center; }
+.english-quiz-card { background: white; border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 10px; }
+.quiz-choices { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
+.quiz-choice-btn { padding: 12px 20px; background: white; border: 2px solid #d97706; border-radius: 10px; cursor: pointer; font-size: 1.1rem; min-width: 60px; transition: all 0.2s; }
+.quiz-choice-btn:hover { background: #fef3c7; }
+.quiz-choice-btn.selected { background: #d97706; color: white; }
+.quiz-choice-btn.correct { background: #059669; color: white; border-color: #059669; }
+.quiz-choice-btn.wrong { background: #dc2626; color: white; border-color: #dc2626; }
+.quiz-choice-btn:disabled { cursor: default; }
+.submit-quiz-btn { margin-top: 16px; padding: 12px 32px; background: #059669; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+.submit-quiz-btn:hover { background: #047857; }
+.submit-quiz-btn:disabled { background: #ccc; cursor: not-allowed; }
+.next-quiz-btn { margin-top: 10px; margin-left: 8px; padding: 10px 24px; background: #d97706; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+.next-quiz-btn:hover { background: #b45309; }
+.quiz-feedback { margin-top: 10px; padding: 10px; background: #fef3c7; border-radius: 8px; font-size: 1rem; }
+.quiz-finish { background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 10px; }
+.finish-score { font-size: 1.3rem; color: #059669; font-weight: bold; margin-bottom: 20px; }
+.gen-btn.secondary { background: #666; }
+.gen-btn.secondary:hover { background: #444; }
+.quiz-header-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: rgba(255,255,255,0.6); border-radius: 12px; margin-bottom: 10px; }
+.quiz-progress { color: #92400e; font-weight: bold; }
+.quiz-score-display { color: #059669; font-weight: bold; }
+.quiz-target-letter { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; }
+.target-char { font-size: 3rem; font-weight: bold; color: #92400e; }
+.quiz-target-letter .speak-btn { padding: 8px 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
+.quiz-target-letter .speak-btn:hover { background: #2563eb; }
+.quiz-prompt { color: #666; margin-bottom: 12px; }
+.english-quiz-placeholder { text-align: center; padding: 40px; color: #92400e; }
 </style>

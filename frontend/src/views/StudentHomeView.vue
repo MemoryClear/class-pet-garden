@@ -12,6 +12,7 @@
           <button class="nav-btn" @click="activeSection='leaderboard'">🏆 光荣榜</button>
           <button class="nav-btn" @click="activeSection='shop'">🏪 小卖部</button>
           <button class="nav-btn" @click="activeSection='classroom'">📚 课堂</button>
+          <button class="nav-btn" @click="activeSection='records'">📝 记录</button>
           <button class="nav-btn" @click="activeSection='level'">📊 等级说明</button>
           <button class="nav-btn logout-btn" @click="handleLogout">退出</button>
         </div>
@@ -94,6 +95,48 @@
         <ClassroomView />
       </div>
 
+      <!-- 记录 -->
+      <div v-if="activeSection === 'records'" class="section">
+        <div class="section-tabs">
+          <button :class="{ active: recordTab === 'score' }" @click="recordTab='score'">💰 积分明细</button>
+          <button :class="{ active: recordTab === 'exchange' }" @click="recordTab='exchange'">🎁 道具明细</button>
+        </div>
+        <div v-if="recordTab === 'score'" class="records-list">
+          <div v-for="r in scoreHistory" :key="r.id" class="record-item">
+            <div class="record-info">
+              <span class="record-icon">{{ r.scoreItemIcon || '📝' }}</span>
+              <div class="record-detail">
+                <span class="record-name">{{ r.scoreItemName }}</span>
+                <span v-if="r.revoked" class="revoked-tag">已撤销</span>
+              </div>
+            </div>
+            <div class="record-right">
+              <span :class="['record-points', r.point >= 0 ? 'positive' : 'negative']">
+                {{ r.point >= 0 ? '+' : '' }}{{ r.point }}
+              </span>
+              <span class="record-time">{{ formatTime(r.createdAt) }}</span>
+            </div>
+          </div>
+          <div v-if="scoreHistory.length === 0" class="empty">暂无积分记录</div>
+        </div>
+        <div v-if="recordTab === 'exchange'" class="records-list">
+          <div v-for="r in exchangeHistory" :key="r.id" class="record-item">
+            <div class="record-info">
+              <span class="record-icon">{{ r.itemIcon }}</span>
+              <div class="record-detail">
+                <span class="record-name">{{ r.itemName }}</span>
+                <span v-if="r.giftFromName" class="gift-tag">🎁 来自 {{ r.giftFromName }}</span>
+              </div>
+            </div>
+            <div class="record-right">
+              <span class="record-points negative">-{{ r.foodSpent }}</span>
+              <span class="record-time">{{ formatTime(r.createdAt) }}</span>
+            </div>
+          </div>
+          <div v-if="exchangeHistory.length === 0" class="empty">暂无道具记录</div>
+        </div>
+      </div>
+
       <!-- 等级说明 -->
       <div v-if="activeSection === 'level'" class="section">
         <h3 class="section-title">📊 宠物等级说明</h3>
@@ -127,6 +170,9 @@ const totalLeaderboard = ref([])
 const petLibrary = ref([])
 const shopItems = ref([])
 const levelGuide = ref([])
+const recordTab = ref('score')
+const scoreHistory = ref([])
+const exchangeHistory = ref([])
 
 const bgStyle = computed(() => ({
   backgroundColor: 'rgba(255,107,157,0.06)',
@@ -209,13 +255,32 @@ async function exchangeItem(item) {
   }
 }
 
+function formatTime(t) {
+  if (!t) return ''
+  const s = typeof t === 'string' ? t : t.toString()
+  return s.replace('T', ' ').substring(0, 16)
+}
+
+async function fetchRecords() {
+  try {
+    const [r1, r2] = await Promise.all([
+      api.get('/student/score-history'),
+      api.get('/student/exchange-history')
+    ])
+    scoreHistory.value = r1.data || []
+    exchangeHistory.value = r2.data || []
+  } catch (e) {
+    console.error('fetchRecords error', e)
+  }
+}
+
 function handleLogout() {
   authStore.logout()
   router.push('/')
 }
 
 onMounted(async () => {
-  await Promise.all([fetchMyInfo(), fetchLeaderboard(), fetchPetLibrary(), fetchShop(), fetchLevelGuide()])
+  await Promise.all([fetchMyInfo(), fetchLeaderboard(), fetchPetLibrary(), fetchShop(), fetchLevelGuide(), fetchRecords()])
 })
 </script>
 
@@ -279,4 +344,20 @@ onMounted(async () => {
 .level-name { font-size: 1.1rem; font-weight: 600; min-width: 120px; }
 .level-range { color: #ff6b9d; font-weight: 500; min-width: 80px; }
 .level-desc { color: #666; }
+
+/* 记录 */
+.records-list { max-height: 500px; overflow-y: auto; }
+.record-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-radius: 12px; margin-bottom: 6px; background: #fafafa; transition: all 0.2s; }
+.record-item:hover { background: #f5f5f5; }
+.record-info { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.record-icon { font-size: 1.2rem; }
+.record-detail { display: flex; flex-direction: column; min-width: 0; }
+.record-name { font-weight: 500; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.record-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.record-points { font-weight: 700; font-size: 1.1rem; }
+.record-points.positive { color: #059669; }
+.record-points.negative { color: #dc2626; }
+.record-time { font-size: 0.75rem; color: #999; }
+.revoked-tag { color: #999; font-size: 0.8rem; text-decoration: line-through; }
+.gift-tag { color: #8b5cf6; font-size: 0.85rem; }
 </style>

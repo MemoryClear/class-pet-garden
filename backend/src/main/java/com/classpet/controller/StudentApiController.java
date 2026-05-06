@@ -1,10 +1,14 @@
 package com.classpet.controller;
 
 import com.classpet.entity.Student;
+import com.classpet.entity.ScoreHistory;
+import com.classpet.entity.ExchangeRecord;
 import com.classpet.security.JwtAuthenticationFilter.AuthenticatedUser;
 import com.classpet.service.StudentService;
 import com.classpet.service.ShopService;
 import com.classpet.repository.ShopItemRepository;
+import com.classpet.repository.ScoreHistoryRepository;
+import com.classpet.repository.ExchangeRecordRepository;
 import com.classpet.entity.ShopItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,8 @@ public class StudentApiController {
 
     @Autowired private StudentService studentService;
     @Autowired private ShopItemRepository shopItemRepository;
+    @Autowired private ScoreHistoryRepository scoreHistoryRepository;
+    @Autowired private ExchangeRecordRepository exchangeRecordRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     // 获取自己的信息
@@ -131,6 +137,26 @@ public class StudentApiController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
+    }
+
+    // 积分明细
+    @GetMapping("/score-history")
+    public ResponseEntity<?> getScoreHistory(@AuthenticationPrincipal AuthenticatedUser principal) {
+        if (!principal.isStudent()) {
+            return ResponseEntity.status(403).body(Map.of("error", "仅限学生使用"));
+        }
+        List<ScoreHistory> history = scoreHistoryRepository.findByStudentIdOrderByCreatedAtDesc(principal.studentId());
+        return ResponseEntity.ok(history);
+    }
+
+    // 道具明细（含赠送记录）
+    @GetMapping("/exchange-history")
+    public ResponseEntity<?> getExchangeHistory(@AuthenticationPrincipal AuthenticatedUser principal) {
+        if (!principal.isStudent()) {
+            return ResponseEntity.status(403).body(Map.of("error", "仅限学生使用"));
+        }
+        List<ExchangeRecord> history = exchangeRecordRepository.findByStudentIdOrderByCreatedAtDesc(principal.studentId());
+        return ResponseEntity.ok(history);
     }
 
     // 学生自助领养/更换宠物
