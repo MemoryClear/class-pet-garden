@@ -24,6 +24,10 @@ FROM maven:3.9-eclipse-temurin-17 AS backend-builder
 
 WORKDIR /app/backend
 
+# Set encoding for Chinese filenames
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
 # Copy backend pom.xml first (for better caching)
 COPY backend/pom.xml ./
 
@@ -36,8 +40,8 @@ COPY backend/src ./src
 # Copy frontend build output to static resources
 COPY --from=frontend-builder /app/frontend/dist ./src/main/resources/static
 
-# Build backend JAR
-RUN mvn clean package -DskipTests -B
+# Build backend JAR with UTF-8 encoding
+RUN mvn clean package -DskipTests -B -Dproject.build.sourceEncoding=UTF-8
 
 # ====================
 # Stage 3: Runtime
@@ -46,8 +50,12 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-# Install curl for healthcheck
-RUN apk add --no-cache curl
+# Install curl for healthcheck and add UTF-8 locale support
+RUN apk add --no-cache curl musl-locales
+
+# Set locale environment
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 # Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
@@ -74,8 +82,9 @@ ENV DB_PATH=/app/data/classpet.db
 ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
 ENV JWT_EXPIRATION_MS=86400000
 
-# Start application
+# Start application with UTF-8 encoding
 ENTRYPOINT ["java", \
+  "-Dfile.encoding=UTF-8", \
   "-Dspring.datasource.url=jdbc:sqlite:${DB_PATH}?busy_timeout=30000&journal_mode=WAL&synchronous=NORMAL", \
   "-Dapp.jwt.secret=${JWT_SECRET}", \
   "-Dapp.jwt.expiration-ms=${JWT_EXPIRATION_MS}", \
