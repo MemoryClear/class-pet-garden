@@ -44,5 +44,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # 移除 Docker 层缓存以避免大文件（82MB JAR + 1333张图片）缓存损坏问题
+          # cache-from: type=gha
+          # cache-to: type=gha,mode=max
