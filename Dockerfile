@@ -46,19 +46,19 @@ RUN mvn clean package -DskipTests -B -Dproject.build.sourceEncoding=UTF-8
 # ====================
 # Stage 3: Runtime
 # ====================
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-# Install curl for healthcheck and add UTF-8 locale support
-RUN apk add --no-cache curl musl-locales
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
 # Set locale environment
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
 # Create non-root user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN groupadd -r appgroup && useradd -r -g appgroup -m appuser
 
 # Copy JAR from builder
 COPY --from=backend-builder /app/backend/target/*.jar app.jar
