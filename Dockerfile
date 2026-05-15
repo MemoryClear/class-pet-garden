@@ -31,7 +31,7 @@ RUN mvn clean package -DskipTests -B -Dproject.build.sourceEncoding=UTF-8
 # ====================
 # Stage 3: Extract JAR (avoid mmap issue)
 # ====================
-FROM eclipse-temurin:17-jre AS extractor
+FROM eclipse-temurin:17 AS extractor
 
 WORKDIR /app
 
