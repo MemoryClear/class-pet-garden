@@ -94,14 +94,12 @@ ENV DB_PATH=/app/data/classpet.db
 ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
 ENV JWT_EXPIRATION_MS=86400000
 
-# Start application directly from extracted layers (no -jar, no ZIP mmap)
-# Uses shell form ENTRYPOINT for proper variable expansion
-ENTRYPOINT exec java \
-  -Dfile.encoding=UTF-8 \
-  -Dsun.jnu.encoding=UTF-8 \
+# Start application directly from extracted layers
+ENTRYPOINT []/bin/sh", "-c"],
+  "exec java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 \
   -Dserver.port=${SERVER_PORT} \
-  "-Dspring.datasource.url=jdbc:sqlite:${DB_PATH}?busy_timeout=30000&journal_mode=WAL&synchronous=NORMAL" \
+  '-Dspring.datasource.url=jdbc:sqlite:${DB_PATH}?busy_timeout=30000&journal_mode=WAL&synchronous=NORMAL' \
   -Dapp.jwt.secret=${JWT_SECRET} \
   -Dapp.jwt.expiration-ms=${JWT_EXPIRATION_MS} \
-  -cp "dependencies/*:spring-boot-loader/:snapshot-dependencies/*:application/" \
-  org.springframework.boot.loader.launch.JarLauncher
+  -cp 'dependencies/*:application' \
+  com.classpet.ClassPetGardenApplication"
