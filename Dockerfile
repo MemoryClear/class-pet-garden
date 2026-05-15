@@ -11,7 +11,7 @@ COPY frontend/ ./
 RUN npm run build
 
 # ====================
-# Stage 2: Build Backend
+# Stage 2: Build Backend (no JAR, run with Maven directly)
 # ====================
 FROM maven:3.9-eclipse-temurin-17 AS backend-builder
 
@@ -26,12 +26,12 @@ RUN mvn dependency:go-offline -B
 COPY backend/src ./src
 COPY --from=frontend-builder /app/frontend/dist ./src/main/resources/static
 
-RUN mvn clean package -DskipTests -B -Dproject.build.sourceEncoding=UTF-8
+# Don't build JAR - we will run with mvn spring-boot:run
 
 # ====================
 # Stage 3: Runtime
 # ====================
-FROM eclipse-temurin:17-jre
+FROM maven:3.9-eclipse-temurin-17
 
 WORKDIR /app
 
@@ -42,8 +42,7 @@ ENV LC_ALL=C.UTF-8
 
 RUN groupadd -r appgroup && useradd -r -g appgroup -m appuser
 
-# Copy original JAR (not extracted)
-COPY --from=backend-builder /app/backend/target/*.jar app.jar
+COPY --from=backend-builder /app/backend/ /app/backend/
 
 RUN mkdir -p /app/data && chown -R appuser:appgroup /app
 
@@ -51,7 +50,7 @@ USER appuser
 
 EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:8080/api/pets || exit 1
 
 ENV SERVER_PORT=8080
@@ -59,4 +58,5 @@ ENV DB_PATH=/app/data/classpet.db
 ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
 ENV JWT_EXPIRATION_MS=86400000
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run directly with mvn - no JAR, no memory-mapped I/O issues
+CMD ["mvn", "spring-boot:run"]
