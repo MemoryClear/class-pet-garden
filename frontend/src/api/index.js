@@ -52,12 +52,16 @@ export const studentApi = {
   create: (data) => api.post('/students', data),
   update: (id, data) => api.put(`/students/${id}`, data),
   delete: (id) => api.delete(`/students/${id}`),
-  getHistory: (id) => api.get(`/students/${id}/history`)
+  getHistory: (id) => api.get(`/students/${id}/history`),
+  getPokemonCount: (id) => api.get(`/students/${id}/pokemon-count`),
+  getStudentPokemon: (id) => api.get(`/students/${id}/pokemon`),
+  setRepresentPokemon: (id, pokemonId) => api.put(`/students/${id}/represent-pokemon`, { pokemonId })
 }
 
 // ============== 宠物相关 ==============
 export const petApi = {
   getAll: () => api.get('/pets'),
+  getPokemon: () => api.get('/pets/pokemon'),
   adopt: (studentId, petData) => api.post(`/students/${studentId}/pet`, petData),
   changePet: (studentId, petData) => api.put(`/students/${studentId}/pet`, petData)
 }
@@ -100,7 +104,30 @@ export const studentApi2 = {
   me: () => api.get('/student/me'),
   adopt: (data) => api.post('/student/adopt', data),
   exchange: (itemId) => api.post('/student/exchange', { itemId }),
-  quizScore: (points, reason) => api.post('/student/quiz-score', { points, reason })
+  quizScore: (points, reason) => api.post('/student/quiz-score', { points, reason }),
+  // 宝可梦相关
+  getPokemon: () => api.get('/student/pokemon'),
+  adoptPokemon: (data) => api.post('/student/adopt-pokemon', data),
+  feedPokemon: (pokemonId, points) => api.post('/student/feed-pokemon', { pokemonId, points }),
+  getPokemonCount: () => api.get('/student/pokemon-count'),
+  evolvePokemon: (pokemonId, data) => api.post(`/student/pokemon/${pokemonId}/evolve`, data),
+  getEvolutionInfo: (pokemonId) => api.get(`/student/pokemon/${pokemonId}/evolution-info`),
+  // 进化道具相关
+  getEvolutionItems: () => api.get('/student/evolution-items'),
+  useEvolutionItem: (pokemonId, itemKey) => api.post(`/student/pokemon/${pokemonId}/use-evolution-item`, { itemKey }),
+  // 精灵球相关
+  getPokemonBalls: () => api.get('/student/pokemon-balls'),
+  usePokemonBall: () => api.post('/student/use-pokemon-ball'),
+  setRepresentPokemon: (pokemonId) => api.post('/student/represent-pokemon', { pokemonId })
+}
+
+
+// ============== 宝可梦池管理 ==============
+export const pokemonApi = {
+  getClassroomPool: (classroomId) => api.get('/pokemon/classroom-pool', { params: { classroomId } }),
+  setClassroomPool: (data) => api.post('/pokemon/classroom-pool', data),
+  clearClassroomPool: (classroomId) => api.delete('/pokemon/classroom-pool', { params: { classroomId } }),
+  distributeBalls: () => api.post('/pokemon/distribute-balls')
 }
 
 export default api

@@ -148,4 +148,59 @@ public class StudentController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
+
+    // 获取学生宝可梦数量
+    @GetMapping("/{id}/pokemon-count")
+    public ResponseEntity<?> getPokemonCount(
+            @PathVariable String id,
+            @AuthenticationPrincipal AuthenticatedUser principal) {
+        try {
+            long count = studentService.getPokemonCount(id);
+            return ResponseEntity.ok(Map.of("count", count));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // 获取学生宝可梦列表（教师查看）
+    @GetMapping("/{id}/pokemon")
+    public ResponseEntity<?> getStudentPokemon(
+            @PathVariable String id,
+            @AuthenticationPrincipal AuthenticatedUser principal) {
+        try {
+            System.out.println("DEBUG CONTROLLER getStudentPokemon called with id: " + id);
+            List<Map<String, Object>> pokemon = studentService.getStudentPokemon(id);
+            // 获取学生当前代表宝可梦ID
+            Student student = studentService.getStudentById(id);
+            Map<String, Object> result = new java.util.HashMap<>();
+            result.put("pokemonList", pokemon);
+            result.put("representPokemonId", student.getRepresentPokemonId());
+            result.put("petChangeCards", student.getPetChangeCards());
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            System.out.println("DEBUG CONTROLLER ERROR: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // 设置学生代表宝可梦（教师操作，消耗更换卡）
+    @PutMapping("/{id}/represent-pokemon")
+    public ResponseEntity<?> setRepresentPokemon(
+            @PathVariable String id,
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestBody Map<String, Object> body) {
+        try {
+            String pokemonId = body.get("pokemonId") != null ? body.get("pokemonId").toString() : null;
+            if (pokemonId == null) {
+                return ResponseEntity.badRequest().body(Map.of("error", "pokemonId不能为空"));
+            }
+            Student student = studentService.setRepresentPokemon(id, pokemonId);
+            return ResponseEntity.ok(Map.of("success", true, "student", student));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
 }

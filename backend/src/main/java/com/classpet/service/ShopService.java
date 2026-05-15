@@ -6,7 +6,6 @@ import com.classpet.dto.ShopDto.ExchangeRequest;
 import com.classpet.dto.ShopDto.GiftRequest;
 import com.classpet.dto.ShopDto.ExchangeRecordResponse;
 import com.classpet.entity.ShopItem;
-import com.classpet.entity.ShopItem;
 import com.classpet.entity.ExchangeRecord;
 import com.classpet.entity.ScoreHistory;
 import com.classpet.entity.Student;
@@ -44,6 +43,8 @@ public class ShopService {
         item.setPrice(req.getPrice());
         item.setDescription(req.getDescription());
         item.setStock(req.getStock());
+        item.setItemType(req.getItemType() != null ? req.getItemType() : "decoration");
+        item.setEvolutionItemKey(req.getEvolutionItemKey());
         item.setTeacherId(teacherId);
         return ShopItemResponse.from(shopItemRepo.save(item));
     }
@@ -57,6 +58,8 @@ public class ShopService {
         item.setPrice(req.getPrice());
         item.setDescription(req.getDescription());
         item.setStock(req.getStock());
+        if (req.getItemType() != null) item.setItemType(req.getItemType());
+        item.setEvolutionItemKey(req.getEvolutionItemKey());
         return ShopItemResponse.from(shopItemRepo.save(item));
     }
 
@@ -183,39 +186,28 @@ public class ShopService {
         return ExchangeRecordResponse.from(record);
     }
 
-    // ============== 默认商品初始化 ==============
-    public void initializeDefaults(String teacherId) {
+    // ============== 进化道具数据 ==============
+    private static final Object[][] EVOLUTION_ITEMS_DATA = {
+        {"💧", "水之石", 30, "让特定宝可梦进化的神秘石头", 99, "水之石"},
+        {"🔥", "火之石", 30, "让特定宝可梦进化的神秘石头", 99, "火之石"},
+        {"🍃", "叶之石", 30, "让特定宝可梦进化的神秘石头", 99, "叶之石"},
+        {"🌙", "月之石", 30, "让特定宝可梦进化的神秘石头", 99, "月之石"},
+        {"⚡", "雷之石", 30, "让特定宝可梦进化的神秘石头", 99, "雷之石"},
+        {"🔗", "联系绳", 30, "让特定宝可梦进化的神秘绳索", 99, "联系绳"}
+    };
+
+    // ============== 进化道具迁移（旧账号兼容） ==============
+    public void migrateEvolutionItems(String teacherId) {
         List<ShopItem> existing = shopItemRepo.findByTeacherIdOrderByCreatedAtDesc(teacherId);
-        if (!existing.isEmpty()) return;
+        boolean hasEvolutionItem = existing.stream().anyMatch(i -> "evolution_item".equals(i.getItemType()));
+        if (!hasEvolutionItem) {
+            createEvolutionItems(teacherId);
+        }
+    }
 
-        Object[][] defaults = {
-            // 头饰类
-            {"🎀", "蝴蝶结", 8, "可爱蝴蝶结，装扮宠物头顶", 99},
-            {"👑", "金色王冠", 25, "尊贵王冠，传说中的装饰", 30},
-            {"🎩", "魔术礼帽", 15, "神秘魔术师的礼帽", 50},
-            {"🌸", "樱花头饰", 12, "春日限定的樱花发饰", 40},
-            {"🎓", "毕业帽", 20, "学霸专属毕业帽", 35},
-            // 衣饰类
-            {"🧣", "温暖围巾", 10, "柔软温暖的围巾", 60},
-            {"👕", "潮流T恤", 12, "时尚潮流的宠物T恤", 50},
-            {"🧥", "魔法斗篷", 30, "神秘魔法斗篷，传说级", 20},
-            {"👗", "公主裙", 18, "梦幻公主裙", 35},
-            {"🦺", "冒险背心", 14, "勇敢冒险者的背心", 45},
-            // 配饰类
-            {"🕶️", "墨镜", 10, "酷酷的宠物墨镜", 55},
-            {"💍", "闪亮戒指", 22, "闪闪发光的戒指", 25},
-            {"⌚", "智能手表", 16, "高科技宠物手表", 40},
-            {"🔔", "铃铛项链", 8, "叮叮当的铃铛项链", 65},
-            {"🎒", "小书包", 14, "迷你书包，上学必备", 45},
-            // 特效类
-            {"✨", "星光特效", 20, "全身闪烁星光", 30},
-            {"🌈", "彩虹光环", 28, "头上浮现彩虹光环", 25},
-            {"🔥", "烈焰光环", 35, "传说级烈焰光环", 15},
-            {"💫", "旋转星星", 18, "身边旋转的小星星", 35},
-            {"🛡️", "守护盾牌", 24, "闪耀的守护之盾", 30}
-        };
-
-        for (Object[] d : defaults) {
+    // 创建进化道具商品
+    private void createEvolutionItems(String teacherId) {
+        for (Object[] d : EVOLUTION_ITEMS_DATA) {
             ShopItem item = new ShopItem();
             item.setIcon((String) d[0]);
             item.setName((String) d[1]);
@@ -223,19 +215,86 @@ public class ShopService {
             item.setDescription((String) d[3]);
             item.setStock((Integer) d[4]);
             item.setTeacherId(teacherId);
-            item.setItemType("decoration");
+            item.setItemType("evolution_item");
+            item.setEvolutionItemKey((String) d[5]);
             shopItemRepo.save(item);
         }
-        
-        // 添加宠物更换卡
-        ShopItem petCard = new ShopItem();
-        petCard.setIcon("🎫");
-        petCard.setName("宠物更换卡");
-        petCard.setPrice(15);
-        petCard.setDescription("使用后可更换宠物");
-        petCard.setStock(99);
-        petCard.setTeacherId(teacherId);
-        petCard.setItemType("pet_change_card");
-        shopItemRepo.save(petCard);
+    }
+
+    // ============== 默认商品初始化 ==============
+    public void initializeDefaults(String teacherId) {
+        List<ShopItem> existing = shopItemRepo.findByTeacherIdOrderByCreatedAtDesc(teacherId);
+
+        // 首次初始化：装饰道具 + 宠物更换卡（仅在商品表为空时）
+        if (existing.isEmpty()) {
+            Object[][] defaults = {
+                // 头饰类
+                {"🎀", "蝴蝶结", 8, "可爱蝴蝶结，装扮宠物头顶", 99},
+                {"👑", "金色王冠", 25, "尊贵王冠，传说中的装饰", 30},
+                {"🎩", "魔术礼帽", 15, "神秘魔术师的礼帽", 50},
+                {"🌸", "樱花头饰", 12, "春日限定的樱花发饰", 40},
+                {"🎓", "毕业帽", 20, "学霸专属毕业帽", 35},
+                // 衣饰类
+                {"🧣", "温暖围巾", 10, "柔软温暖的围巾", 60},
+                {"👕", "潮流T恤", 12, "时尚潮流的宠物T恤", 50},
+                {"🧥", "魔法斗篷", 30, "神秘魔法斗篷，传说级", 20},
+                {"👗", "公主裙", 18, "梦幻公主裙", 35},
+                {"🦺", "冒险背心", 14, "勇敢冒险者的背心", 45},
+                // 配饰类
+                {"🕶️", "墨镜", 10, "酷酷的宠物墨镜", 55},
+                {"💍", "闪亮戒指", 22, "闪闪发光的戒指", 25},
+                {"⌚", "智能手表", 16, "高科技宠物手表", 40},
+                {"🔔", "铃铛项链", 8, "叮叮当的铃铛项链", 65},
+                {"🎒", "小书包", 14, "迷你书包，上学必备", 45},
+                // 特效类
+                {"✨", "星光特效", 20, "全身闪烁星光", 30},
+                {"🌈", "彩虹光环", 28, "头上浮现彩虹光环", 25},
+                {"🔥", "烈焰光环", 35, "传说级烈焰光环", 15},
+                {"💫", "旋转星星", 18, "身边旋转的小星星", 35},
+                {"🛡️", "守护盾牌", 24, "闪耀的守护之盾", 30}
+            };
+            for (Object[] d : defaults) {
+                ShopItem item = new ShopItem();
+                item.setIcon((String) d[0]);
+                item.setName((String) d[1]);
+                item.setPrice((Integer) d[2]);
+                item.setDescription((String) d[3]);
+                item.setStock((Integer) d[4]);
+                item.setTeacherId(teacherId);
+                item.setItemType("decoration");
+                shopItemRepo.save(item);
+            }
+
+            // 添加宠物更换卡
+            ShopItem petCard = new ShopItem();
+            petCard.setIcon("🎫");
+            petCard.setName("宠物更换卡");
+            petCard.setPrice(15);
+            petCard.setDescription("使用后可更换宠物");
+            petCard.setStock(99);
+            petCard.setTeacherId(teacherId);
+            petCard.setItemType("pet_change_card");
+            shopItemRepo.save(petCard);
+
+            // 添加精灵球（首次初始化时）
+            ShopItem pokeball = new ShopItem();
+            pokeball.setIcon("⚪");
+            pokeball.setName("精灵球");
+            pokeball.setPrice(100);
+            pokeball.setDescription("使用后可领取随机宝可梦");
+            pokeball.setStock(999);
+            pokeball.setTeacherId(teacherId);
+            pokeball.setItemType("pokemon_ball");
+            shopItemRepo.save(pokeball);
+
+            // 重新获取列表（包含刚添加的商品）
+            existing = shopItemRepo.findByTeacherIdOrderByCreatedAtDesc(teacherId);
+        }
+
+        // 始终检查：补充缺失的进化道具（兼容旧账号）
+        boolean hasEvolutionItem = existing.stream().anyMatch(i -> "evolution_item".equals(i.getItemType()));
+        if (!hasEvolutionItem) {
+            createEvolutionItems(teacherId);
+        }
     }
 }

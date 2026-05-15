@@ -25,7 +25,7 @@ public class SecurityConfig {
     private static final String[] SPA_ROUTES = {
         "/", "/home", "/activate", "/history",
         "/exchange-history", "/leaderboard", "/shop", "/settings",
-        "/student-home", "/classroom"
+        "/student-home", "/classroom", "/pokemon-pool"
     };
 
     @Autowired
@@ -47,7 +47,7 @@ public class SecurityConfig {
                 // SPA frontend routes - must match SpaController exactly
                 .requestMatchers(SPA_ROUTES).permitAll()
                 // Static resources from Vite build
-                .requestMatchers("/assets/**", "/static/**",
+                .requestMatchers("/assets/**", "/static/**", "/pokemon/**",
                     "/*.html", "/*.js", "/*.css", "/*.ico",
                     "/*.png", "/*.jpg", "/*.svg").permitAll()
                 // Public APIs (no auth needed)

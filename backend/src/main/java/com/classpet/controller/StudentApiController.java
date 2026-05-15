@@ -54,18 +54,21 @@ public class StudentApiController {
         else if (food >= 10) level = "少年期 🌱";
         else level = "幼崽期 🥚";
         
-        return ResponseEntity.ok(Map.of(
-                "id", stu.getId(),
-                "name", stu.getName(),
-                "studentNo", stu.getStudentNo() != null ? stu.getStudentNo() : "",
-                "petId", stu.getPetId() != null ? stu.getPetId() : 0,
-                "petName", stu.getPetName() != null ? stu.getPetName() : "",
-                "petIcon", stu.getPetIcon() != null ? stu.getPetIcon() : "",
-                "food", food,
-                "level", level,
-                "petChangeCards", stu.getPetChangeCards() != null ? stu.getPetChangeCards() : 0,
-                "equippedItems", stu.getEquippedItems() != null ? stu.getEquippedItems() : "[]"
-        ));
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", stu.getId());
+        result.put("name", stu.getName());
+        result.put("studentNo", stu.getStudentNo() != null ? stu.getStudentNo() : "");
+        result.put("petId", stu.getPetId() != null ? stu.getPetId() : 0);
+        result.put("petName", stu.getPetName() != null ? stu.getPetName() : "");
+        result.put("petIcon", stu.getPetIcon() != null ? stu.getPetIcon() : "");
+        result.put("food", food);
+        result.put("level", level);
+        result.put("petChangeCards", stu.getPetChangeCards() != null ? stu.getPetChangeCards() : 0);
+        result.put("equippedItems", stu.getEquippedItems() != null ? stu.getEquippedItems() : "[]");
+        result.put("pokemonCount", studentService.getPokemonCount(stu.getId()));
+        result.put("representPokemonId", stu.getRepresentPokemonId() != null ? stu.getRepresentPokemonId() : "");
+        result.put("evolutionItems", stu.getEvolutionItems() != null ? stu.getEvolutionItems() : "{}");
+        return ResponseEntity.ok(result);
     }
 
     // 光荣榜（只读）
@@ -121,6 +124,10 @@ public class StudentApiController {
     @GetMapping("/shop")
     public ResponseEntity<?> getShopItems(@AuthenticationPrincipal AuthenticatedUser principal) {
         List<ShopItem> items = shopItemRepository.findByTeacherId(principal.teacherId());
+        System.out.println("[DEBUG] StudentApiController.getShopItems: teacherId=" + principal.teacherId() + ", itemCount=" + items.size());
+        for (ShopItem item : items) {
+            System.out.println("[DEBUG]   item: name=" + item.getName() + ", type=" + item.getItemType() + ", id=" + item.getId());
+        }
         return ResponseEntity.ok(items);
     }
 
@@ -161,6 +168,32 @@ public class StudentApiController {
         }
         List<ExchangeRecord> history = exchangeRecordRepository.findByStudentIdOrderByCreatedAtDesc(principal.studentId());
         return ResponseEntity.ok(history);
+    }
+
+    // 学生设置代表宝可梦
+    @PostMapping("/represent-pokemon")
+    public ResponseEntity<?> setRepresentPokemon(
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestBody Map<String, Object> body) {
+        if (!principal.isStudent()) {
+            return ResponseEntity.status(403).body(Map.of("error", "仅限学生使用"));
+        }
+        String pokemonId = body.get("pokemonId") != null ? body.get("pokemonId").toString() : null;
+        if (pokemonId == null || pokemonId.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "pokemonId不能为空"));
+        }
+        try {
+            Student stu = studentService.setRepresentPokemon(principal.studentId(), pokemonId);
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "representPokemonId", stu.getRepresentPokemonId() != null ? stu.getRepresentPokemonId() : "",
+                    "petIcon", stu.getPetIcon() != null ? stu.getPetIcon() : "",
+                    "petName", stu.getPetName() != null ? stu.getPetName() : "",
+                    "petChangeCards", stu.getPetChangeCards() != null ? stu.getPetChangeCards() : 0
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     // 学生自助领养/更换宠物

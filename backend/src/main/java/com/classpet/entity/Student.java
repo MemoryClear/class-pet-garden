@@ -25,6 +25,9 @@ public class Student {
     private String petIcon;
     private Integer food = 0;
 
+    // 可用精灵球数量（每月发放，可叠加）
+    private Integer pokemonBalls = 0;
+
     // 已装备的商品ID列表，JSON数组格式，如 ["uuid1","uuid2"]
     @Column(name = "equipped_items", length = 500)
     private String equippedItems = "[]";
@@ -32,6 +35,14 @@ public class Student {
     // 宠物更换卡数量
     @Column(name = "pet_change_cards")
     private Integer petChangeCards = 0;
+
+    // 学生展示的代表宝可梦ID
+    @Column(name = "represent_pokemon_id")
+    private String representPokemonId;
+
+    // 进化道具库存，JSON对象格式，如 {"水之石":1,"火之石":2}
+    @Column(name = "evolution_items", length = 1000)
+    private String evolutionItems = "{}";
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -57,10 +68,17 @@ public class Student {
     public void setPetIcon(String petIcon) { this.petIcon = petIcon; }
     public Integer getFood() { return food; }
     public void setFood(Integer food) { this.food = food; }
+
+    public Integer getPokemonBalls() { return pokemonBalls; }
+    public void setPokemonBalls(Integer pokemonBalls) { this.pokemonBalls = pokemonBalls; }
     public String getEquippedItems() { return equippedItems; }
     public void setEquippedItems(String equippedItems) { this.equippedItems = equippedItems; }
     public Integer getPetChangeCards() { return petChangeCards; }
     public void setPetChangeCards(Integer petChangeCards) { this.petChangeCards = petChangeCards; }
+    public String getRepresentPokemonId() { return representPokemonId; }
+    public void setRepresentPokemonId(String representPokemonId) { this.representPokemonId = representPokemonId; }
+    public String getEvolutionItems() { return evolutionItems; }
+    public void setEvolutionItems(String evolutionItems) { this.evolutionItems = evolutionItems; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

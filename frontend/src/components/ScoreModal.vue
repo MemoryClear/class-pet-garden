@@ -2,7 +2,7 @@
   <div class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-card">
       <div class="modal-header">
-        <div class="modal-title">{{ student.petIcon }} {{ student.name }}</div>
+        <div class="modal-title"><PetIcon :icon="student.petIcon" size="20" /> {{ student.name }}</div>
         <button class="modal-close" @click="$emit('close')">×</button>
       </div>
 
@@ -60,6 +60,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useAppStore } from '../stores/app.js'
+import PetIcon from './PetIcon.vue'
 const props = defineProps({ student: { type: Object, required: true } })
 defineEmits(['close'])
 const appStore = useAppStore()

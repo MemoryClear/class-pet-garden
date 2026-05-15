@@ -1,0 +1,1904 @@
+[
+  {
+    "pokedexId": 1,
+    "name": "妙蛙种子",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0001-妙蛙种子.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 2,
+    "name": "妙蛙草",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0002-妙蛙草.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 3,
+    "name": "妙蛙花",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0003-妙蛙花.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 3,
+    "name": "妙蛙花",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0003-妙蛙花-超级妙蛙花.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": "超级妙蛙花"
+  },
+  {
+    "pokedexId": 3,
+    "name": "妙蛙花",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0003-妙蛙花-超极巨化妙蛙花.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": "超极巨化妙蛙花"
+  },
+  {
+    "pokedexId": 4,
+    "name": "小火龙",
+    "types": [
+      "火"
+    ],
+    "image": "0004-小火龙.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 5,
+    "name": "火恐龙",
+    "types": [
+      "火"
+    ],
+    "image": "0005-火恐龙.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 6,
+    "name": "喷火龙",
+    "types": [
+      "火",
+      "飞行"
+    ],
+    "image": "0006-喷火龙.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 6,
+    "name": "喷火龙",
+    "types": [
+      "火",
+      "格斗"
+    ],
+    "image": "0006-喷火龙.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": "超级喷火龙X"
+  },
+  {
+    "pokedexId": 6,
+    "name": "喷火龙",
+    "types": [
+      "火",
+      "飞行"
+    ],
+    "image": "0006-喷火龙.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": "超级喷火龙Y"
+  },
+  {
+    "pokedexId": 6,
+    "name": "喷火龙",
+    "types": [
+      "火",
+      "飞行"
+    ],
+    "image": "0006-喷火龙-超极巨化喷火龙.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": "超极巨化喷火龙"
+  },
+  {
+    "pokedexId": 7,
+    "name": "杰尼龟",
+    "types": [
+      "水"
+    ],
+    "image": "0007-杰尼龟.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 8,
+    "name": "卡咪龟",
+    "types": [
+      "水"
+    ],
+    "image": "0008-卡咪龟.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 9,
+    "name": "水箭龟",
+    "types": [
+      "水"
+    ],
+    "image": "0009-水箭龟.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 9,
+    "name": "水箭龟",
+    "types": [
+      "水"
+    ],
+    "image": "0009-水箭龟-超级水箭龟.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": "超级水箭龟"
+  },
+  {
+    "pokedexId": 9,
+    "name": "水箭龟",
+    "types": [
+      "水"
+    ],
+    "image": "0009-水箭龟-超极巨化水箭龟.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": "超极巨化水箭龟"
+  },
+  {
+    "pokedexId": 10,
+    "name": "绿毛虫",
+    "types": [
+      "虫"
+    ],
+    "image": "0010-绿毛虫.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 11,
+    "name": "铁甲蛹",
+    "types": [
+      "虫"
+    ],
+    "image": "0011-铁甲蛹.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 12,
+    "name": "巴大蝶",
+    "types": [
+      "虫",
+      "飞行"
+    ],
+    "image": "0012-巴大蝶.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 13,
+    "name": "独角虫",
+    "types": [
+      "虫"
+    ],
+    "image": "0013-独角虫.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 14,
+    "name": "铁壳蛹",
+    "types": [
+      "虫"
+    ],
+    "image": "0014-铁壳蛹.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 15,
+    "name": "大针蜂",
+    "types": [
+      "虫",
+      "飞行"
+    ],
+    "image": "0015-大针蜂.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 16,
+    "name": "波波",
+    "types": [
+      "一般",
+      "飞行"
+    ],
+    "image": "0016-波波.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 17,
+    "name": "比比鸟",
+    "types": [
+      "一般",
+      "飞行"
+    ],
+    "image": "0017-比比鸟.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 18,
+    "name": "大比鸟",
+    "types": [
+      "一般",
+      "飞行"
+    ],
+    "image": "0018-大比鸟.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 19,
+    "name": "小拉达",
+    "types": [
+      "一般"
+    ],
+    "image": "0019-小拉达.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 20,
+    "name": "拉达",
+    "types": [
+      "一般"
+    ],
+    "image": "0020-拉达.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 21,
+    "name": "烈雀",
+    "types": [
+      "一般",
+      "飞行"
+    ],
+    "image": "0021-烈雀.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 22,
+    "name": "大嘴雀",
+    "types": [
+      "一般",
+      "飞行"
+    ],
+    "image": "0022-大嘴雀.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 23,
+    "name": "阿柏蛇",
+    "types": [
+      "毒"
+    ],
+    "image": "0023-阿柏蛇.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 24,
+    "name": "阿柏怪",
+    "types": [
+      "毒"
+    ],
+    "image": "0024-阿柏怪.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 27,
+    "name": "穿山鼠",
+    "types": [
+      "地上"
+    ],
+    "image": "0027-穿山鼠.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 28,
+    "name": "穿山王",
+    "types": [
+      "地上"
+    ],
+    "image": "0028-穿山王.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 29,
+    "name": "尼多兰",
+    "types": [
+      "毒"
+    ],
+    "image": "0029-尼多兰.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 30,
+    "name": "尼多娜",
+    "types": [
+      "毒"
+    ],
+    "image": "0030-尼多娜.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 31,
+    "name": "尼多后",
+    "types": [
+      "毒",
+      "地面"
+    ],
+    "image": "0031-尼多后.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 32,
+    "name": "尼多朗",
+    "types": [
+      "毒"
+    ],
+    "image": "0032-尼多朗.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 33,
+    "name": "尼多力诺",
+    "types": [
+      "毒"
+    ],
+    "image": "0033-尼多力诺.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 34,
+    "name": "尼多王",
+    "types": [
+      "毒",
+      "地面"
+    ],
+    "image": "0034-尼多王.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 37,
+    "name": "六尾",
+    "types": [
+      "火"
+    ],
+    "image": "0037-六尾.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 38,
+    "name": "九尾",
+    "types": [
+      "火"
+    ],
+    "image": "0038-九尾.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 41,
+    "name": "超音蝠",
+    "types": [
+      "毒",
+      "飞行"
+    ],
+    "image": "0041-超音蝠.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 42,
+    "name": "大嘴蝠",
+    "types": [
+      "毒",
+      "飞行"
+    ],
+    "image": "0042-大嘴蝠.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 169,
+    "name": "叉字蝠",
+    "types": [
+      "毒",
+      "飞行"
+    ],
+    "image": "0169-叉字蝠.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 43,
+    "name": "走路草",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0043-走路草.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 44,
+    "name": "臭臭花",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0044-臭臭花.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 45,
+    "name": "霸王花",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0045-霸王花.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 182,
+    "name": "美丽花",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0182-美丽花.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 46,
+    "name": "派拉斯",
+    "types": [
+      "虫",
+      "草"
+    ],
+    "image": "0046-派拉斯.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 47,
+    "name": "派拉斯特",
+    "types": [
+      "虫",
+      "草"
+    ],
+    "image": "0047-派拉斯特.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 48,
+    "name": "毛球",
+    "types": [
+      "虫",
+      "毒"
+    ],
+    "image": "0048-毛球.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 49,
+    "name": "摩鲁蛾",
+    "types": [
+      "虫",
+      "毒"
+    ],
+    "image": "0049-摩鲁蛾.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 50,
+    "name": "地鼠",
+    "types": [
+      "地上"
+    ],
+    "image": "0050-地鼠.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 51,
+    "name": "三地鼠",
+    "types": [
+      "地上"
+    ],
+    "image": "0051-三地鼠.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 52,
+    "name": "喵喵",
+    "types": [
+      "一般"
+    ],
+    "image": "0052-喵喵.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 53,
+    "name": "猫老大",
+    "types": [
+      "一般"
+    ],
+    "image": "0053-猫老大.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 863,
+    "name": "喵头目",
+    "types": [
+      "一般",
+      "恶"
+    ],
+    "image": "0863-喵头目.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 54,
+    "name": "可达鸭",
+    "types": [
+      "水"
+    ],
+    "image": "0054-可达鸭.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 55,
+    "name": "哥达鸭",
+    "types": [
+      "水"
+    ],
+    "image": "0055-哥达鸭.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 56,
+    "name": "猴怪",
+    "types": [
+      "格斗"
+    ],
+    "image": "0056-猴怪.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 57,
+    "name": "火暴猴",
+    "types": [
+      "格斗"
+    ],
+    "image": "0057-火暴猴.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 979,
+    "name": "弃世猴",
+    "types": [
+      "格斗",
+      "火"
+    ],
+    "image": "0979-弃世猴.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 58,
+    "name": "卡蒂狗",
+    "types": [
+      "火"
+    ],
+    "image": "0058-卡蒂狗.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 59,
+    "name": "风速狗",
+    "types": [
+      "火"
+    ],
+    "image": "0059-风速狗.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 60,
+    "name": "蚊香蝌蚪",
+    "types": [
+      "水"
+    ],
+    "image": "0060-蚊香蝌蚪.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 61,
+    "name": "蚊香君",
+    "types": [
+      "水"
+    ],
+    "image": "0061-蚊香君.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 62,
+    "name": "蚊香泳士",
+    "types": [
+      "水",
+      "格斗"
+    ],
+    "image": "0062-蚊香泳士.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 186,
+    "name": "蚊香蛙皇",
+    "types": [
+      "水",
+      "地上"
+    ],
+    "image": "0186-蚊香蛙皇.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 63,
+    "name": "凯西",
+    "types": [
+      "超能"
+    ],
+    "image": "0063-凯西.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 64,
+    "name": "勇基拉",
+    "types": [
+      "超能"
+    ],
+    "image": "0064-勇基拉.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 65,
+    "name": "胡地",
+    "types": [
+      "超能"
+    ],
+    "image": "0065-胡地.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 66,
+    "name": "腕力",
+    "types": [
+      "格斗"
+    ],
+    "image": "0066-腕力.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 67,
+    "name": "豪力",
+    "types": [
+      "格斗"
+    ],
+    "image": "0067-豪力.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 68,
+    "name": "怪力",
+    "types": [
+      "格斗"
+    ],
+    "image": "0068-怪力.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 69,
+    "name": "喇叭芽",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0069-喇叭芽.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 70,
+    "name": "口呆花",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0070-口呆花.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 71,
+    "name": "大食花",
+    "types": [
+      "草",
+      "毒"
+    ],
+    "image": "0071-大食花.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 72,
+    "name": "玛瑙水母",
+    "types": [
+      "水",
+      "毒"
+    ],
+    "image": "0072-玛瑙水母.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 73,
+    "name": "毒刺水母",
+    "types": [
+      "水",
+      "毒"
+    ],
+    "image": "0073-毒刺水母.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 74,
+    "name": "小拳石",
+    "types": [
+      "岩石",
+      "地上"
+    ],
+    "image": "0074-小拳石.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 75,
+    "name": "隆隆石",
+    "types": [
+      "岩石",
+      "地上"
+    ],
+    "image": "0075-隆隆石.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 76,
+    "name": "隆隆岩",
+    "types": [
+      "岩石",
+      "地上"
+    ],
+    "image": "0076-隆隆岩.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 77,
+    "name": "小火马",
+    "types": [
+      "火"
+    ],
+    "image": "0077-小火马.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 78,
+    "name": "烈焰马",
+    "types": [
+      "火"
+    ],
+    "image": "0078-烈焰马.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 79,
+    "name": "呆呆兽",
+    "types": [
+      "水",
+      "超能"
+    ],
+    "image": "0079-呆呆兽.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 80,
+    "name": "呆壳兽",
+    "types": [
+      "水",
+      "超能"
+    ],
+    "image": "0080-呆壳兽.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 199,
+    "name": "呆呆王",
+    "types": [
+      "水",
+      "超能"
+    ],
+    "image": "0199-呆呆王.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 81,
+    "name": "小磁怪",
+    "types": [
+      "电",
+      "钢"
+    ],
+    "image": "0081-小磁怪.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 82,
+    "name": "三合一磁怪",
+    "types": [
+      "电",
+      "钢"
+    ],
+    "image": "0082-三合一磁怪.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 462,
+    "name": "自爆磁怪",
+    "types": [
+      "电",
+      "钢"
+    ],
+    "image": "0462-自爆磁怪.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 83,
+    "name": "大葱鸭",
+    "types": [
+      "一般"
+    ],
+    "image": "0083-大葱鸭.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 865,
+    "name": "葱游兵",
+    "types": [
+      "一般"
+    ],
+    "image": "0865-葱游兵.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 84,
+    "name": "嘟嘟",
+    "types": [
+      "一般",
+      "飞行"
+    ],
+    "image": "0084-嘟嘟.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 85,
+    "name": "嘟嘟利",
+    "types": [
+      "一般",
+      "飞行"
+    ],
+    "image": "0085-嘟嘟利.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 86,
+    "name": "小海狮",
+    "types": [
+      "水",
+      "冰"
+    ],
+    "image": "0086-小海狮.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 87,
+    "name": "白海狮",
+    "types": [
+      "水",
+      "冰"
+    ],
+    "image": "0087-白海狮.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 88,
+    "name": "臭泥",
+    "types": [
+      "毒"
+    ],
+    "image": "0088-臭泥.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 89,
+    "name": "臭臭泥",
+    "types": [
+      "毒"
+    ],
+    "image": "0089-臭臭泥.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 90,
+    "name": "大舌贝",
+    "types": [
+      "水"
+    ],
+    "image": "0090-大舌贝.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 91,
+    "name": "刺甲贝",
+    "types": [
+      "水",
+      "冰"
+    ],
+    "image": "0091-刺甲贝.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 92,
+    "name": "鬼斯",
+    "types": [
+      "幽灵"
+    ],
+    "image": "0092-鬼斯.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 93,
+    "name": "鬼斯通",
+    "types": [
+      "幽灵"
+    ],
+    "image": "0093-鬼斯通.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 94,
+    "name": "耿鬼",
+    "types": [
+      "幽灵",
+      "毒"
+    ],
+    "image": "0094-耿鬼.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 95,
+    "name": "大岩蛇",
+    "types": [
+      "岩石",
+      "地上"
+    ],
+    "image": "0095-大岩蛇.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 208,
+    "name": "大钢蛇",
+    "types": [
+      "钢",
+      "地面"
+    ],
+    "image": "0208-大钢蛇.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 96,
+    "name": "催眠貘",
+    "types": [
+      "超能"
+    ],
+    "image": "0096-催眠貘.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 97,
+    "name": "引梦貘人",
+    "types": [
+      "超能"
+    ],
+    "image": "0097-引梦貘人.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 98,
+    "name": "大钳蟹",
+    "types": [
+      "水"
+    ],
+    "image": "0098-大钳蟹.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 99,
+    "name": "巨钳蟹",
+    "types": [
+      "水"
+    ],
+    "image": "0099-巨钳蟹.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 100,
+    "name": "霹雳电球",
+    "types": [
+      "电"
+    ],
+    "image": "0100-霹雳电球.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 101,
+    "name": "顽皮雷弹",
+    "types": [
+      "电"
+    ],
+    "image": "0101-顽皮雷弹.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 102,
+    "name": "蛋蛋",
+    "types": [
+      "草",
+      "超能"
+    ],
+    "image": "0102-蛋蛋.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 103,
+    "name": "椰蛋树",
+    "types": [
+      "草",
+      "超能"
+    ],
+    "image": "0103-椰蛋树.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 104,
+    "name": "卡拉卡拉",
+    "types": [
+      "地面"
+    ],
+    "image": "0104-卡拉卡拉.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 105,
+    "name": "嘎啦嘎啦",
+    "types": [
+      "地面",
+      "格斗"
+    ],
+    "image": "0105-嘎啦嘎啦.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 108,
+    "name": "大舌头",
+    "types": [
+      "一般"
+    ],
+    "image": "0108-大舌头.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 463,
+    "name": "大舌舔",
+    "types": [
+      "一般"
+    ],
+    "image": "0463-大舌舔.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 109,
+    "name": "瓦斯弹",
+    "types": [
+      "毒"
+    ],
+    "image": "0109-瓦斯弹.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 110,
+    "name": "双弹瓦斯",
+    "types": [
+      "毒"
+    ],
+    "image": "0110-双弹瓦斯.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 111,
+    "name": "独角犀牛",
+    "types": [
+      "地面",
+      "岩石"
+    ],
+    "image": "0111-独角犀牛.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 112,
+    "name": "钻角犀兽",
+    "types": [
+      "地面",
+      "岩石"
+    ],
+    "image": "0112-钻角犀兽.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 464,
+    "name": "超甲狂犀",
+    "types": [
+      "地面",
+      "岩石"
+    ],
+    "image": "0464-超甲狂犀.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 114,
+    "name": "蔓藤怪",
+    "types": [
+      "草"
+    ],
+    "image": "0114-蔓藤怪.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 465,
+    "name": "巨蔓藤",
+    "types": [
+      "草"
+    ],
+    "image": "0465-巨蔓藤.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 115,
+    "name": "袋兽",
+    "types": [
+      "一般"
+    ],
+    "image": "0115-袋兽.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 116,
+    "name": "墨海马",
+    "types": [
+      "水"
+    ],
+    "image": "0116-墨海马.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 117,
+    "name": "海刺龙",
+    "types": [
+      "水"
+    ],
+    "image": "0117-海刺龙.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 230,
+    "name": "刺龙王",
+    "types": [
+      "水",
+      "龙"
+    ],
+    "image": "0230-刺龙王.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 118,
+    "name": "角金鱼",
+    "types": [
+      "水"
+    ],
+    "image": "0118-角金鱼.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 119,
+    "name": "金鱼王",
+    "types": [
+      "水"
+    ],
+    "image": "0119-金鱼王.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 120,
+    "name": "海星星",
+    "types": [
+      "水"
+    ],
+    "image": "0120-海星星.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 121,
+    "name": "宝石海星",
+    "types": [
+      "水",
+      "超能"
+    ],
+    "image": "0121-宝石海星.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 123,
+    "name": "飞天螳螂",
+    "types": [
+      "虫",
+      "飞行"
+    ],
+    "image": "0123-飞天螳螂.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 212,
+    "name": "巨钳螳螂",
+    "types": [
+      "虫",
+      "钢"
+    ],
+    "image": "0212-巨钳螳螂.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 900,
+    "name": "劈斧螳螂",
+    "types": [
+      "虫",
+      "格斗"
+    ],
+    "image": "0900-劈斧螳螂.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 127,
+    "name": "凯罗斯",
+    "types": [
+      "虫"
+    ],
+    "image": "0127-凯罗斯.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 128,
+    "name": "肯泰罗",
+    "types": [
+      "一般"
+    ],
+    "image": "0128-肯泰罗.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 129,
+    "name": "鲤鱼王",
+    "types": [
+      "水"
+    ],
+    "image": "0129-鲤鱼王.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 130,
+    "name": "暴鲤龙",
+    "types": [
+      "水",
+      "飞行"
+    ],
+    "image": "0130-暴鲤龙.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 131,
+    "name": "拉普拉斯",
+    "types": [
+      "水",
+      "冰"
+    ],
+    "image": "0131-拉普拉斯.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 132,
+    "name": "百变怪",
+    "types": [
+      "一般"
+    ],
+    "image": "0132-百变怪.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 133,
+    "name": "伊布",
+    "types": [
+      "一般"
+    ],
+    "image": "0133-伊布.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 134,
+    "name": "水伊布",
+    "types": [
+      "水"
+    ],
+    "image": "0134-水伊布.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 135,
+    "name": "雷伊布",
+    "types": [
+      "电"
+    ],
+    "image": "0135-雷伊布.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 136,
+    "name": "火伊布",
+    "types": [
+      "火"
+    ],
+    "image": "0136-火伊布.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 470,
+    "name": "叶伊布",
+    "types": [
+      "草"
+    ],
+    "image": "0470-叶伊布.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 471,
+    "name": "冰伊布",
+    "types": [
+      "冰"
+    ],
+    "image": "0471-冰伊布.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 700,
+    "name": "仙子伊布",
+    "types": [
+      "妖精"
+    ],
+    "image": "0700-仙子伊布.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 196,
+    "name": "太阳伊布",
+    "types": [
+      "超能"
+    ],
+    "image": "0196-太阳伊布.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 197,
+    "name": "月亮伊布",
+    "types": [
+      "超能"
+    ],
+    "image": "0197-月亮伊布.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 137,
+    "name": "多边兽",
+    "types": [
+      "一般"
+    ],
+    "image": "0137-多边兽.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 233,
+    "name": "多边兽２型",
+    "types": [
+      "一般"
+    ],
+    "image": "0233-多边兽２型.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 474,
+    "name": "多边兽乙型",
+    "types": [
+      "一般"
+    ],
+    "image": "0474-多边兽乙型.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 138,
+    "name": "菊石兽",
+    "types": [
+      "岩石",
+      "水"
+    ],
+    "image": "0138-菊石兽.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 139,
+    "name": "多刺菊石兽",
+    "types": [
+      "岩石",
+      "水"
+    ],
+    "image": "0139-多刺菊石兽.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 140,
+    "name": "化石盔",
+    "types": [
+      "岩石",
+      "水"
+    ],
+    "image": "0140-化石盔.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 141,
+    "name": "镰刀盔",
+    "types": [
+      "岩石",
+      "水"
+    ],
+    "image": "0141-镰刀盔.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 142,
+    "name": "化石翼龙",
+    "types": [
+      "岩石",
+      "飞行"
+    ],
+    "image": "0142-化石翼龙.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 144,
+    "name": "急冻鸟",
+    "types": [
+      "冰",
+      "飞行"
+    ],
+    "image": "0144-急冻鸟.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 145,
+    "name": "闪电鸟",
+    "types": [
+      "电",
+      "飞行"
+    ],
+    "image": "0145-闪电鸟.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 146,
+    "name": "火焰鸟",
+    "types": [
+      "火",
+      "飞行"
+    ],
+    "image": "0146-火焰鸟.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 147,
+    "name": "迷你龙",
+    "types": [
+      "龙"
+    ],
+    "image": "0147-迷你龙.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 148,
+    "name": "哈克龙",
+    "types": [
+      "龙"
+    ],
+    "image": "0148-哈克龙.png",
+    "tier": 0,
+    "stage": 1,
+    "formName": null
+  },
+  {
+    "pokedexId": 149,
+    "name": "快龙",
+    "types": [
+      "龙"
+    ],
+    "image": "0149-快龙.png",
+    "tier": 0,
+    "stage": 2,
+    "formName": null
+  },
+  {
+    "pokedexId": 150,
+    "name": "超梦",
+    "types": [
+      "超能"
+    ],
+    "image": "0150-超梦.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  },
+  {
+    "pokedexId": 151,
+    "name": "梦幻",
+    "types": [
+      "超能"
+    ],
+    "image": "0151-梦幻.png",
+    "tier": 1,
+    "stage": 0,
+    "formName": null
+  }
+]

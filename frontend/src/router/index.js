@@ -61,6 +61,12 @@ const routes = [
     name: 'Classroom',
     component: () => import('../views/ClassroomView.vue'),
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/pokemon-pool',
+    name: 'PokemonPool',
+    component: () => import('../views/PokemonPoolView.vue'),
+    meta: { requiresAuth: true, activated: true, teacherOnly: true }
   }
 ]
 

@@ -3,8 +3,8 @@
     <div class="modal">
       <h2>🏪 兑换商品</h2>
       <div class="student-info">
-        <span class="pet-icon">{{ student.petIcon || '❓' }}</span>
-        <span class="student-name">{{ student.name }}</span>
+        <span class="pet-icon"><PetIcon :icon="student.petIcon" size="20" /></span>
+        <span class="student-name">{{ student?.name }}</span>
         <span class="food-remaining">🍖 剩余: {{ student.food || 0 }}</span>
       </div>
 
@@ -109,7 +109,7 @@
       <!-- 装备确认 -->
       <div v-else-if="step === 'equip'" class="equip-step">
         <div class="equip-preview">
-          <div class="preview-pet">{{ student.petIcon || '❓' }}</div>
+          <div class="preview-pet"><PetIcon :icon="student.petIcon" size="48" /></div>
           <div class="preview-item">+ {{ pendingItem.icon }} {{ pendingItem.name }}</div>
         </div>
         <p class="equip-question">要把 <strong>{{ pendingItem.name }}</strong> 装备到宠物身上吗？</p>
@@ -143,7 +143,7 @@
               :class="['student-option', { selected: giftTo === stu.id }]"
               @click="giftTo = stu.id"
             >
-              <span class="stu-icon">{{ stu.petIcon || '❓' }}</span>
+              <span class="stu-icon"><PetIcon :icon="stu.petIcon" size="20" /></span>
               <span class="stu-name">{{ stu.name }}</span>
             </div>
           </div>
@@ -165,6 +165,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useAppStore } from '../stores/app.js'
+import PetIcon from './PetIcon.vue'
 
 const props = defineProps({ student: { type: Object, required: true } })
 const emit = defineEmits(['close', 'exchanged'])

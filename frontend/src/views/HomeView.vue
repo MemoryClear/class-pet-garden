@@ -16,6 +16,7 @@
           <button class="nav-btn" @click="router.push('/history')">📜 历史</button>
           <button class="nav-btn" @click="router.push('/exchange-history')">📦 明细</button>
           <button class="nav-btn" @click="router.push('/classroom')">📚 课堂</button>
+          <button class="nav-btn" @click="router.push('/pokemon-pool')">🎮 宝可梦池</button>
           <button class="nav-btn" @click="router.push('/settings')">⚙️ 设置</button>
         </div>
       </div>
@@ -38,6 +39,7 @@
           @exchange="openExchangeModal(stu)"
           @history="openHistoryDetail(stu)"
           @edit="openEditModal(stu)"
+          @pokemon="openPokemonModal(stu)"
         />
       </div>
     </div>
@@ -51,6 +53,8 @@
     <!-- 学生明细弹窗 -->
     <StudentEditModal v-if="editModalVisible" :student="currentEditingStudent" @close="editModalVisible = false" @updated="onStudentUpdated" />
     <StudentDetailModal v-if="detailModalVisible" :student="currentStudent" @close="detailModalVisible = false" />
+    <!-- 宝可梦图鉴弹窗 -->
+    <StudentPokemonModal v-show="pokemonModalVisible" :student="currentStudent" :visible="pokemonModalVisible" @close="pokemonModalVisible = false" @updated="onStudentUpdated" />
   </div>
 </template>
 
@@ -65,6 +69,7 @@ import PetSelectModal from '../components/PetSelectModal.vue'
 import ExchangeModal from '../components/ExchangeModal.vue'
 import StudentDetailModal from '../components/StudentDetailModal.vue'
 import StudentEditModal from '../components/StudentEditModal.vue'
+import StudentPokemonModal from '../components/StudentPokemonModal.vue'
 import LevelGuide from '../components/LevelGuide.vue'
 
 const appStore = useAppStore()
@@ -76,6 +81,7 @@ const scoreModalVisible = ref(false)
 const adoptModalVisible = ref(false)
 const exchangeModalVisible = ref(false)
 const editModalVisible = ref(false)
+const pokemonModalVisible = ref(false)
 const currentEditingStudent = ref(null)
 const detailModalVisible = ref(false)
 const currentStudent = ref(null)
@@ -97,7 +103,7 @@ const themeStyle = computed(() => ({
 const filteredStudents = computed(() => {
   if (!searchKw.value) return appStore.students
   const kw = searchKw.value.toLowerCase()
-  return appStore.students.filter(s => s.name.toLowerCase().includes(kw))
+  return appStore.students.filter(s => (s?.name ?? '').toLowerCase().includes(kw))
 })
 
 function openScoreModal(stu) {
@@ -118,6 +124,10 @@ function openExchangeModal(stu) {
 function openEditModal(stu) {
   currentEditingStudent.value = stu
   editModalVisible.value = true
+}
+function openPokemonModal(stu) {
+  currentStudent.value = stu
+  pokemonModalVisible.value = true
 }
 function onStudentUpdated(updated) {
   const idx = appStore.students.findIndex(s => s.id === updated.id)

@@ -18,4 +18,9 @@ public class PetController {
     public ResponseEntity<List<Map<String, Object>>> getPetLibrary() {
         return ResponseEntity.ok(studentService.getPetLibrary());
     }
+
+    @GetMapping("/pokemon")
+    public ResponseEntity<List<Map<String, Object>>> getPokemonLibrary() {
+        return ResponseEntity.ok(studentService.getPokemonLibrary());
+    }
 }

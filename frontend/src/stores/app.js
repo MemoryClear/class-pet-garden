@@ -37,12 +37,13 @@ export const useAppStore = defineStore('app', {
       await api.delete(`/students/${id}`)
       await this.fetchStudents()
     },
-    async adoptPet(studentId, petId) {
-      const pet = this.petLibrary.find(p => p.id === petId)
+    async adoptPet(studentId, petId, petName, petIcon) {
+      const name = petName || this.petLibrary.find(p => p.id === petId)?.name || ''
+      const icon = petIcon || this.petLibrary.find(p => p.id === petId)?.icon || '❓'
       const { data } = await api.post(`/students/${studentId}/adopt`, {
-        petId: pet.id,
-        petName: pet.name,
-        petIcon: pet.icon
+        petId: typeof petId === 'number' ? petId : parseInt(petId),
+        petName: name,
+        petIcon: icon
       })
       await this.fetchStudents()
       return data

@@ -52,7 +52,7 @@
           <div class="podium-item silver" :class="{ 'no-pet': !displayList[1].petIcon }">
             <div class="podium-medal">🥈</div>
             <div class="podium-avatar">
-              <span class="pet-emoji">{{ displayList[1].petIcon || '❓' }}</span>
+              <span class="pet-emoji"><PetIcon :icon="displayList[1].petIcon" size="40" /></span>
             </div>
             <div class="podium-name">{{ displayList[1].name }}</div>
             <div class="podium-score">{{ getScore(displayList[1]) }} 分</div>
@@ -64,7 +64,7 @@
             <div class="podium-medal">🥇</div>
             <div class="crown-float">👑</div>
             <div class="podium-avatar champion">
-              <span class="pet-emoji">{{ displayList[0].petIcon || '❓' }}</span>
+              <span class="pet-emoji"><PetIcon :icon="displayList[0].petIcon" size="56" /></span>
             </div>
             <div class="podium-name">{{ displayList[0].name }}</div>
             <div class="podium-score">{{ getScore(displayList[0]) }} 分</div>
@@ -75,7 +75,7 @@
           <div class="podium-item bronze" v-if="displayList.length >= 3" :class="{ 'no-pet': !displayList[2].petIcon }">
             <div class="podium-medal">🥉</div>
             <div class="podium-avatar">
-              <span class="pet-emoji">{{ displayList[2].petIcon || '❓' }}</span>
+              <span class="pet-emoji"><PetIcon :icon="displayList[2].petIcon" size="40" /></span>
             </div>
             <div class="podium-name">{{ displayList[2].name }}</div>
             <div class="podium-score">{{ getScore(displayList[2]) }} 分</div>
@@ -88,7 +88,7 @@
         <div class="solo-champion" v-if="displayList.length === 1">
           <div class="crown-float">👑</div>
           <div class="solo-avatar">
-            <span class="pet-emoji">{{ displayList[0].petIcon || '❓' }}</span>
+            <span class="pet-emoji"><PetIcon :icon="displayList[0].petIcon" size="56" /></span>
           </div>
           <div class="solo-name">{{ displayList[0].name }}</div>
           <div class="solo-score">{{ getScore(displayList[0]) }} 分</div>
@@ -106,7 +106,7 @@
           >
             <div class="rank-number">{{ idx + 4 }}</div>
             <div class="rank-avatar">
-              <span>{{ stu.petIcon || '❓' }}</span>
+              <span><PetIcon :icon="stu.petIcon" size="20" /></span>
             </div>
             <div class="rank-info">
               <div class="rank-name">{{ stu.name }}</div>
@@ -131,6 +131,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useAppStore } from '../stores/app.js'
 import { useRouter } from 'vue-router'
+import PetIcon from '../components/PetIcon.vue'
 
 const appStore = useAppStore()
 const router = useRouter()

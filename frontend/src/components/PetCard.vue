@@ -2,6 +2,12 @@
   <div class="pet-card" :class="[levelClass, { 'no-pet': !student.petId }]" @click="$emit('click', student)">
     <div class="level-badge" v-if="student.petId">Lv.{{ level }}</div>
 
+    <div class="student-corner">
+      <div class="corner-name">{{ student?.name }}</div>
+      <div v-if="student.studentNo" class="corner-no">{{ student.studentNo }}</div>
+      <div class="corner-pokemon" title="宝可梦数量">🎮 {{ pokemonCount }}</div>
+    </div>
+
     <div class="pet-top-deco" v-if="level >= 3 || headItems.length">
       <span v-if="level >= 6" class="deco-crown">👑</span>
       <span v-if="level === 5" class="deco-fire-text">🔥</span>
@@ -18,7 +24,9 @@
       <div class="pet-avatar">
         <span v-if="level >= 2" class="deco deco-star1">✨</span>
         <span v-if="level >= 4" class="deco deco-star3">✨</span>
-        <span v-if="student.petIcon" class="pet-icon" :class="`size-${level}`">{{ student.petIcon }}</span>
+        <span v-if="student.petIcon" class="pet-icon" :class="`size-${level}`">
+          <PetIcon :icon="student.petIcon" :size="petIconSize" />
+        </span>
         <span v-else class="pet-icon">❓</span>
         <span v-if="level >= 2" class="deco deco-star2">✨</span>
       </div>
@@ -55,8 +63,6 @@
         {{ student.petName || '未领养' }}
         <span v-if="level >= 3" class="title-badge">{{ levelTitle }}</span>
       </div>
-      <div class="student-name">{{ student.name }}</div>
-        <div v-if="student.studentNo" class="student-no">{{ student.studentNo }}</div>
     </div>
 
     <div class="pet-food">
@@ -76,16 +82,19 @@
       <button class="action-btn exchange-btn" @click="$emit('exchange', student)" title="兑换商品">🏪</button>
       <button class="action-btn history-btn" @click="$emit('history', student)" title="查看明细">📋</button>
       <button class="action-btn edit-btn" @click="$emit('edit', student)" title="编辑">✏️</button>
+      <button class="action-btn pokemon-btn" @click="$emit('pokemon', student)" title="宝可梦图鉴">🎮</button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
+import { studentApi } from '../api/index.js'
 import { useAppStore } from '../stores/app.js'
+import PetIcon from './PetIcon.vue'
 
 const props = defineProps({ student: { type: Object, required: true } })
-const emit = defineEmits(['click', 'adopt', 'exchange', 'history'])
+const emit = defineEmits(['click', 'adopt', 'exchange', 'history', 'edit', 'pokemon'])
 const appStore = useAppStore()
 
 // 解析已装备的商品ID列表
@@ -136,6 +145,11 @@ const level = computed(() => {
 
 const levelClass = computed(() => `level-${level.value}`)
 
+const petIconSize = computed(() => {
+  const sizes = { 1: 72, 2: 76, 3: 80, 4: 82, 5: 86, 6: 92 }
+  return sizes[level.value] || 72
+})
+
 const levelTitle = computed(() => {
   const titles = { 1: '', 2: '✦', 3: '★', 4: '★★', 5: '★★★', 6: '★★★★' }
   return titles[level.value] || ''
@@ -155,6 +169,7 @@ const foodPct = computed(() => {
 
 // 卸下确认弹窗状态
 const unequipTarget = ref(null)
+const pokemonCount = ref(0)
 
 // 确认卸下
 const confirmUnequip = async (item) => {
@@ -170,6 +185,13 @@ onMounted(async () => {
   if (!appStore.shopItems.length) {
     await appStore.fetchShopItems()
   }
+  // 获取学生宝可梦数量
+  try {
+    const { data } = await studentApi.getPokemonCount(props.student.id)
+    pokemonCount.value = data.count || 0
+  } catch (e) {
+    // 静默失败
+  }
 })
 </script>
 
@@ -182,6 +204,8 @@ onMounted(async () => {
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 .pet-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
 .pet-card.no-pet { background: linear-gradient(135deg, #fff 0%, #fff5f7 100%); border: 2px dashed #f0c0d0; }
@@ -244,6 +268,30 @@ onMounted(async () => {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white; font-size: 11px; font-weight: 700;
   padding: 3px 8px; border-radius: 10px;
+  z-index: 10;
+}
+.student-corner {
+  position: absolute;
+  top: 10px; left: 10px;
+  z-index: 10;
+  text-align: left;
+}
+.corner-name {
+  font-size: 11px;
+  color: #555;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.corner-no {
+  font-size: 10px;
+  color: #999;
+  line-height: 1.3;
+}
+.corner-pokemon {
+  font-size: 10px;
+  color: #6366f1;
+  font-weight: 600;
+  margin-top: 2px;
 }
 .pet-card.level-4 .level-badge { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); animation: badge-pulse 1.5s ease-in-out infinite; }
 .pet-card.level-5 .level-badge { background: linear-gradient(135deg, #f97316 0%, #ef4444 100%); animation: badge-pulse 1.2s ease-in-out infinite; }
@@ -290,29 +338,38 @@ onMounted(async () => {
 }
 
 .pet-icon {
-  font-size: 60px;
+  font-size: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s;
+  width: 72px;
+  height: 72px;
 }
+.pet-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: auto;
+}
+.pet-card:hover .pet-icon-img { transform: scale(1.1); }
 .pet-card:hover .pet-icon { transform: scale(1.1); }
-.pet-icon.size-2 { font-size: 64px; }
-.pet-icon.size-3 { font-size: 68px; filter: drop-shadow(0 2px 8px rgba(168,85,247,0.4)); }
-.pet-icon.size-4 { font-size: 70px; filter: drop-shadow(0 4px 12px rgba(96,165,250,0.6)); animation: icon-float 2s ease-in-out infinite; }
+.pet-icon.size-2 { font-size: 76px; width: 76px; height: 76px; }
+.pet-icon.size-3 { font-size: 80px; width: 80px; height: 80px; filter: drop-shadow(0 2px 8px rgba(168,85,247,0.4)); }
+.pet-icon.size-4 { font-size: 82px; width: 82px; height: 82px; filter: drop-shadow(0 4px 12px rgba(96,165,250,0.6)); animation: icon-float 2s ease-in-out infinite; }
 .pet-icon.size-5 {
-  font-size: 72px;
+  font-size: 86px;
+  width: 86px;
+  height: 86px;
   filter: drop-shadow(0 4px 16px rgba(249,115,22,0.7));
   animation: icon-float 1.5s ease-in-out infinite, fire-glow 0.6s ease-in-out infinite alternate;
 }
 .pet-icon.size-6 {
-  font-size: 76px;
+  font-size: 92px;
+  width: 92px;
+  height: 92px;
   filter: drop-shadow(0 4px 20px rgba(255,215,0,0.8)) drop-shadow(0 0 8px rgba(255,165,0,0.5));
   animation: icon-float 1.2s ease-in-out infinite, legendary-pulse 1.5s ease-in-out infinite;
-}
-@keyframes icon-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
 }
 
 .deco { font-size: 14px; animation: twinkle 1.5s ease-in-out infinite; line-height: 1; }
@@ -339,9 +396,6 @@ onMounted(async () => {
   50% { transform: translateY(-3px); }
 }
 
-.pet-avatar-wrap {
-  margin-bottom: 2px;
-}
 
 /* 装备栏 */
 .equipped-bar {
@@ -430,21 +484,25 @@ onMounted(async () => {
   color: #c4a000;
   margin-bottom: 4px;
   opacity: 0.7;
-  min-height: 20px;
+  min-height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.pet-info { text-align: center; margin-bottom: 10px; }
-.pet-name { font-size: 15px; font-weight: 600; color: #2d3748; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.pet-info { text-align: center; margin-bottom: 8px; }
+.pet-info .info-row { display: none; }
+.pet-name { font-size: 15px; font-weight: 600; color: #2d3748; display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 24px; line-height: 24px; flex-wrap: wrap; }
 .pet-card.level-4 .pet-name { color: #1e40af; }
 .pet-card.level-5 .pet-name { color: #c2410c; }
 .pet-card.level-6 .pet-name { color: #b7791f; }
-.student-name { font-size: 12px; color: #999; margin-top: 2px; }
+.student-name { display: none; }
 .title-badge { font-size: 10px; color: #a855f7; }
 .pet-card.level-4 .title-badge { color: #3b82f6; }
 .pet-card.level-5 .title-badge { color: #ef4444; }
 .pet-card.level-6 .title-badge { color: #d97706; }
 
-.pet-food { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.pet-food { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; height: 28px; }
 .food-bar { flex: 1; height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; position: relative; }
 .food-fill { height: 100%; background: linear-gradient(90deg, #ff9f69, #ffc168); border-radius: 3px; transition: width 0.3s; }
 .food-bar.bar-2 .food-fill { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
@@ -452,28 +510,34 @@ onMounted(async () => {
 .food-bar.bar-4 .food-fill { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
 .food-bar.bar-5 .food-fill { background: linear-gradient(90deg, #f97316, #ef4444); }
 .food-bar.bar-6 .food-fill { background: linear-gradient(90deg, #ffd700, #ff8c00); animation: fire-bar 0.8s ease-in-out infinite; }
-.food-emoji { font-size: 12px; }
-.food-val { font-size: 12px; font-weight: 600; color: #b87323; min-width: 20px; }
+.food-emoji { font-size: 12px; height: 14px; line-height: 14px; display: inline-flex; align-items: center; }
+.food-val { font-size: 12px; font-weight: 600; color: #b87323; min-width: 20px; height: 14px; line-height: 14px; display: inline-flex; align-items: center; box-sizing: border-box; }
 .pet-card.level-4 .food-val { color: #1e40af; }
 .pet-card.level-5 .food-val { color: #c2410c; }
 .pet-card.level-6 .food-val { color: #b7791f; }
-.student-no {
-  font-size: 11px;
-  color: #888;
-  margin-top: 2px;
-}
+.student-no { display: none; }
 .pet-card-badge {
   font-size: 10px;
   background: #e0f2fe;
   color: #0369a1;
-  padding: 1px 4px;
+  padding: 2px 4px;
   border-radius: 4px;
   margin-left: 4px;
+  min-height: 14px;
+  height: 14px;
+  line-height: 14px;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
 }
 
-.pet-actions { display: flex; justify-content: center; gap: 8px; }
+.pet-actions { display: flex; justify-content: center; gap: 8px; margin-top: auto; }
 .action-btn { background: #fff0f3; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 14px; transition: all 0.2s; }
 .action-btn:hover { background: #ffe0e6; transform: scale(1.1); }
 .exchange-btn { background: #fef3c7; }
 .exchange-btn:hover { background: #fde68a; }
+.pokemon-btn { background: #dbeafe; }
+.pokemon-btn:hover { background: #bfdbfe; }
+
+.pokemon-badge { display: none; }
 </style>

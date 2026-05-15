@@ -64,7 +64,10 @@ public class AuthController {
             req.username = username;
             req.password = password;
             
-            return ResponseEntity.ok(authService.login(req));
+            AuthDto.LoginResponse resp = authService.login(req);
+            // 补充旧账号缺失的进化道具
+            shopService.migrateEvolutionItems(resp.teacherId);
+            return ResponseEntity.ok(resp);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));

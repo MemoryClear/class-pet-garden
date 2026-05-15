@@ -2,7 +2,7 @@
   <div class="modal-overlay" @click.self="emit('close')">
     <div class="modal-card">
       <div class="modal-header">
-        <div class="modal-title">📊 {{ student.name }} 的明细</div>
+        <div class="modal-title">📊 {{ student?.name }} 的明细</div>
         <button class="modal-close" @click="emit('close')">×</button>
       </div>
 

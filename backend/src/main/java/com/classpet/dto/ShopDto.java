@@ -25,6 +25,12 @@ public class ShopDto {
         @NotNull(message = "库存不能为空")
         @Min(value = 0, message = "库存不能为负数")
         private Integer stock;
+        
+        // 商品类型: decoration | petCard | evolution_item
+        private String itemType;
+        
+        // 进化道具key（如"水之石"），仅 itemType=evolution_item 时有效
+        private String evolutionItemKey;
     }
 
     @Data
@@ -56,6 +62,8 @@ public class ShopDto {
         private Integer price;
         private String description;
         private Integer stock;
+        private String itemType;
+        private String evolutionItemKey;
         private LocalDateTime createdAt;
 
         public static ShopItemResponse from(ShopItem item) {
@@ -66,6 +74,8 @@ public class ShopDto {
             res.setPrice(item.getPrice());
             res.setDescription(item.getDescription());
             res.setStock(item.getStock());
+            res.setItemType(item.getItemType());
+            res.setEvolutionItemKey(item.getEvolutionItemKey());
             res.setCreatedAt(item.getCreatedAt());
             return res;
         }

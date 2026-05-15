@@ -40,8 +40,8 @@ const emit = defineEmits(['close', 'updated'])
 const authStore = useAuthStore()
 const saving = ref(false)
 
-const original = { ...props.student }
-const form = ref({ name: props.student.name, studentNo: props.student.studentNo || '' })
+const original = { ...(props.student || {}) }
+const form = ref({ name: props.student?.name ?? '', studentNo: props.student?.studentNo ?? '' })
 
 function save() {
   saving.value = true
