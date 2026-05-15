@@ -11,7 +11,7 @@ COPY frontend/ ./
 RUN npm run build
 
 # ====================
-# Stage 2: Build Backend (no JAR, run with Maven directly)
+# Stage 2: Build Backend (package as JAR)
 # ====================
 FROM maven:3.9-eclipse-temurin-17 AS backend-builder
 
@@ -26,12 +26,24 @@ RUN mvn dependency:go-offline -B
 COPY backend/src ./src
 COPY --from=frontend-builder /app/frontend/dist ./src/main/resources/static
 
-# Don't build JAR - we will run with mvn spring-boot:run
+RUN mvn clean package -DskipTests -B -Dproject.build.sourceEncoding=UTF-8
 
 # ====================
-# Stage 3: Runtime
+# Stage 3: Extract JAR (avoid mmap issue)
 # ====================
-FROM maven:3.9-eclipse-temurin-17
+FROM eclipse-temurin:17-jre AS extractor
+
+WORKDIR /app
+
+COPY --from=backend-builder /app/backend/target/*.jar app.jar
+
+# Extract the JAR (no mmap at runtime)
+RUN jar xf app.jar && rm app.jar
+
+# ====================
+# Stage 4: Runtime (run extracted JAR with correct classpath)
+# ====================
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
@@ -42,7 +54,10 @@ ENV LC_ALL=C.UTF-8
 
 RUN groupadd -r appgroup && useradd -r -g appgroup -m appuser
 
-COPY --from=backend-builder /app/backend/ /app/backend/
+# Copy extracted JAR contents
+COPY --from=extractor /app/BOOT-INF/ /app/BOOT-INF/
+COPY --from=extractor /app/org/ /app/org/
+COPY --from=extractor /app/META-INF/ /app/META-INF/
 
 RUN mkdir -p /app/data && chown -R appuser:appgroup /app
 
@@ -58,5 +73,5 @@ ENV DB_PATH=/app/data/classpet.db
 ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
 ENV JWT_EXPIRATION_MS=86400000
 
-# Run directly with mvn - no JAR, no memory-mapped I/O issues
-CMD ["mvn", "spring-boot:run"]
+# Run with JarLauncher (correct classpath for Spring Boot)
+CMD ["java", "-cp", "BOOT-INF/classes:BOOT-INF/lib/*:org/", "org.springframework.boot.loader.launch.JarLauncher"]
