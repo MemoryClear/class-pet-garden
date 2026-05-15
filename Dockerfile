@@ -44,7 +44,16 @@ COPY --from=frontend-builder /app/frontend/dist ./src/main/resources/static
 RUN mvn clean package -DskipTests -B -Dproject.build.sourceEncoding=UTF-8
 
 # ====================
-# Stage 3: Runtime
+# Stage 3: Extract JAR layers (bypass Spring Boot ZIP mmap I/O)
+# ====================
+FROM eclipse-temurin:17-jre AS extractor
+
+WORKDIR /app
+COPY --from=backend-builder /app/backend/target/*.jar app.jar
+RUN java -Djarmode=layertools -jar app.jar extract && rm app.jar
+
+# ====================
+# Stage 4: Runtime
 # ====================
 FROM eclipse-temurin:17-jre
 
@@ -60,8 +69,11 @@ ENV LC_ALL=C.UTF-8
 # Create non-root user
 RUN groupadd -r appgroup && useradd -r -g appgroup -m appuser
 
-# Copy JAR from builder
-COPY --from=backend-builder /app/backend/target/*.jar app.jar
+# Copy extracted layers (bypasses Spring Boot ZIP memory-mapped I/O that hangs on NAS)
+COPY --from=extractor /app/dependencies/ ./
+COPY --from=extractor /app/spring-boot-loader/ ./
+COPY --from=extractor /app/snapshot-dependencies/ ./
+COPY --from=extractor /app/application/ ./
 
 # Create data directory for SQLite database
 RUN mkdir -p /app/data && chown -R appuser:appgroup /app
@@ -82,10 +94,14 @@ ENV DB_PATH=/app/data/classpet.db
 ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
 ENV JWT_EXPIRATION_MS=86400000
 
-# Start application with UTF-8 encoding
-ENTRYPOINT ["java", \
-  "-Dfile.encoding=UTF-8", \
-  "-Dspring.datasource.url=jdbc:sqlite:${DB_PATH}?busy_timeout=30000&journal_mode=WAL&synchronous=NORMAL", \
-  "-Dapp.jwt.secret=${JWT_SECRET}", \
-  "-Dapp.jwt.expiration-ms=${JWT_EXPIRATION_MS}", \
-  "-jar", "app.jar"]
+# Start application directly from extracted layers (no -jar, no ZIP mmap)
+# Uses shell form ENTRYPOINT for proper variable expansion
+ENTRYPOINT exec java \
+  -Dfile.encoding=UTF-8 \
+  -Dsun.jnu.encoding=UTF-8 \
+  -Dserver.port=${SERVER_PORT} \
+  "-Dspring.datasource.url=jdbc:sqlite:${DB_PATH}?busy_timeout=30000&journal_mode=WAL&synchronous=NORMAL" \
+  -Dapp.jwt.secret=${JWT_SECRET} \
+  -Dapp.jwt.expiration-ms=${JWT_EXPIRATION_MS} \
+  -cp "dependencies/*:spring-boot-loader/:snapshot-dependencies/*:application/" \
+  org.springframework.boot.loader.launch.JarLauncher
