@@ -29,7 +29,7 @@ COPY --from=frontend-builder /app/frontend/dist ./src/main/resources/static
 RUN mvn clean package -DskipTests -B -Dproject.build.sourceEncoding=UTF-8
 
 # Extract JAR in builder stage (Maven image has JDK, can use jar command)
-RUN jar xf target/*.jar && rm target/*.jar
+RUN cd target && jar xf *.jar && rm *.jar
 
 # ====================
 # Stage 3: Runtime (run extracted JAR)
@@ -46,9 +46,9 @@ ENV LC_ALL=C.UTF-8
 RUN groupadd -r appgroup && useradd -r -g appgroup -m appuser
 
 # Copy extracted JAR contents directly from builder stage
-COPY --from=backend-builder /app/backend/BOOT-INF/ /app/BOOT-INF/
-COPY --from=backend-builder /app/backend/org/ /app/org/
-COPY --from=backend-builder /app/backend/META-INF/ /app/META-INF/
+COPY --from=backend-builder /app/backend/target/BOOT-INF/ /app/BOOT-INF/
+COPY --from=backend-builder /app/backend/target/org/ /app/org/
+COPY --from=backend-builder /app/backend/target/META-INF/ /app/META-INF/
 
 RUN mkdir -p /app/data && chown -R appuser:appgroup /app
 
@@ -56,12 +56,11 @@ USER appuser
 
 EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3
-  CMD curl -f http://localhost:8080/api/pets || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 CMD curl -f http://localhost:8080/api/pets || exit 1
 
 ENV SERVER_PORT=8080
 ENV DB_PATH=/app/data/classpet.db
-ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yYW5kd290b2tlbmdsZW5lcmF0aW9uMjAyNA==
+ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
 ENV JWT_EXPIRATION_MS=86400000
 
 CMD ["java", "-cp", "BOOT-INF/classes:BOOT-INF/lib/*:org/", "org.springframework.boot.loader.launch.JarLauncher"]
