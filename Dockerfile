@@ -28,8 +28,8 @@ COPY --from=frontend-builder /app/frontend/dist ./src/main/resources/static
 
 RUN mvn clean package -DskipTests -B -Dproject.build.sourceEncoding=UTF-8
 
-# Extract JAR in builder stage (Maven image has JDK, can use jar command)
-RUN cd target && jar xf *.jar && rm *.jar
+# Extract ONLY the fat JAR (not the .original one)
+RUN cd target && jar xf $(ls *.jar | grep -v '\.original$') && rm -f *.jar
 
 # ====================
 # Stage 3: Runtime (run extracted JAR)
@@ -63,4 +63,5 @@ ENV DB_PATH=/app/data/classpet.db
 ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
 ENV JWT_EXPIRATION_MS=86400000
 
-CMD ["java", "-cp", "BOOT-INF/classes:BOOT-INF/lib/*:org/", "org.springframework.boot.loader.launch.JarLauncher"]
+# Classpath should be "." (current dir contains BOOT-INF/, org/, META-INF/)
+CMD ["java", "-cp", ".", "org.springframework.boot.loader.launch.JarLauncher"]
