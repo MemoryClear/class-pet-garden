@@ -18,11 +18,14 @@ COPY frontend/ ./
 RUN npm run build
 
 # ====================
-# Stage 2: Build Backend
+# Stage 2: Build Backend AND Extract JAR
 # ====================
 FROM maven:3.9-eclipse-temurin-17 AS backend-builder
 
 WORKDIR /app/backend
+
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 # Copy backend pom.xml first (for better caching)
 COPY backend/pom.xml ./
@@ -37,46 +40,42 @@ COPY backend/src ./src
 COPY --from=frontend-builder /app/frontend/dist ./src/main/resources/static
 
 # Build backend JAR
-RUN mvn clean package -DskipTests -B
+RUN mvn clean package -DskipTests -B -Dproject.build.sourceEncoding=UTF-8
+
+# Extract ONLY the fat JAR (not the .original one)
+RUN cd target && jar xf $(ls *.jar | grep -v '\.original$') && rm -f *.jar
 
 # ====================
-# Stage 3: Runtime
+# Stage 3: Runtime (run extracted JAR)
 # ====================
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-# Install curl for healthcheck
-RUN apk add --no-cache curl
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
-# Copy JAR from builder
-COPY --from=backend-builder /app/backend/target/*.jar app.jar
+RUN groupadd -r appgroup && useradd -r -g appgroup -m appuser
 
-# Create data directory for SQLite database
+# Copy extracted JAR contents directly from builder stage
+COPY --from=backend-builder /app/backend/target/BOOT-INF/ /app/BOOT-INF/
+COPY --from=backend-builder /app/backend/target/org/ /app/org/
+COPY --from=backend-builder /app/backend/target/META-INF/ /app/META-INF/
+
 RUN mkdir -p /app/data && chown -R appuser:appgroup /app
 
-# Switch to non-root user
 USER appuser
 
-# Expose port
 EXPOSE 8080
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:8080/api/pets || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 CMD curl -f http://localhost:8080/api/pets || exit 1
 
-# Environment variables with defaults
 ENV SERVER_PORT=8080
 ENV DB_PATH=/app/data/classpet.db
 ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
 ENV JWT_EXPIRATION_MS=86400000
 
-# Start application
-ENTRYPOINT ["java", \
-  "-Dspring.datasource.url=jdbc:sqlite:${DB_PATH}?busy_timeout=30000&journal_mode=WAL&synchronous=NORMAL", \
-  "-Dapp.jwt.secret=${JWT_SECRET}", \
-  "-Dapp.jwt.expiration-ms=${JWT_EXPIRATION_MS}", \
-  "-jar", "app.jar"]
+# Classpath should be "." (current dir contains BOOT-INF/, org/, META-INF/)
+CMD ["java", "-cp", ".", "org.springframework.boot.loader.launch.JarLauncher"]
