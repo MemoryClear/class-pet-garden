@@ -52,7 +52,7 @@ FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends curl gosu && rm -rf /var/lib/apt/lists/*
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
@@ -66,7 +66,13 @@ COPY --from=backend-builder /app/backend/target/META-INF/ /app/META-INF/
 
 RUN mkdir -p /app/data && chown -R appuser:appgroup /app
 
-USER appuser
+COPY <<'EOF' /app/entrypoint.sh
+#!/bin/sh
+# Fix permissions for mounted volume (NAS may map to unknown uid)
+chown -R appuser:appgroup /app/data 2>/dev/null || true
+exec gosu appuser java -cp . org.springframework.boot.loader.launch.JarLauncher
+EOF
+RUN chmod +x /app/entrypoint.sh
 
 EXPOSE 8080
 
@@ -77,5 +83,4 @@ ENV DB_PATH=/app/data/classpet.db
 ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
 ENV JWT_EXPIRATION_MS=86400000
 
-# Classpath should be "." (current dir contains BOOT-INF/, org/, META-INF/)
-CMD ["java", "-cp", ".", "org.springframework.boot.loader.launch.JarLauncher"]
+ENTRYPOINT ["/app/entrypoint.sh"]
