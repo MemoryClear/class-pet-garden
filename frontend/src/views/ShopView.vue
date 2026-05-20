@@ -39,6 +39,9 @@
           <div class="item-name">{{ item.name }}</div>
           <div class="item-desc" v-if="item.description">{{ item.description }}</div>
           <div class="item-price">💰 {{ item.price }} 粮食</div>
+          <div class="item-type-badge" :class="'type-' + (item.itemType || 'decoration')">
+            {{ itemTypeLabel(item.itemType) }}
+          </div>
           <div class="item-stock" :class="{ 'low-stock': item.stock <= 3 }">
             📦 库存: {{ item.stock }}
           </div>
@@ -72,6 +75,30 @@
           <div class="form-group">
             <label>库存</label>
             <input v-model.number="itemForm.stock" type="number" min="0" />
+          </div>
+          <div class="form-group">
+            <label>商品类型</label>
+            <select v-model="itemForm.itemType" class="form-select">
+              <option value="decoration">装饰道具</option>
+              <option value="pet_change_card">宠物更换卡</option>
+              <option value="pokemon_ball">精灵球</option>
+              <option value="evolution_item">进化道具</option>
+            </select>
+          </div>
+          <div v-if="itemForm.itemType === 'evolution_item'" class="form-group">
+            <label>进化道具Key</label>
+            <select v-model="itemForm.evolutionItemKey" class="form-select">
+              <option value="">请选择</option>
+              <option value="水之石">水之石</option>
+              <option value="火之石">火之石</option>
+              <option value="叶之石">叶之石</option>
+              <option value="月之石">月之石</option>
+              <option value="雷之石">雷之石</option>
+              <option value="联系绳">联系绳</option>
+              <option value="日之石">日之石</option>
+              <option value="黑奇石">黑奇石</option>
+              <option value="冰之石">冰之石</option>
+            </select>
           </div>
           <div class="modal-actions">
             <button class="cancel-btn" @click="closeModal">取消</button>
@@ -120,7 +147,9 @@ const itemForm = ref({
   icon: '',
   price: 10,
   description: '',
-  stock: 10
+  stock: 10,
+  itemType: 'decoration',
+  evolutionItemKey: ''
 })
 
 const fetchItems = async () => {
@@ -174,13 +203,23 @@ const deleteItem = async (id) => {
 const closeModal = () => {
   showAddModal.value = false
   editingItem.value = null
-  itemForm.value = { name: '', icon: '', price: 10, description: '', stock: 10 }
+  itemForm.value = { name: '', icon: '', price: 10, description: '', stock: 10, itemType: 'decoration', evolutionItemKey: '' }
 }
 
 const formatTime = (time) => {
   if (!time) return ''
   const date = new Date(time)
   return `${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2,'0')}`
+}
+
+const itemTypeLabel = (type) => {
+  const labels = {
+    decoration: '装饰',
+    pet_change_card: '更换卡',
+    pokemon_ball: '精灵球',
+    evolution_item: '进化道具'
+  }
+  return labels[type] || '装饰'
 }
 
 watch(activeTab, (tab) => {
@@ -363,6 +402,28 @@ onMounted(() => {
   border-radius: 8px;
   font-size: 1rem;
 }
+
+.form-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+}
+
+.item-type-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin: 4px 0;
+}
+
+.type-decoration { background: #e0e7ff; color: #4338ca; }
+.type-pet_change_card { background: #fef3c7; color: #92400e; }
+.type-pokemon_ball { background: #fee2e2; color: #991b1b; }
+.type-evolution_item { background: #d1fae5; color: #065f46; }
 
 .modal-actions {
   display: flex;

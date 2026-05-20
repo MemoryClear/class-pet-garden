@@ -9,6 +9,7 @@ import com.classpet.service.ShopService;
 import com.classpet.repository.ShopItemRepository;
 import com.classpet.repository.ScoreHistoryRepository;
 import com.classpet.repository.ExchangeRecordRepository;
+import com.classpet.repository.StudentRepository;
 import com.classpet.entity.ShopItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ public class StudentApiController {
     @Autowired private ShopItemRepository shopItemRepository;
     @Autowired private ScoreHistoryRepository scoreHistoryRepository;
     @Autowired private ExchangeRecordRepository exchangeRecordRepository;
+    @Autowired private StudentRepository studentRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     // 获取自己的信息
@@ -213,5 +215,36 @@ public class StudentApiController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
+    }
+
+    // 获取同班同学列表（赠送用）
+    @GetMapping("/classmates")
+    public ResponseEntity<?> getClassmates(@AuthenticationPrincipal AuthenticatedUser principal) {
+        String studentId = principal.studentId();
+        Student me = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
+        var classmateList = studentRepository.findByTeacherIdOrderByCreatedAtAsc(me.getTeacherId()).stream()
+                .filter(s -> !s.getId().equals(studentId))
+                .map(s -> Map.of("studentNo", s.getStudentNo(), "name", s.getName() != null ? s.getName() : s.getStudentNo()))
+                .toList();
+        return ResponseEntity.ok(classmateList);
+    }
+
+    // 装备/卸下装饰品
+    @PostMapping("/equip-item")
+    public ResponseEntity<?> equipItem(@AuthenticationPrincipal AuthenticatedUser principal, @RequestBody Map<String, String> body) {
+        if (!principal.isStudent()) return ResponseEntity.status(403).body(Map.of("error", "仅限学生访问"));
+        String itemId = body.get("itemId");
+        boolean equip = Boolean.parseBoolean(body.getOrDefault("equip", "true"));
+        return ResponseEntity.ok(studentService.toggleEquipItem(principal.studentId(), itemId, equip));
+    }
+
+    // 赠送道具给同学
+    @PostMapping("/gift-item")
+    public ResponseEntity<?> giftItem(@AuthenticationPrincipal AuthenticatedUser principal, @RequestBody Map<String, String> body) {
+        if (!principal.isStudent()) return ResponseEntity.status(403).body(Map.of("error", "仅限学生访问"));
+        String itemId = body.get("itemId");
+        String targetStudentNo = body.get("targetStudentNo");
+        return ResponseEntity.ok(studentService.giftItem(principal.studentId(), itemId, targetStudentNo));
     }
 }

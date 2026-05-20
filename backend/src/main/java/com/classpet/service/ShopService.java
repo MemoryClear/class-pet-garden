@@ -105,11 +105,20 @@ public class ShopService {
         scoreHistoryRepo.save(history);
 
         // 特殊商品处理：宠物更换卡（购买时不创建兑换记录）
-        if ("petCard".equals(item.getItemType())) {
+        if ("petCard".equals(item.getItemType()) || "pet_change_card".equals(item.getItemType())) {
             int cards = student.getPetChangeCards() != null ? student.getPetChangeCards() : 0;
             student.setPetChangeCards(cards + 1);
             studentRepo.save(student);
             // 宠物更换卡不创建兑换记录，只需积分历史（已在上方写入）
+            return null;
+        }
+
+        // 特殊商品处理：精灵球（购买时不创建兑换记录）
+        if ("pokemon_ball".equals(item.getItemType()) || "POKEBALL".equals(item.getItemType())) {
+            int balls = student.getPokemonBalls() != null ? student.getPokemonBalls() : 0;
+            student.setPokemonBalls(balls + 1);
+            studentRepo.save(student);
+            // 精灵球不创建兑换记录，只需积分历史（已在上方写入）
             return null;
         }
 
