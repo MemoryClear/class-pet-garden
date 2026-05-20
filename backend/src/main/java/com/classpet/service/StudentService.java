@@ -66,7 +66,55 @@ public class StudentService {
         } catch (IOException e) {
             evolutionRulesMap = new HashMap<>();
         }
+        // 启动时修复超限食物数据
+        fixOverfedPokemon();
     }
+    
+    /**
+     * 修复食物超过上限的宝可梦数据（历史数据清理）
+     * 将所有 food > maxFood 的宝可梦 food 降至 maxFood
+     */
+    @Transactional
+    public void fixOverfedPokemon() {
+        List<StudentPokemon> allPokemon = studentPokemonRepository.findAll();
+        int fixed = 0;
+        for (StudentPokemon pokemon : allPokemon) {
+            int maxFood = calcMaxFoodToFinal(pokemon.getPokedexId(), pokemon.getEvolutionStage(), 0);
+            int stageFoodCap = (pokemon.getEvolutionStage() == null || pokemon.getEvolutionStage() == 0) ? 50 :
+                    (pokemon.getEvolutionStage() == 1 ? 150 : 300);
+            int effectiveMax = maxFood > 0 ? maxFood : stageFoodCap;
+            int currentFood = pokemon.getFood() != null ? pokemon.getFood() : 0;
+            if (currentFood > effectiveMax) {
+                pokemon.setFood(effectiveMax);
+                studentPokemonRepository.save(pokemon);
+                fixed++;
+                logger.info("修复超限食物: #{} {} food {} -> {}", pokemon.getPokedexId(), pokemon.getName(), currentFood, effectiveMax);
+            }
+        }
+        if (fixed > 0) {
+            logger.info("共修复 {} 只宝可梦的超限食物数据", fixed);
+        }
+    }
+
+    // 清理积分历史中scoreItemName的emoji前缀（历史数据迁移）
+    @PostConstruct
+    public void cleanupScoreItemNameEmoji() {
+        List<ScoreHistory> all = scoreHistoryRepository.findAll();
+        int fixed = 0;
+        for (ScoreHistory h : all) {
+            String name = h.getScoreItemName();
+            String icon = h.getScoreItemIcon();
+            if (name != null && icon != null && name.startsWith(icon)) {
+                h.setScoreItemName(name.substring(icon.length()).trim());
+                scoreHistoryRepository.save(h);
+                fixed++;
+            }
+        }
+        if (fixed > 0) {
+            System.out.println("Cleaned " + fixed + " scoreItemName records (removed emoji prefix)");
+        }
+    }
+
     
     // 加载所有宝可梦物种数据
     private List<Map<String, Object>> getAllSpecies() {
@@ -230,7 +278,7 @@ public class StudentService {
 
         ScoreHistory history = new ScoreHistory(
             stu.getId(), stu.getName(),
-            reason != null ? reason : "\uD83D\uDCDA 课堂答题",
+            reason != null ? reason : "课堂答题",
             "\uD83D\uDCDA",
             points, stu.getTeacherId()
         );
@@ -388,7 +436,7 @@ public class StudentService {
             int cards = student.getPetChangeCards() != null ? student.getPetChangeCards() : 0;
             student.setPetChangeCards(cards + 1);
             ScoreHistory history = new ScoreHistory(student.getId(), student.getName(),
-                item.getIcon() + " 购买「" + item.getName() + "」",
+                "购买「" + item.getName() + "」",
                 item.getIcon(), -item.getPrice(), teacherId);
             scoreHistoryRepository.save(history);
             studentRepository.save(student);
@@ -400,7 +448,7 @@ public class StudentService {
             int balls = student.getPokemonBalls() != null ? student.getPokemonBalls() : 0;
             student.setPokemonBalls(balls + 1);
             ScoreHistory history = new ScoreHistory(student.getId(), student.getName(),
-                item.getIcon() + " 购买「" + item.getName() + "」",
+                "购买「" + item.getName() + "」",
                 item.getIcon(), -item.getPrice(), teacherId);
             scoreHistoryRepository.save(history);
             studentRepository.save(student);
@@ -420,7 +468,7 @@ public class StudentService {
                 student.setEvolutionItems("{\"" + itemKey + "\":1}");
             }
             ScoreHistory history = new ScoreHistory(student.getId(), student.getName(),
-                item.getIcon() + " 购买「" + item.getName() + "」",
+                "购买「" + item.getName() + "」",
                 item.getIcon(), -item.getPrice(), teacherId);
             scoreHistoryRepository.save(history);
             studentRepository.save(student);
@@ -443,7 +491,7 @@ public class StudentService {
         exchangeRecordRepository.save(record);
 
         ScoreHistory history = new ScoreHistory(student.getId(), student.getName(),
-            item.getIcon() + " 购买「" + item.getName() + "」",
+            "购买「" + item.getName() + "」",
             item.getIcon(), -item.getPrice(), teacherId);
         scoreHistoryRepository.save(history);
         studentRepository.save(student);
@@ -807,15 +855,22 @@ public class StudentService {
             int stageFoodCap = (pokemon.getEvolutionStage() == 0 ? 50 : (pokemon.getEvolutionStage() == 1 ? 150 : 300));
             maxFood = stageFoodCap;
         }
+        // 阶段食物上限常量
+        int stageFoodCap = (pokemon.getEvolutionStage() == null || pokemon.getEvolutionStage() == 0) ? 50 :
+                          (pokemon.getEvolutionStage() == 1 ? 150 : 300);
+
         if (isFinalForm) {
             // 最终形态：cap = 前一进化阶段的最大食物（由 calcMaxFoodToFinal 递归计算得到）
             int prevMaxFood = calcMaxFoodToFinal(pokemon.getPokedexId(), pokemon.getEvolutionStage(), 0);
-            if (prevMaxFood > 0 && currentFood >= prevMaxFood) {
+            // 单阶段宝可梦（无进化路线）：prevMaxFood=0，使用阶段默认上限
+            int effectiveCap = prevMaxFood > 0 ? prevMaxFood : stageFoodCap;
+            if (currentFood >= effectiveCap) {
                 throw new IllegalArgumentException("该宝可梦已达当前阶段食物上限，无法继续投喂");
             }
         } else {
             // 中间形态：cap = calcMaxFoodToFinal 返回的总食物上限
-            if (maxFood > 0 && currentFood >= maxFood) {
+            int effectiveMax = maxFood > 0 ? maxFood : stageFoodCap;
+            if (currentFood >= effectiveMax) {
                 throw new IllegalArgumentException("该宝可梦已达当前阶段食物上限，无法继续投喂");
             }
         }
@@ -1257,6 +1312,67 @@ public class StudentService {
         return null;
     }
 
+
+    // ============== 道具装备（学生端） ==============
+    @Transactional
+    public Map<String, Object> toggleEquipItem(String studentId, String itemId, boolean equip) {
+        Student stu = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
+        List<String> equipped = parseEquippedList(stu.getEquippedItems());
+        if (equip) {
+            if (equipped.size() >= 3) {
+                throw new IllegalArgumentException("最多装备3个道具");
+            }
+            if (equipped.contains(itemId)) {
+                throw new IllegalArgumentException("该道具已装备");
+            }
+            equipped.add(itemId);
+        } else {
+            equipped.remove(itemId);
+        }
+        try { stu.setEquippedItems(objectMapper.writeValueAsString(equipped)); }
+        catch (JsonProcessingException e) { stu.setEquippedItems("[]"); }
+        studentRepository.save(stu);
+        return Map.of("success", true, "equippedItems", stu.getEquippedItems());
+    }
+
+    @Transactional
+    public Map<String, Object> giftItem(String studentId, String itemId, String targetStudentNo) {
+        Student giver = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
+        Student target = studentRepository.findByStudentNo(targetStudentNo)
+                .orElseThrow(() -> new IllegalArgumentException("未找到学号为 " + targetStudentNo + " 的同学"));
+        if (!target.getTeacherId().equals(giver.getTeacherId())) {
+            throw new IllegalArgumentException("只能赠送给同班同学");
+        }
+        if (target.getId().equals(studentId)) {
+            throw new IllegalArgumentException("不能赠送给自己");
+        }
+        // 找到赠送者拥有且可赠送的记录（giftFrom为null，即自己买的或已接收的）
+        List<ExchangeRecord> records = exchangeRecordRepository.findByStudentIdOrderByCreatedAtDesc(studentId);
+        ExchangeRecord giftRecord = records.stream()
+                .filter(r -> r.getItemId().equals(itemId))
+                .filter(r -> r.getGiftFrom() == null)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("你没有可赠送的该道具"));
+        // 标记原记录为已赠送
+        giftRecord.setGiftFrom(target.getId());
+        giftRecord.setGiftFromName(target.getName());
+        exchangeRecordRepository.save(giftRecord);
+        // 为接收者创建新记录
+        ExchangeRecord newRecord = new ExchangeRecord();
+        newRecord.setStudentId(target.getId());
+        newRecord.setStudentName(target.getName());
+        newRecord.setItemId(giftRecord.getItemId());
+        newRecord.setItemName(giftRecord.getItemName());
+        newRecord.setItemIcon(giftRecord.getItemIcon());
+        newRecord.setFoodSpent(0);
+        newRecord.setTeacherId(giver.getTeacherId());
+        newRecord.setGiftFrom(studentId);
+        newRecord.setGiftFromName(giver.getName());
+        exchangeRecordRepository.save(newRecord);
+        return Map.of("success", true, "message", "已赠送给" + target.getName());
+    }
 
     public Student getStudentById(String studentId) {
         return studentRepository.findById(studentId)

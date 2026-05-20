@@ -34,7 +34,7 @@
         </div>
         <div v-if="loading" class="loading">加载中...</div>
         <div v-else-if="poems.length === 0" class="empty">暂无诗词，点击上方按钮添加</div>
-        <div v-else-if="!poemQuizActive" class="poem-list">
+        <div v-if="!loading && poems.length > 0 && !poemQuizActive" class="poem-list">
           <div
             v-for="(poem, index) in filteredPoems"
             :key="poem.title + poem.author"
@@ -109,8 +109,11 @@
         </div>
         <div v-if="poemQuizActive" class="poem-quiz-section">
           <div class="quiz-header-bar">
-            <span class="quiz-progress">{{ poemQuizIndex + 1 }} / {{ poemQuizBlanks.length }}</span>
-            <span class="quiz-score-display">得分: {{ poemQuizScore }} 分</span>
+            <button class="back-to-poetry-btn" @click="poemQuizActive = false">← 返回诗词</button>
+            <div class="quiz-header-info">
+              <span class="quiz-progress">{{ poemQuizIndex + 1 }} / {{ poemQuizBlanks.length }}</span>
+              <span class="quiz-score-display">得分: {{ poemQuizScore }} 分</span>
+            </div>
           </div>
           <div v-if="poemQuizIndex < poemQuizBlanks.length" class="poem-quiz-card">
             <p class="poem-quiz-title">{{ poemQuizBlanks[poemQuizIndex].poem.title }} - {{ poemQuizBlanks[poemQuizIndex].poem.author }}</p>
@@ -221,7 +224,7 @@
       </div>
 
       <div v-if="mathMode === 'arithmetic'">
-        <div class="math-config">
+        <div class="math-config" v-if="!isStudent">
           <div class="config-row">
             <label>最大数字：<input type="number" v-model.number="mathConfig.maxNum" min="1" max="1000"></label>
             <label>题目数量：<input type="number" v-model.number="mathConfig.count" min="1" max="50"></label>
@@ -233,6 +236,10 @@
             <label><input type="checkbox" value="÷" v-model="mathConfig.operations"> ÷</label>
           </div>
           <button class="gen-btn" @click="generateMathProblems">生成题目</button>
+        </div>
+        <div v-if="isStudent" class="math-config-readonly">
+          <p class="config-hint">📝 按教师配置练习</p>
+          <button class="gen-btn" @click="generateMathProblems">开始练习</button>
         </div>
         <div v-if="mathProblems.length" class="math-quiz-list">
           <div v-for="(p, i) in mathProblems" :key="i" class="math-quiz-item" :class="{ answered: p.result !== null }">
@@ -279,7 +286,7 @@
             <tbody>
               <tr v-for="i in 9" :key="i">
                 <th>{{ i }}</th>
-                <td v-for="j in 9" :key="j" :class="{ highlight: i >= j }">{{ i }}×{{ j }}={{ i * j }}</td>
+                <td v-for="j in 9" :key="j" :class="{ highlight: i >= j }" @click="speakMultiply(i, j)">{{ i }}×{{ j }}={{ i * j }}</td>
               </tr>
             </tbody>
           </table>
@@ -391,6 +398,7 @@ import { classroomApi, studentApi2 } from '../api/index.js'
 import { useAuthStore } from '../stores/auth.js'
 import { pinyin as py } from 'pinyin'
 import $confirm from '../composables/useConfirmModal.js'
+const authStore = useAuthStore()
 
 
 // 拼音辅助函数：将 pinyin 数组转为空格分隔的字符串
@@ -532,12 +540,15 @@ const dictationResult = ref('')
 
 function showPoem(poem) { selectedPoem.value = poem; showPinyin.value = false; dictationMode.value = false; userInput.value = ''; dictationResult.value = '' }
 function speak(text) { const u = new SpeechSynthesisUtterance(text); u.lang = 'zh-CN'; u.rate = 0.8; speechSynthesis.speak(u) }
-function speakPoem(poem) {
+async function speakPoem(poem) {
   let text = poem.title
   if (poem.author) text += '，' + poem.author
   if (poem.dynasty) text += '，' + poem.dynasty
   text += '。' + poem.content
   speak(text)
+  if (isStudent.value) {
+    await recordReading('POEM_READING', poem.title)
+  }
 }
 function startDictation() { dictationMode.value = true; dictationResult.value = '' }
 function checkDictation() {
@@ -601,9 +612,12 @@ const toneList = ref([
 ])
 
 // 声调发声
-function speakTone(t) {
+async function speakTone(t) {
   speak(t.mark + '（第' + t.tone + '声，' + t.name + '）')
   setTimeout(() => speak(t.example), 800)
+  if (isStudent.value) {
+    await recordReading('PINYIN_TONE', 'tone_' + t.tone)
+  }
 }
 
 // 声母/韵母发声
@@ -623,18 +637,64 @@ const pinyinCharMap = {
   'ān':'安','ēn':'恩','īn':'音','ūn':'温','ǖn':'晕',
   'āng':'昂','ēng':'鞥','īng':'英','ōng':'中'
 }
-function speakPinyin(item) {
-  const text = pinyinCharMap[item.sound] || item.sound
-  speak(text)
+
+// 朗读打卡通用函数
+async function recordReading(activityType, itemId) {
+  try {
+    const res = await fetch('/api/reading/record', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        studentId: authStore.studentId,
+        activityType,
+        itemId,
+        teacherId: authStore.user?.teacherId || authStore.user?.id || ''
+      })
+    })
+    const data = await res.json()
+    if (data.success) {
+      console.log('打卡成功:', activityType, itemId, data.newScore)
+    } else if (data.alreadyRecorded) {
+      console.log('今日已打卡:', activityType, itemId)
+    }
+  } catch (e) {
+    console.error('打卡失败:', e)
+  }
 }
 
-function speakLetter(text) {
+async function speakPinyin(item) {
+  const text = pinyinCharMap[item.sound] || item.sound
+  speak(text)
+  if (isStudent.value) {
+    await recordReading('PINYIN_CARD', item.sound)
+  }
+}
+
+
+// 乘法口诀表点击朗读 + 打卡
+async function speakMultiply(i, j) {
+  const formula = `${i}乘以${j}等于${i * j}`
+  const u = new SpeechSynthesisUtterance(formula)
+  u.lang = 'zh-CN'
+  u.rate = 0.9
+  speechSynthesis.speak(u)
+  if (isStudent.value) {
+    await recordReading('MULTIPLY_CELL', `${i}×${j}`)
+  }
+}
+
+async function speakLetter(text) {
   const u = new SpeechSynthesisUtterance(text)
   u.lang = 'en-US'
   u.rate = 0.85
   speechSynthesis.speak(u)
+  if (isStudent.value) {
+    await recordReading('ENGLISH_LETTER', text.toUpperCase())
+  }
 }
-function speakAllLetters() { letters.forEach((l, i) => setTimeout(() => speakLetter(l.lower), i * 600)) }
+function speakAllLetters() {
+    letters.value.forEach((l, i) => setTimeout(() => speakLetter(l.lower), i * 600))
+  }
 
 // === 数学 ===
 const mathMode = ref('arithmetic')
@@ -677,7 +737,23 @@ function _makeOneProblem() {
   return { question: a + ' ' + op + ' ' + b + ' = ?', answer: ans[op], userAnswer: null, result: null, showAnswer: false }
 }
 
-function generateMathProblems() {
+async function generateMathProblems() {
+  // 学生端：先从后端获取教师配置
+  if (isStudent.value) {
+    try {
+      const tid = authStore.user?.teacherId
+      if (tid) {
+        const res = await fetch(`/api/student/classroom-config?teacherId=${tid}&type=MATH`)
+        const data = await res.json()
+        if (data.config && data.config !== '{}') {
+          const cfg = typeof data.config === 'string' ? JSON.parse(data.config) : data.config
+          if (cfg.maxNum) mathConfig.maxNum = cfg.maxNum
+          if (cfg.count) mathConfig.count = cfg.count
+          if (cfg.operations) mathConfig.operations = cfg.operations
+        }
+      }
+    } catch (e) { console.warn('获取教师配置失败，使用默认', e) }
+  }
   if (!mathConfig.operations.length) { $confirm.alert('请选择运算'); return }
   const cnt = Math.max(1, Math.min(50, mathConfig.count))
   mathProblems.value = Array.from({ length: cnt }, () => _makeOneProblem())
@@ -688,6 +764,9 @@ function checkOneProblem(i) {
   if (p.result !== null) return
   if (Number(p.userAnswer) === p.answer) {
     p.result = true
+    if (isStudent.value) {
+      studentApi2.quizScore(1, '数学四则运算').catch(() => {})
+    }
   } else {
     p.result = false
     wrongRecords.value.push(p.question + ' 你答：' + p.userAnswer)
@@ -717,6 +796,9 @@ function checkMultiplyOne(i) {
   if (p.result !== null) return
   if (Number(p.userAnswer) === p.answer) {
     p.result = true
+    if (isStudent.value) {
+      studentApi2.quizScore(1, '数学乘法练习').catch(() => {})
+    }
   } else {
     p.result = false
     wrongRecords.value.push(p.question + ' 你答：' + p.userAnswer)
@@ -729,7 +811,7 @@ const letters = ref('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(l => ({ upper: l,
 onMounted(() => {
   loadPoems()
   generateMathProblems()
-  const authStore = useAuthStore()
+  
   isStudent.value = authStore.isStudent
 })
 
@@ -750,7 +832,12 @@ function startEnglishQuiz() {
 
 function submitEnglishAnswer() {
   const q = englishQuizQuestions.value[englishQuizIndex.value]
-  if (englishQuizSelected.value === q.letter.upper) englishQuizScore.value++
+  if (englishQuizSelected.value === q.letter.upper) {
+    englishQuizScore.value++
+    if (isStudent.value) {
+      studentApi2.quizScore(1, '英语字母测验').catch(() => {})
+    }
+  }
   englishQuizSubmitted.value = true
 }
 
@@ -758,9 +845,7 @@ function nextEnglishQuestion() {
   englishQuizIndex.value++
   englishQuizSelected.value = null
   englishQuizSubmitted.value = false
-  if (englishQuizIndex.value >= englishQuizQuestions.value.length) {
-    studentApi2.quizScore(englishQuizScore.value, '英语字母测验').catch(() => {})
-  }
+  // 积分已在每题答对时实时加分，此处不再重复
 }
 
 function startPoemQuiz() {
@@ -791,7 +876,12 @@ function checkPoemBlanks() {
   poemQuizChecked.value = true
   const blanks = poemQuizBlanks.value[poemQuizIndex.value].blanks
   blanks.forEach((blank, bi) => {
-    if (poemQuizAnswers.value[bi] === blank.char) poemQuizScore.value++
+    if (poemQuizAnswers.value[bi] === blank.char) {
+      poemQuizScore.value++
+      if (isStudent.value) {
+        studentApi2.quizScore(1, '语文诗词填空测验').catch(() => {})
+      }
+    }
   })
 }
 
@@ -799,23 +889,21 @@ function nextPoemQuestion() {
   poemQuizIndex.value++
   poemQuizChecked.value = false
   poemQuizAnswers.value = []
-  if (poemQuizIndex.value >= poemQuizBlanks.value.length) {
-    studentApi2.quizScore(poemQuizScore.value, '语文诗词填空测验').catch(() => {})
-  }
+  // 积分已在每空答对时实时加分，此处不再重复
 }
 
 function submitMathScore() {
   const correct = mathProblems.value.filter(p => p.result).length
   mathSubmitted.value = true
   mathSubmittedScore.value = correct
-  studentApi2.quizScore(correct, '数学四则运算').catch(() => {})
+  // 积分已在每题答对时实时加分，此处不再重复
 }
 
 function submitMultiplyScore() {
   const correct = multiplyProblems.value.filter(p => p.result).length
   multiplySubmitted.value = true
   multiplySubmittedScore.value = correct
-  studentApi2.quizScore(correct, '数学乘法练习').catch(() => {})
+  // 积分已在每题答对时实时加分，此处不再重复
 }
 </script>
 <style scoped>
@@ -902,6 +990,8 @@ function submitMultiplyScore() {
 .checkbox-group label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
 .gen-btn { padding: 10px 25px; background: #d97706; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 10px; }
 .gen-btn:hover { background: #b45309; }
+.math-config-readonly { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); text-align: center; }
+.config-hint { color: #92400e; margin-bottom: 10px; font-size: 1.05rem; }
 
 /* 题目列表 */
 .math-quiz-list { display: flex; flex-direction: column; gap: 12px; }
@@ -1041,6 +1131,9 @@ function submitMultiplyScore() {
 .finish-score { font-size: 1.3rem; color: #059669; font-weight: bold; margin-bottom: 20px; }
 .gen-btn.secondary { background: #666; }
 .gen-btn.secondary:hover { background: #444; }
+.back-to-poetry-btn { padding: 6px 14px; background: #d97706; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+.back-to-poetry-btn:hover { background: #b45309; }
+.quiz-header-info { display: flex; gap: 15px; align-items: center; }
 .quiz-header-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: rgba(255,255,255,0.6); border-radius: 12px; margin-bottom: 10px; }
 .quiz-progress { color: #92400e; font-weight: bold; }
 .quiz-score-display { color: #059669; font-weight: bold; }

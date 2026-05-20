@@ -54,6 +54,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/settings").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/pets", "/api/pets/**").permitAll()
+                .requestMatchers("/api/reading/**").permitAll()
+                .requestMatchers("/api/pokemon/classroom-pool/current").permitAll()
+                .requestMatchers("/api/student/classroom-config").permitAll()
                 .requestMatchers("/error").permitAll()
                 // All other API endpoints require authentication
                 .anyRequest().authenticated()
