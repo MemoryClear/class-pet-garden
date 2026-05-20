@@ -47,6 +47,8 @@
           <div class="pet-library-tabs">
             <button :class="{ active: petLibraryTab === 'pet' }" @click="petLibraryTab = 'pet'">普通宠物</button>
             <button :class="{ active: petLibraryTab === 'pokemon' }" @click="petLibraryTab = 'pokemon'">我的宝可梦</button>
+
+            <button :class="{ active: petLibraryTab === 'items' }" @click="petLibraryTab = 'items'">🎒 我的道具</button>
           </div>
           <div class="pet-grid" v-if="petLibraryTab === 'pet'">
             <div v-for="p in petLibrary" :key="p.id" class="pet-thumb" :class="{ owned: myInfo.petId === p.id }">
@@ -81,6 +83,73 @@
                 <div class="mylist-level">Lv.{{ poke.level }}</div>
                 <div class="mylist-food">🍖 {{ poke.food }}</div>
               </div>
+            </div>
+          </div>
+
+          <!-- 我的道具 Tab -->
+          <div v-if="petLibraryTab === 'items'" class="my-items-panel">
+            <!-- 进化道具 -->
+            <div class="items-section">
+              <h5 class="items-title">💎 进化道具</h5>
+              <div class="items-grid evo-items-grid">
+                <div v-for="(count, name) in myInfo.evolutionItems" :key="name" class="item-card evo-item-card">
+                  <span class="evo-item-icon">{{ getEvoIcon(name) }}</span>
+                  <span class="evo-item-name">{{ name }}</span>
+                  <span class="evo-item-count">x{{ count }}</span>
+                </div>
+                <div v-if="!myInfo.evolutionItems || Object.keys(myInfo.evolutionItems).length === 0" class="empty-hint">暂无进化道具</div>
+              </div>
+            </div>
+            <!-- 特殊道具 -->
+            <div class="items-section">
+              <h5 class="items-title">🎫 特殊道具</h5>
+              <div class="items-grid special-items-grid">
+                <div class="item-card special-card">
+                  <span class="special-icon">🎫</span>
+                  <span class="special-name">宠物更换卡</span>
+                  <span class="special-count">x{{ myInfo.petChangeCards }}</span>
+                </div>
+                <div class="item-card special-card">
+                  <span class="special-icon">🔴</span>
+                  <span class="special-name">精灵球</span>
+                  <span class="special-count">x{{ myInfo.pokemonBalls }}</span>
+                  <button class="action-btn equip-btn" style="margin-left:auto;font-size:11px;padding:2px 8px" @click="petLibraryTab='pokemon';showBallModal=true" :disabled="myInfo.pokemonBalls<=0">去抽取</button>
+                </div>
+              </div>
+            </div>
+            <!-- 装饰品 -->
+            <div class="items-section">
+              <h5 class="items-title">✨ 装饰品 (已装备 {{ equippedItemIds.length }}/3)</h5>
+              <div class="items-grid deco-items-grid">
+                <div v-for="item in decorationItems" :key="item.itemId" class="item-card evo-item-card" :class="{ 'is-equipped': equippedItemIds.includes(item.itemId) }">
+                  <span class="evo-item-icon">{{ item.itemIcon || '🎁' }}</span>
+                  <span class="evo-item-name">{{ item.itemName }}</span>
+                  <span class="evo-item-count">x{{ item.count }}</span>
+                  <span v-if="equippedItemIds.includes(item.itemId)" class="equipped-badge">✅</span>
+                  <div class="deco-inline-actions">
+                    <button v-if="equippedItemIds.includes(item.itemId)" class="action-btn unequip-btn" @click="toggleEquipItem(item.itemId, false)" title="卸下">卸下</button>
+                    <button v-else-if="equippedItemIds.length < 3" class="action-btn equip-btn" @click="toggleEquipItem(item.itemId, true)" title="装备">装备</button>
+                    <button class="action-btn gift-btn" @click="giftItem(item)" title="赠送">🎁</button>
+                  </div>
+                </div>
+                <div v-if="decorationItems.length === 0" class="empty-hint">暂无装饰品，去小卖部看看吧</div>
+              </div>
+
+          <!-- 赠送同学弹窗 -->
+          <div v-if="showGiftModal" class="modal-overlay" @click.self="showGiftModal=false">
+            <div class="gift-modal">
+              <h4>🎁 赠送给同学</h4>
+              <p style="margin:8px 0;color:#64748b;font-size:13px">将「{{ giftTarget?.itemName }}」赠送给：</p>
+              <div class="classmates-list">
+                <div v-for="mate in classmates" :key="mate.studentNo" class="classmate-item" @click="confirmGift(mate)">
+                  <span class="classmate-no">{{ mate.studentNo }}</span>
+                  <span class="classmate-name">{{ mate.name }}</span>
+                </div>
+                <div v-if="classmates.length===0" class="empty-hint">暂无同班同学</div>
+              </div>
+              <button class="action-btn unequip-btn" style="margin-top:12px;width:100%" @click="showGiftModal=false">取消</button>
+            </div>
+          </div>
             </div>
           </div>
         </div>
@@ -396,6 +465,64 @@ const totalEvoItems = computed(() => { const items = myInfo.evolutionItems || {}
 const leaderboard = ref([])
 const totalLeaderboard = ref([])
 const petLibrary = ref([])
+
+// ==================== 我的道具相关 ====================
+const equippedItemIds = computed(() => {
+  try { return JSON.parse(myInfo.equippedItems || '[]') } catch { return [] }
+})
+
+const evoIconMap = { '水之石': '💧', '火之石': '🔥', '叶之石': '🌿', '雷之石': '⚡', '月之石': '🌙', '太阳之石': '☀️', '觉醒石': '🔶', '联系绳': '🔗', '冰之石': '🧊', '暗之石': '🌑', '光之石': '🌟', '战斗之石': '⚔️' }
+function getEvoIcon(name) { return evoIconMap[name] || '💎' }
+
+const decorationItems = computed(() => {
+  if (!exchangeHistory.value) return []
+  const owned = exchangeHistory.value.filter(r => !r.giftFrom)
+  const map = new Map()
+  for (const r of owned) {
+    const key = r.itemId || r.itemName
+    if (!map.has(key)) map.set(key, { itemId: r.itemId, itemName: r.itemName, itemIcon: r.itemIcon, count: 0 })
+    map.get(key).count++
+  }
+  return [...map.values()]
+})
+
+async function toggleEquipItem(itemId, equip) {
+  try {
+    const { data } = await api.post('/student/equip-item', { itemId, equip })
+    myInfo.equippedItems = data.equippedItems
+    $confirm.success(equip ? '装备成功！✨' : '已卸下')
+  } catch (e) {
+    $confirm.error(e.response?.data?.error || '操作失败')
+  }
+}
+
+let showGiftModal = ref(false)
+let giftTarget = ref(null)
+let classmates = ref([])
+
+async function fetchClassmates() {
+  try {
+    const { data } = await api.get('/student/classmates')
+    classmates.value = data
+  } catch { classmates.value = [] }
+}
+
+async function giftItem(item) {
+  giftTarget.value = item
+  await fetchClassmates()
+  showGiftModal.value = true
+}
+
+async function confirmGift(mate) {
+  try {
+    const { data } = await api.post('/student/gift-item', { itemId: giftTarget.value.itemId, targetStudentNo: mate.studentNo })
+    $confirm.success(data.message)
+    showGiftModal.value = false
+    await fetchRecords()
+  } catch (e) {
+    $confirm.error(e.response?.data?.error || '赠送失败')
+  }
+}
 const petLibraryTab = ref('pet') // 'pet' | 'pokemon'
 const shopItems = ref([])
 const recordTab = ref('score')
@@ -648,7 +775,7 @@ async function exchangeItem(item) {
     $confirm.success('兑换成功！')
     await fetchMyInfo()
     await fetchShop()
-    await fetchPokemonBalls()
+    // removed
   } catch (e) {
     $confirm.error(e.response?.data?.error || '兑换失败')
   }
@@ -750,6 +877,44 @@ onMounted(async () => {
 .nav-btn.active { background: #ff6b9d; color: #fff; }
 .logout-btn { color: #f44; }
 .section { background: #fff; border-radius: 20px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+
+/* 我的道具面板 */
+.my-items-panel { padding: 8px 0; }
+.items-section { margin-bottom: 20px; }
+.items-title { margin: 0 0 10px; font-size: 14px; color: #64748b; }
+.items-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.item-card { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-radius: 12px; background: #fff; border: 1px solid #e2e8f0; }
+.evo-item-card { min-width: 100px; }
+.evo-item-icon { font-size: 20px; }
+.evo-item-name { font-size: 13px; color: #334155; }
+.evo-item-count { font-size: 13px; font-weight: 600; color: #8b5cf6; }
+.special-card { min-width: 120px; }
+.special-icon { font-size: 20px; }
+.special-name { font-size: 13px; color: #334155; }
+.special-count { font-size: 13px; font-weight: 600; color: #f59e0b; }
+.deco-card { flex-direction: column; align-items: stretch; min-width: 130px; gap: 8px; }
+.deco-card.is-equipped { border-color: #a78bfa; background: #f5f3ff; }
+.deco-card-top { display: flex; align-items: center; gap: 6px; }
+.deco-icon { font-size: 22px; }
+.deco-name { font-size: 13px; color: #334155; }
+.equipped-badge { font-size: 11px; color: #8b5cf6; background: #ede9fe; padding: 2px 6px; border-radius: 8px; margin-left: auto; }
+.deco-card-actions { display: flex; gap: 6px; }
+.action-btn { padding: 4px 10px; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+.equip-btn { background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff; }
+.equip-btn:hover { opacity: 0.9; }
+.unequip-btn { background: #f1f5f9; color: #64748b; }
+.unequip-btn:hover { background: #e2e8f0; }
+.gift-btn { background: #fef3c7; color: #92400e; }
+.gift-btn:hover { background: #fde68a; }
+
+/* 赠送弹窗 */
+.gift-modal { background: #fff; border-radius: 16px; padding: 20px; width: 90%; max-width: 360px; margin: auto; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+.classmates-list { max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.classmate-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+.classmate-item:hover { background: #f1f5f9; }
+.classmate-no { font-size: 12px; color: #94a3b8; min-width: 50px; }
+.classmate-name { font-size: 14px; color: #334155; }
+.empty-hint { text-align: center; color: #94a3b8; font-size: 13px; padding: 16px; width: 100%; }
 
 /* 宠物区 */
 .pet-card-large { display: flex; align-items: center; gap: 24px; padding: 20px; background: linear-gradient(135deg, #fff5f7, #fff); border-radius: 16px; border: 2px solid #ffe0e8; margin-bottom: 20px; }
