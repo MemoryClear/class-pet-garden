@@ -539,7 +539,13 @@ const userInput = ref('')
 const dictationResult = ref('')
 
 function showPoem(poem) { selectedPoem.value = poem; showPinyin.value = false; dictationMode.value = false; userInput.value = ''; dictationResult.value = '' }
-function speak(text) { const u = new SpeechSynthesisUtterance(text); u.lang = 'zh-CN'; u.rate = 0.8; speechSynthesis.speak(u) }
+const ttsAudio = new Audio()
+function speak(text) {
+  if (!text) return
+  ttsAudio.pause()
+  ttsAudio.src = '/api/tts?text=' + encodeURIComponent(text)
+  ttsAudio.play().catch(() => {})
+}
 async function speakPoem(poem) {
   let text = poem.title
   if (poem.author) text += '，' + poem.author

@@ -52,7 +52,9 @@ FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl gosu && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends curl gosu python3 && \
+    python3 -m pip install --break-system-packages --no-cache-dir edge-tts && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
