@@ -679,7 +679,9 @@ async function recordReading(activityType, itemId) {
 }
 
 async function speakPinyin(item) {
-  const text = pinyinCharMap[item.sound] || item.sound
+  // 声母/韵母直接映射发音（避免被 Vite tree-shake）
+  const pinyinMap = {'b':'波','p':'坡','m':'摸','f':'佛','d':'得','t':'特','n':'讷','l':'乐','g':'哥','k':'科','h':'喝','j':'基','q':'欺','x':'希','zh':'知','ch':'蚩','sh':'诗','r':'日','z':'资','c':'雌','s':'思','y':'衣','w':'乌','a':'啊','o':'哦','e':'婀','i':'衣','u':'乌','v':'淤'};
+  const text = pinyinMap[item.sound] || item.sound
   speak(text)
   if (isStudent.value) {
     await recordReading('PINYIN_CARD', item.sound)
