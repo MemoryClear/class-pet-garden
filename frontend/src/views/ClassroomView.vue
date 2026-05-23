@@ -540,10 +540,12 @@ const dictationResult = ref('')
 
 function showPoem(poem) { selectedPoem.value = poem; showPinyin.value = false; dictationMode.value = false; userInput.value = ''; dictationResult.value = '' }
 const ttsAudio = new Audio()
-function speak(text) {
+function speak(text, voice = '') {
   if (!text) return
   ttsAudio.pause()
-  ttsAudio.src = '/api/tts?text=' + encodeURIComponent(text)
+  let url = '/api/tts?text=' + encodeURIComponent(text)
+  if (voice) url += '&voice=' + encodeURIComponent(voice)
+  ttsAudio.src = url
   ttsAudio.play().catch(() => {})
 }
 async function speakPoem(poem) {
@@ -692,20 +694,14 @@ async function speakPinyin(item) {
 // 乘法口诀表点击朗读 + 打卡
 async function speakMultiply(i, j) {
   const formula = `${i}乘以${j}等于${i * j}`
-  const u = new SpeechSynthesisUtterance(formula)
-  u.lang = 'zh-CN'
-  u.rate = 0.9
-  speechSynthesis.speak(u)
+  speak(formula)
   if (isStudent.value) {
     await recordReading('MULTIPLY_CELL', `${i}×${j}`)
   }
 }
 
 async function speakLetter(text) {
-  const u = new SpeechSynthesisUtterance(text)
-  u.lang = 'en-US'
-  u.rate = 0.85
-  speechSynthesis.speak(u)
+  speak(text, 'en-US-JennyNeural')
   if (isStudent.value) {
     await recordReading('ENGLISH_LETTER', text.toUpperCase())
   }
