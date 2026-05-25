@@ -561,7 +561,9 @@ public class StudentService {
     // 判断条件是否为等级进化（而非道具/通讯交换等）
     private boolean isLevelBasedCondition(String condition) {
         if (condition == null) return false;
-        return condition.contains("等级");
+        // 精确匹配：只有"等级N"或"等级 N"这种纯等级条件才算等级进化
+        // 排除"提升等级""提高等级"等出现在其他语境的情况
+        return condition.matches("^等级\\s*\\d+.*") || condition.matches("^Level\\s*\\d+.*");
     }
     
     // 从进化条件中提取道具名称（如"使用水之石" -> "水之石"）
