@@ -197,20 +197,50 @@ public class ShopService {
 
     // ============== 进化道具数据 ==============
     private static final Object[][] EVOLUTION_ITEMS_DATA = {
+        // 普通进化石
         {"💧", "水之石", 30, "让特定宝可梦进化的神秘石头", 99, "水之石"},
         {"🔥", "火之石", 30, "让特定宝可梦进化的神秘石头", 99, "火之石"},
         {"🍃", "叶之石", 30, "让特定宝可梦进化的神秘石头", 99, "叶之石"},
         {"🌙", "月之石", 30, "让特定宝可梦进化的神秘石头", 99, "月之石"},
         {"⚡", "雷之石", 30, "让特定宝可梦进化的神秘石头", 99, "雷之石"},
-        {"🔗", "联系绳", 30, "让特定宝可梦进化的神秘绳索", 99, "联系绳"}
+        {"❄️", "冰之石", 30, "让冰系宝可梦进化的神秘石头", 99, "冰之石"},
+        {"☀️", "日之石", 30, "让特定宝可梦进化的神秘石头", 99, "日之石"},
+        {"🔮", "黑奇石", 30, "让特定宝可梦进化的神秘石头", 99, "黑奇石"},
+        // 连接交换进化道具
+        {"🔗", "联系绳", 30, "让特定宝可梦进化的神秘绳索", 99, "联系绳"},
+        {"📿", "王者之证", 30, "让特定宝可梦进化的神秘道具", 99, "王者之证"},
+        {"⚙️", "金属膜", 30, "让特定宝可梦进化的金属膜", 99, "金属膜"},
+        {"🛡️", "护具", 30, "让特定宝可梦进化的护具", 99, "护具"},
+        {"🐉", "龙之鳞片", 30, "让特定宝可梦进化的龙鳞", 99, "龙之鳞片"},
+        {"💾", "升级数据", 30, "让特定宝可梦进化的数据道具", 99, "升级数据"},
+        {"💉", "可疑补丁", 30, "让特定宝可梦进化的可疑道具", 99, "可疑补丁"},
+        // 亲密度进化（亲密度/友好度/特定招式条件统一为一种道具）
+        {"💜", "亲密度进化石", 50, "让亲密度足够的宝可梦进化（太阳伊布/月亮伊布/仙子伊布等）", 99, "亲密度进化石"}
     };
 
-    // ============== 进化道具迁移（旧账号兼容） ==============
+    // ============== 进化道具迁移（旧账号兼容，逐个检查补充） ==============
     public void migrateEvolutionItems(String teacherId) {
         List<ShopItem> existing = shopItemRepo.findByTeacherIdOrderByCreatedAtDesc(teacherId);
-        boolean hasEvolutionItem = existing.stream().anyMatch(i -> "evolution_item".equals(i.getItemType()));
-        if (!hasEvolutionItem) {
-            createEvolutionItems(teacherId);
+        // 提取已有进化道具的名称集合
+        java.util.Set<String> existingNames = existing.stream()
+                .filter(i -> "evolution_item".equals(i.getItemType()))
+                .map(ShopItem::getName)
+                .collect(Collectors.toSet());
+        // 逐个检查，缺失的才创建
+        for (Object[] d : EVOLUTION_ITEMS_DATA) {
+            String itemName = (String) d[5];  // evolutionItemKey
+            if (!existingNames.contains(itemName)) {
+                ShopItem item = new ShopItem();
+                item.setIcon((String) d[0]);
+                item.setName((String) d[1]);
+                item.setPrice((Integer) d[2]);
+                item.setDescription((String) d[3]);
+                item.setStock((Integer) d[4]);
+                item.setTeacherId(teacherId);
+                item.setItemType("evolution_item");
+                item.setEvolutionItemKey(itemName);
+                shopItemRepo.save(item);
+            }
         }
     }
 
@@ -300,10 +330,7 @@ public class ShopService {
             existing = shopItemRepo.findByTeacherIdOrderByCreatedAtDesc(teacherId);
         }
 
-        // 始终检查：补充缺失的进化道具（兼容旧账号）
-        boolean hasEvolutionItem = existing.stream().anyMatch(i -> "evolution_item".equals(i.getItemType()));
-        if (!hasEvolutionItem) {
-            createEvolutionItems(teacherId);
-        }
+        // 始终检查：补充缺失的进化道具（兼容旧账号及新添加的道具）
+        migrateEvolutionItems(teacherId);
     }
 }
