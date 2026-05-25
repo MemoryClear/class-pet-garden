@@ -542,6 +542,8 @@ function showPoem(poem) { selectedPoem.value = poem; showPinyin.value = false; d
 const ttsAudio = new Audio()
 function speak(text, voice = '') {
   if (!text) return
+  // 连续重复字符间插入顿号，避免TTS连读变调（如"鹅鹅鹅"→"鹅、鹅、鹅"）
+  text = text.replace(/(.)\1{1,}/g, (m, c) => m.split('').join('、'))
   ttsAudio.pause()
   let url = '/api/tts?text=' + encodeURIComponent(text)
   if (voice) url += '&voice=' + encodeURIComponent(voice)
