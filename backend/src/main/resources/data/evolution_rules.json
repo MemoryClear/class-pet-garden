@@ -292,7 +292,7 @@
     {
       "toPokedexId": 169,
       "toName": "叉字蝠",
-      "condition": "亲密度220以上或友好度158以上提升等级",
+      "condition": "使用亲密度进化石",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
@@ -398,7 +398,7 @@
     {
       "toPokedexId": 979,
       "toName": "弃世猴",
-      "condition": "使出20次愤怒之拳后提升等级",
+      "condition": "使用亲密度进化石",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
@@ -436,7 +436,7 @@
     {
       "toPokedexId": 186,
       "toName": "蚊香蛙皇",
-      "condition": "携带王者之证连接交换",
+      "condition": "使用王者之证",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
@@ -456,7 +456,7 @@
     {
       "toPokedexId": 65,
       "toName": "胡地",
-      "condition": "连接交换 ；使用联系绳",
+      "condition": "使用联系绳",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
@@ -476,7 +476,7 @@
     {
       "toPokedexId": 68,
       "toName": "怪力",
-      "condition": "连接交换 ；使用联系绳",
+      "condition": "使用联系绳",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
@@ -526,7 +526,7 @@
     {
       "toPokedexId": 76,
       "toName": "隆隆岩",
-      "condition": "连接交换 ；使用联系绳",
+      "condition": "使用联系绳",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
@@ -554,7 +554,7 @@
     {
       "toPokedexId": 199,
       "toName": "呆呆王",
-      "condition": "携带王者之证连接交换",
+      "condition": "使用王者之证",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -574,7 +574,7 @@
     {
       "toPokedexId": 462,
       "toName": "自爆磁怪",
-      "condition": "来到特殊磁场附近提升等级 ；使用雷之石（第八世代起）",
+      "condition": "使用雷之石",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
@@ -584,7 +584,7 @@
     {
       "toPokedexId": 865,
       "toName": "葱游兵",
-      "condition": "对战中击中要害3次或以上结束对战",
+      "condition": "使用亲密度进化石",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -644,7 +644,7 @@
     {
       "toPokedexId": 94,
       "toName": "耿鬼",
-      "condition": "连接交换 ；使用联系绳",
+      "condition": "使用联系绳",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
@@ -654,7 +654,7 @@
     {
       "toPokedexId": 208,
       "toName": "大钢蛇",
-      "condition": "携带金属膜连接交换 ；使用金属膜（传说 阿尔宙斯中）",
+      "condition": "使用金属膜",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -694,7 +694,7 @@
     {
       "toPokedexId": 103,
       "toName": "椰蛋树",
-      "condition": "使用叶之石（在其他地区或究极空间）",
+      "condition": "使用亲密度进化石",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -704,7 +704,7 @@
     {
       "toPokedexId": 105,
       "toName": "嘎啦嘎啦",
-      "condition": "等级28以上（在其他地区或究极空间）",
+      "condition": "使用亲密度进化石",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -714,7 +714,7 @@
     {
       "toPokedexId": 463,
       "toName": "大舌舔",
-      "condition": "学会滚动时提升等级",
+      "condition": "使用亲密度进化石",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -724,7 +724,7 @@
     {
       "toPokedexId": 110,
       "toName": "双弹瓦斯",
-      "condition": "等级35以上（在其他地区）",
+      "condition": "等级35以上",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -744,7 +744,7 @@
     {
       "toPokedexId": 464,
       "toName": "超甲狂犀",
-      "condition": "携带护具连接交换 ；使用护具（传说 阿尔宙斯中）",
+      "condition": "使用护具",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
@@ -754,7 +754,7 @@
     {
       "toPokedexId": 465,
       "toName": "巨蔓藤",
-      "condition": "学会原始之力时提升等级",
+      "condition": "使用亲密度进化石",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -774,7 +774,7 @@
     {
       "toPokedexId": 230,
       "toName": "刺龙王",
-      "condition": "携带龙之鳞片连接交换",
+      "condition": "使用龙之鳞片",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
@@ -804,7 +804,7 @@
     {
       "toPokedexId": 212,
       "toName": "巨钳螳螂",
-      "condition": "携带金属膜连接交换 ；使用金属膜（传说 阿尔宙斯中）",
+      "condition": "使用金属膜",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -856,7 +856,7 @@
     {
       "toPokedexId": 470,
       "toName": "叶伊布",
-      "condition": "来到苔岩附近提升等级或使用叶之石（第八世代起）",
+      "condition": "使用叶之石",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -864,7 +864,7 @@
     {
       "toPokedexId": 471,
       "toName": "冰伊布",
-      "condition": "来到冻石附近提升等级或使用冰之石（第八世代起）",
+      "condition": "使用冰之石",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -872,7 +872,7 @@
     {
       "toPokedexId": 700,
       "toName": "仙子伊布",
-      "condition": "友好度158以上学会妖精属性招式时提升等级",
+      "condition": "使用亲密度进化石",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -880,7 +880,7 @@
     {
       "toPokedexId": 196,
       "toName": "太阳伊布",
-      "condition": "亲密度220以上或友好度158以上提升等级（白天）",
+      "condition": "使用亲密度进化石",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -888,7 +888,7 @@
     {
       "toPokedexId": 197,
       "toName": "月亮伊布",
-      "condition": "亲密度220以上或友好度158以上提升等级（夜晚）",
+      "condition": "使用亲密度进化石",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -898,7 +898,7 @@
     {
       "toPokedexId": 233,
       "toName": "多边兽２型",
-      "condition": "携带升级数据连接交换 ；使用升级数据（传说 阿尔宙斯中）",
+      "condition": "使用升级数据",
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
@@ -948,7 +948,7 @@
     {
       "toPokedexId": 474,
       "toName": "多边兽乙型",
-      "condition": "携带可疑补丁连接交换 ；使用可疑补丁（传说 阿尔宙斯中）",
+      "condition": "使用可疑补丁",
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
