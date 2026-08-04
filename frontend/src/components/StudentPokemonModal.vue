@@ -47,12 +47,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { studentApi } from '../api/index.js'
 import $confirm from '../composables/useConfirmModal.js'
 
 const props = defineProps({
-  student: { type: Object, required: false, default: null }
+  student: { type: Object, required: true },
+  visible: { type: Boolean, default: false }
 })
 const emit = defineEmits(['close', 'updated'])
 
@@ -107,7 +108,7 @@ async function handleSelect(poke) {
 
 
 
-onMounted(() => { if (props.student) loadData() })
+watch(() => props.visible, (v) => { if (v) loadData() })
 </script>
 
 <style scoped>

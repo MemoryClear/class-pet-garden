@@ -54,7 +54,7 @@
     <StudentEditModal v-if="editModalVisible" :student="currentEditingStudent" @close="editModalVisible = false" @updated="onStudentUpdated" />
     <StudentDetailModal v-if="detailModalVisible" :student="currentStudent" @close="detailModalVisible = false" />
     <!-- 宝可梦图鉴弹窗 -->
-    <StudentPokemonModal v-if="pokemonModalVisible" :student="currentStudent" @close="pokemonModalVisible = false" @updated="onStudentUpdated" />
+    <StudentPokemonModal v-show="pokemonModalVisible" :student="currentStudent" :visible="pokemonModalVisible" @close="pokemonModalVisible = false" @updated="onStudentUpdated" />
   </div>
 </template>
 
