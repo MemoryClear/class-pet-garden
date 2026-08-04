@@ -234,7 +234,11 @@ async function distributeBalls() {
 }
 
 function handleImageError(e) {
-  e.target.src = '/pokemon/placeholder.png'
+  if (e.target.dataset.fallback) return
+  e.target.dataset.fallback = '1'
+  e.target.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><rect width="80" height="80" fill="#e2e8f0"/><text x="50%" y="50%" font-size="14" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle">无图</text></svg>'
+  )
 }
 </script>
 
