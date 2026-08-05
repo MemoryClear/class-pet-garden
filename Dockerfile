@@ -5,10 +5,9 @@
 # This is the FALLBACK: at runtime, the backend injects window.__APP_CONFIG__
 # (see FeaturesController.index) which overrides this value.
 # Pass --build-arg CLASSROOM_ENABLED=true|false to change the build-time default.
-ARG CLASSROOM_ENABLED=false
-ENV VITE_CLASSROOM_ENABLED=${CLASSROOM_ENABLED}
-
 FROM node:20-alpine AS frontend-builder
+
+# ARG 必须放在 FROM 之后才能被 ENV 引用
 ARG CLASSROOM_ENABLED=false
 ENV VITE_CLASSROOM_ENABLED=${CLASSROOM_ENABLED}
 
