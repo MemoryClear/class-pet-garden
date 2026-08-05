@@ -120,7 +120,9 @@ const visible = ref(false)
   width: 100%;
   max-width: 420px;
   max-height: 80vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 .guide-header {
   display: flex;
@@ -128,6 +130,7 @@ const visible = ref(false)
   justify-content: space-between;
   padding: 20px;
   border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
 }
 .guide-title { font-size: 18px; font-weight: 600; }
 .guide-close {
@@ -142,7 +145,7 @@ const visible = ref(false)
   align-items: center;
   justify-content: center;
 }
-.guide-content { padding: 20px; }
+.guide-content { padding: 20px; overflow-y: auto; flex: 1; }
 .guide-desc {
   text-align: center;
   color: #666;
