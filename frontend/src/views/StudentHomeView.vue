@@ -15,7 +15,7 @@
           <button class="nav-btn" :class="{ active: activeSection === 'pokemon' }" @click="activeSection='pokemon'">🎮 宝可梦</button>
           <button class="nav-btn" :class="{ active: activeSection === 'leaderboard' }" @click="activeSection='leaderboard'">🏆 光荣榜</button>
           <button class="nav-btn" :class="{ active: activeSection === 'shop' }" @click="activeSection='shop'">🏪 小卖部</button>
-          <button class="nav-btn" :class="{ active: activeSection === 'classroom' }" @click="activeSection='classroom'">📚 课堂</button>
+          <button v-if="classroomEnabled" class="nav-btn" :class="{ active: activeSection === 'classroom' }" @click="activeSection='classroom'">📚 课堂</button>
           <button class="nav-btn" :class="{ active: activeSection === 'records' }" @click="activeSection='records'">📝 记录</button>
           <button class="nav-btn logout-btn" @click="handleLogout">退出</button>
         </div>
@@ -293,7 +293,7 @@
       </div>
 
       <!-- 课堂 -->
-      <div v-if="activeSection === 'classroom'" class="section">
+      <div v-if="classroomEnabled && activeSection === 'classroom'" class="section">
         <ClassroomView />
       </div>
 
@@ -451,6 +451,7 @@ import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
 import api, { studentApi2, petApi } from '../api/index.js'
 import ClassroomView from './ClassroomView.vue'
+import { CLASSROOM_ENABLED as classroomEnabled } from '../config/features.js'
 import $confirm from '../composables/useConfirmModal.js'
 import PetIcon from '../components/PetIcon.vue'
 
