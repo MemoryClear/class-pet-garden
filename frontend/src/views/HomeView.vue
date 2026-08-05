@@ -15,7 +15,7 @@
           <LevelGuide />
           <button class="nav-btn" @click="router.push('/history')">📜 历史</button>
           <button class="nav-btn" @click="router.push('/exchange-history')">📦 明细</button>
-          <button class="nav-btn" @click="router.push('/classroom')">📚 课堂</button>
+          <button v-if="classroomEnabled" class="nav-btn" @click="router.push('/classroom')">📚 课堂</button>
           <button class="nav-btn" @click="router.push('/pokemon-pool')">🎮 宝可梦池</button>
           <button class="nav-btn" @click="router.push('/settings')">⚙️ 设置</button>
         </div>
@@ -69,6 +69,7 @@ import PetSelectModal from '../components/PetSelectModal.vue'
 import ExchangeModal from '../components/ExchangeModal.vue'
 import StudentDetailModal from '../components/StudentDetailModal.vue'
 import StudentEditModal from '../components/StudentEditModal.vue'
+import { CLASSROOM_ENABLED as classroomEnabled } from '../config/features.js'
 import StudentPokemonModal from '../components/StudentPokemonModal.vue'
 import LevelGuide from '../components/LevelGuide.vue'
 

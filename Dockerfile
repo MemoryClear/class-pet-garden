@@ -1,7 +1,16 @@
 # ====================
 # Stage 1: Build Frontend
 # ====================
+# Build-time default for VITE_CLASSROOM_ENABLED.
+# This is the FALLBACK: at runtime, the backend injects window.__APP_CONFIG__
+# (see FeaturesController.index) which overrides this value.
+# Pass --build-arg CLASSROOM_ENABLED=true|false to change the build-time default.
+ARG CLASSROOM_ENABLED=false
+ENV VITE_CLASSROOM_ENABLED=${CLASSROOM_ENABLED}
+
 FROM node:20-alpine AS frontend-builder
+ARG CLASSROOM_ENABLED=false
+ENV VITE_CLASSROOM_ENABLED=${CLASSROOM_ENABLED}
 
 WORKDIR /app/frontend
 
@@ -82,7 +91,9 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 CMD curl 
 
 ENV SERVER_PORT=8080
 ENV DB_PATH=/app/data/classpet.db
-ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
+ENV JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5lZW5lcmF0aW9uMjAyNA==
 ENV JWT_EXPIRATION_MS=86400000
+# 课堂功能开关（运行时生效；前端通过 /api/features + window.__APP_CONFIG__ 读取）
+ENV CLASSROOM_ENABLED=false
 
 ENTRYPOINT ["/app/entrypoint.sh"]

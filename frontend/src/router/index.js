@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth.js'
+import { CLASSROOM_ENABLED } from '../config/features.js'
 
 const routes = [
   {
@@ -60,7 +61,7 @@ const routes = [
     path: '/classroom',
     name: 'Classroom',
     component: () => import('../views/ClassroomView.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, classroomFeature: true }
   },
   {
     path: '/pokemon-pool',
@@ -133,6 +134,10 @@ router.beforeEach(async (to, from) => {
   }
   // 改密页强制：改完后才能离开
   if (to.meta.forceChangePassword && auth.isLoggedIn && !auth.mustChangePassword) {
+    return auth.isStudent ? { name: 'StudentHome' } : { name: 'Home' }
+  }
+  // 课堂功能禁用时：访问 /classroom 一律重定向到首页
+  if (to.meta.classroomFeature && !CLASSROOM_ENABLED) {
     return auth.isStudent ? { name: 'StudentHome' } : { name: 'Home' }
   }
 })

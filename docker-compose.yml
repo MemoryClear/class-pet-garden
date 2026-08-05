@@ -17,6 +17,10 @@ services:
       - JWT_SECRET=dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uMjAyNA==
       # JWT token expiration (24 hours)
       - JWT_EXPIRATION_MS=86400000
+      # 课堂功能开关（运行时生效，同时控制前端和后端）
+      # - true  : 显示课堂按钮 + /classroom 路由可访问
+      # - false : 完全隐藏课堂按钮 + 路由重定向（默认）
+      - CLASSROOM_ENABLED=${CLASSROOM_ENABLED:-false}
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/pets"]
