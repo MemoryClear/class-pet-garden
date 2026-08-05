@@ -39,24 +39,39 @@
           <label class="form-label">添加单个学生</label>
           <div class="add-row">
             <input type="text" class="form-input" v-model="newName" placeholder="输入姓名" @keyup.enter="addSingle">
+            <input type="text" class="form-input small-input" v-model="newPassword" placeholder="初始密码（可选）">
             <button class="btn-sm" @click="addSingle">添加</button>
           </div>
+          <div class="form-hint">留空则默认密码 = 学号，学生首次登录需强制修改密码</div>
         </div>
         <!-- 批量导入 -->
         <div class="form-group">
           <label class="form-label">批量导入（每行一个姓名）</label>
           <textarea class="form-textarea" v-model="batchNames" placeholder="张三&#10;李四&#10;王五"></textarea>
-          <button class="btn-sm" @click="addBatch" :disabled="appStore.loading">
-            {{ appStore.loading ? '导入中...' : '批量导入' }}
-          </button>
+          <div class="add-row">
+            <input type="text" class="form-input" v-model="batchPassword" placeholder="统一初始密码（可选，留空=学号）">
+            <button class="btn-sm" @click="addBatch" :disabled="appStore.loading">
+              {{ appStore.loading ? '导入中...' : '批量导入' }}
+            </button>
+          </div>
         </div>
         <p v-if="manageError" class="error-msg show">{{ manageError }}</p>
         <!-- 学生列表 -->
         <div class="student-list" v-if="appStore.students.length > 0">
+          <div class="list-toolbar">
+            <label class="checkbox-label">
+              <input type="checkbox" v-model="selectAll" @change="toggleSelectAll"> 全选
+            </label>
+            <button class="btn-sm" @click="batchResetSelected" :disabled="selectedIds.length === 0">
+              批量重置密码（{{ selectedIds.length }}）
+            </button>
+          </div>
           <div v-for="stu in appStore.students" :key="stu.id" class="student-item">
-            <span>{{ stu.name }}</span>
+            <input type="checkbox" :value="stu.id" v-model="selectedIds" class="student-checkbox">
+            <span class="student-name">{{ stu.name }} <span class="student-no">({{ stu.studentNo }})</span></span>
             <div class="student-actions">
               <button class="icon-btn" @click="promptEdit(stu)" title="修改">✏️</button>
+              <button class="icon-btn" @click="promptResetPwd(stu)" title="重置密码">🔑</button>
               <button class="icon-btn" @click="deleteStudent(stu.id)" title="删除">🗑️</button>
             </div>
           </div>
@@ -109,7 +124,11 @@ const router = useRouter()
 
 const form = reactive({ systemName: '', className: '', theme: 'pink' })
 const newName = ref('')
+const newPassword = ref('')
 const batchNames = ref('')
+const batchPassword = ref('')
+const selectedIds = ref([])
+const selectAll = ref(false)
 const manageError = ref('')
 const scoreForm = reactive({ icon: '', name: '', point: null })
 
@@ -139,8 +158,13 @@ async function addSingle() {
   manageError.value = ''
   if (!newName.value.trim()) return
   try {
-    await appStore.createStudent(newName.value.trim())
+    const payload = { name: newName.value.trim() }
+    if (newPassword.value.trim()) payload.initialPassword = newPassword.value.trim()
+    const { default: api } = await import('../api/index.js')
+    await api.post('/students', payload)
+    await appStore.fetchStudents()
     newName.value = ''
+    newPassword.value = ''
   } catch (e) { manageError.value = e.response?.data?.error || e.message }
 }
 
@@ -148,9 +172,48 @@ async function addBatch() {
   manageError.value = ''
   if (!batchNames.value.trim()) return
   try {
-    await appStore.batchCreateStudents(batchNames.value)
+    const payload = { names: batchNames.value }
+    if (batchPassword.value.trim()) payload.initialPassword = batchPassword.value.trim()
+    const { default: api } = await import('../api/index.js')
+    await api.post('/students/batch', payload)
+    await appStore.fetchStudents()
     batchNames.value = ''
+    batchPassword.value = ''
     manageError.value = ''
+  } catch (e) { manageError.value = e.response?.data?.error || e.message }
+}
+
+function toggleSelectAll() {
+  if (selectAll.value) {
+    selectedIds.value = appStore.students.map(s => s.id)
+  } else {
+    selectedIds.value = []
+  }
+}
+
+async function promptResetPwd(stu) {
+  const pwd = prompt(`为「${stu.name}」重置密码（留空则重置为学号 ${stu.studentNo}）`, '')
+  if (pwd === null) return
+  try {
+    const { default: api } = await import('../api/index.js')
+    await api.post(`/students/${stu.id}/reset-password`, { newPassword: pwd.trim() || null })
+    alert(pwd.trim() ? `已将密码重置为：${pwd.trim()}` : `已将密码重置为学号：${stu.studentNo}`)
+  } catch (e) { manageError.value = e.response?.data?.error || e.message }
+}
+
+async function batchResetSelected() {
+  if (selectedIds.value.length === 0) return
+  const pwd = prompt(`批量重置 ${selectedIds.value.length} 个学生的密码（留空则全部重置为各自学号）`, '')
+  if (pwd === null) return
+  try {
+    const { default: api } = await import('../api/index.js')
+    const { data } = await api.post('/students/batch-reset-password', {
+      studentIds: selectedIds.value,
+      newPassword: pwd.trim() || null
+    })
+    alert(`批量重置完成：成功 ${data.success}，失败 ${data.failed}`)
+    selectedIds.value = []
+    selectAll.value = false
   } catch (e) { manageError.value = e.response?.data?.error || e.message }
 }
 
@@ -207,7 +270,9 @@ h2 { font-size:18px; font-weight:600; color:#2d3748; }
 .form-label { display:block; font-size:13px; color:#718096; margin-bottom:6px; }
 .form-input { width:100%; padding:10px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px; }
 .form-input.small { width:60px; }
+.form-input.small-input { width:180px; }
 .form-textarea { width:100%; padding:10px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px; min-height:100px; resize:vertical; margin-bottom:8px; }
+.form-hint { color:#718096; font-size:12px; margin-top:6px; }
 .add-row { display:flex; gap:8px; }
 .btn-sm { background:#ff4d79; color:#fff; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-size:14px; white-space:nowrap; }
 .add-score-row { display:flex; gap:8px; align-items:center; }
@@ -215,8 +280,13 @@ h2 { font-size:18px; font-weight:600; color:#2d3748; }
 .theme-item { height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:2px solid transparent; transition:all 0.2s; }
 .theme-item.selected { border-color:#ff4d79; }
 .theme-emoji { font-size:24px; }
-.student-list { margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; }
-.student-item { background:#f7f3f0; border-radius:8px; padding:6px 12px; display:flex; align-items:center; gap:8px; font-size:14px; }
+.student-list { margin-top:12px; display:flex; flex-direction:column; gap:8px; }
+.list-toolbar { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 0; }
+.checkbox-label { display:flex; align-items:center; gap:6px; font-size:13px; color:#4a5568; cursor:pointer; }
+.student-item { background:#f7f3f0; border-radius:8px; padding:8px 12px; display:flex; align-items:center; gap:8px; font-size:14px; }
+.student-checkbox { cursor:pointer; }
+.student-name { flex:1; }
+.student-no { color:#718096; font-size:12px; }
 .student-actions { display:flex; gap:4px; }
 .icon-btn { background:transparent; border:none; cursor:pointer; font-size:14px; }
 .error-msg { color:#ff4444; font-size:12px; display:none; }

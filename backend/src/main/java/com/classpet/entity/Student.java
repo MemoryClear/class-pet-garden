@@ -44,6 +44,14 @@ public class Student {
     @Column(name = "evolution_items", length = 1000)
     private String evolutionItems = "{}";
 
+    // 学生独立登录密码哈希（BCrypt）；旧学生迁移时默认 = 学号 + mustChangePassword=true
+    @Column(name = "password_hash")
+    private String passwordHash;
+
+    // 首次登录是否需要强制改密
+    @Column(name = "must_change_password", nullable = false)
+    private Boolean mustChangePassword = false;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public Student() {}
@@ -79,6 +87,10 @@ public class Student {
     public void setRepresentPokemonId(String representPokemonId) { this.representPokemonId = representPokemonId; }
     public String getEvolutionItems() { return evolutionItems; }
     public void setEvolutionItems(String evolutionItems) { this.evolutionItems = evolutionItems; }
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public Boolean getMustChangePassword() { return mustChangePassword; }
+    public void setMustChangePassword(Boolean mustChangePassword) { this.mustChangePassword = mustChangePassword; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

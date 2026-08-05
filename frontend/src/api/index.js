@@ -55,7 +55,9 @@ export const studentApi = {
   getHistory: (id) => api.get(`/students/${id}/history`),
   getPokemonCount: (id) => api.get(`/students/${id}/pokemon-count`),
   getStudentPokemon: (id) => api.get(`/students/${id}/pokemon`),
-  setRepresentPokemon: (id, pokemonId) => api.put(`/students/${id}/represent-pokemon`, { pokemonId })
+  setRepresentPokemon: (id, pokemonId) => api.put(`/students/${id}/represent-pokemon`, { pokemonId }),
+  resetPassword: (id, newPassword) => api.post(`/students/${id}/reset-password`, { newPassword }),
+  batchResetPassword: (studentIds, newPassword) => api.post('/students/batch-reset-password', { studentIds, newPassword })
 }
 
 // ============== 宠物相关 ==============

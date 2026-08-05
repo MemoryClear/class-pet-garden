@@ -1,12 +1,17 @@
 package com.classpet.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 public class StudentDto {
     public static class CreateRequest {
         @NotBlank @Size(max = 10)
         public String name;
+        // 初始密码，可选；留空 = 默认 = 学号 + 强制改密
+        @Size(min = 0, max = 50)
+        public String initialPassword;
     }
     public static class UpdateRequest {
         @Size(max = 10)
@@ -17,6 +22,21 @@ public class StudentDto {
     public static class BatchCreateRequest {
         @NotBlank
         public String names; // newline-separated names
+        // 统一初始密码，可选；留空 = 默认 = 学号 + 强制改密
+        @Size(min = 0, max = 50)
+        public String initialPassword;
+    }
+    public static class ResetPasswordRequest {
+        // 留空 = 重置为学号 + 强制改密
+        @Size(min = 0, max = 50)
+        public String newPassword;
+    }
+    public static class BatchResetPasswordRequest {
+        @NotNull
+        public List<String> studentIds;
+        // 留空 = 重置为学号 + 强制改密
+        @Size(min = 0, max = 50)
+        public String newPassword;
     }
     public static class AdoptRequest {
         public Integer petId;

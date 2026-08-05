@@ -49,6 +49,7 @@ public class StudentService {
     @Autowired private ShopItemRepository shopItemRepository;
     @Autowired private ExchangeRecordRepository exchangeRecordRepository;
     @Autowired private StudentPokemonRepository studentPokemonRepository;
+    @Autowired private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     private final ObjectMapper objectMapper = new ObjectMapper();
     
     // 宝可梦物种数据缓存（所有形态）
@@ -68,8 +69,9 @@ public class StudentService {
         }
         // 启动时修复超限食物数据
         fixOverfedPokemon();
+        // 老学生密码迁移已抽到独立 StudentPasswordMigration（ApplicationRunner）
     }
-    
+
     /**
      * 修复食物超过上限的宝可梦数据（历史数据清理）
      * 将所有 food > maxFood 的宝可梦 food 降至 maxFood
@@ -159,27 +161,138 @@ public class StudentService {
 
     @Transactional
     public Student createStudent(String name, String teacherId) {
+        return createStudent(name, teacherId, null);
+    }
+
+    /**
+     * 添加单个学生。
+     * @param initialPassword 初始密码，null/空白 = 默认使用学号并强制改密
+     */
+    @Transactional
+    public Student createStudent(String name, String teacherId, String initialPassword) {
         Student stu = new Student();
         stu.setName(name.trim());
         stu.setTeacherId(teacherId);
-        stu.setStudentNo(generateStudentNo(teacherId));
-        stu.setPetChangeCards(3); // 新学生初始3张宠物更换卡
+        String studentNo = generateStudentNo(teacherId);
+        stu.setStudentNo(studentNo);
+        stu.setPetChangeCards(3);
+        String pwd = (initialPassword == null || initialPassword.isBlank()) ? studentNo : initialPassword;
+        stu.setPasswordHash(passwordEncoder.encode(pwd));
+        stu.setMustChangePassword(initialPassword == null || initialPassword.isBlank());
         return studentRepository.save(stu);
     }
 
     @Transactional
     public List<Student> batchCreateStudents(List<String> names, String teacherId) {
+        return batchCreateStudents(names, teacherId, null);
+    }
+
+    /**
+     * 批量添加学生。
+     * @param initialPassword 统一初始密码，留空 = 默认 = 学号
+     */
+    @Transactional
+    public List<Student> batchCreateStudents(List<String> names, String teacherId, String initialPassword) {
         int counter = getNextStudentNoCounter(teacherId);
         List<Student> students = new ArrayList<>();
+        boolean mustChange = (initialPassword == null || initialPassword.isBlank());
         for (String n : names) {
             Student s = new Student();
             s.setName(n.trim());
             s.setTeacherId(teacherId);
-            s.setStudentNo(String.format("S%04d", counter++));
-            s.setPetChangeCards(3); // 新学生初始3张宠物更换卡
+            String sno = String.format("S%04d", counter++);
+            s.setStudentNo(sno);
+            s.setPetChangeCards(3);
+            String pwd = mustChange ? sno : initialPassword;
+            s.setPasswordHash(passwordEncoder.encode(pwd));
+            s.setMustChangePassword(mustChange);
             students.add(s);
         }
         return studentRepository.saveAll(students);
+    }
+
+    /**
+     * 教师重置单个学生密码。
+     * @param newPassword 新密码；留空 = 重置为学号 + 强制改密
+     */
+    @Transactional
+    public Student resetStudentPassword(String studentId, String teacherId, String newPassword) {
+        Student stu = findByIdAndTeacherId(studentId, teacherId);
+        String pwd = (newPassword == null || newPassword.isBlank()) ? stu.getStudentNo() : newPassword;
+        stu.setPasswordHash(passwordEncoder.encode(pwd));
+        stu.setMustChangePassword(newPassword == null || newPassword.isBlank());
+        return studentRepository.save(stu);
+    }
+
+    /**
+     * 教师批量重置学生密码。
+     * @param newPassword 统一新密码；留空 = 重置为各自学号 + 强制改密
+     */
+    @Transactional
+    public Map<String, Object> batchResetStudentPassword(String teacherId, List<String> studentIds, String newPassword) {
+        boolean mustChange = (newPassword == null || newPassword.isBlank());
+        int success = 0;
+        int failed = 0;
+        List<String> failedIds = new ArrayList<>();
+        for (String sid : studentIds) {
+            try {
+                Student stu = findByIdAndTeacherId(sid, teacherId);
+                String pwd = mustChange ? stu.getStudentNo() : newPassword;
+                stu.setPasswordHash(passwordEncoder.encode(pwd));
+                stu.setMustChangePassword(mustChange);
+                studentRepository.save(stu);
+                success++;
+            } catch (Exception e) {
+                logger.warn("批量重置密码失败 studentId={}: {}", sid, e.getMessage());
+                failed++;
+                failedIds.add(sid);
+            }
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", success);
+        result.put("failed", failed);
+        result.put("failedIds", failedIds);
+        return result;
+    }
+
+    /**
+     * 学生自己修改密码（不需要旧密码，符合 Q4=标志位拦截）。
+     */
+    @Transactional
+    public Student studentChangePassword(String studentId, String newPassword) {
+        if (newPassword == null || newPassword.isBlank()) {
+            throw new IllegalArgumentException("新密码不能为空");
+        }
+        if (newPassword.length() < 4) {
+            throw new IllegalArgumentException("新密码至少4个字符");
+        }
+        Student stu = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
+        stu.setPasswordHash(passwordEncoder.encode(newPassword));
+        stu.setMustChangePassword(false);
+        return studentRepository.save(stu);
+    }
+
+    /**
+     * 学生用学号+自己的密码登录（取代旧版"学号+教师密码"模式）。
+     */
+    @Transactional
+    public Map<String, Object> studentLoginByPassword(String studentNo, String password) {
+        Student stu = studentRepository.findByStudentNo(studentNo)
+                .orElseThrow(() -> new IllegalArgumentException("学号不存在"));
+        if (stu.getPasswordHash() == null || stu.getPasswordHash().isEmpty()) {
+            throw new IllegalArgumentException("该学生尚未设置登录密码，请联系教师重置");
+        }
+        if (!passwordEncoder.matches(password, stu.getPasswordHash())) {
+            throw new IllegalArgumentException("密码错误");
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("studentId", stu.getId());
+        result.put("studentNo", stu.getStudentNo());
+        result.put("studentName", stu.getName());
+        result.put("teacherId", stu.getTeacherId());
+        result.put("mustChangePassword", Boolean.TRUE.equals(stu.getMustChangePassword()));
+        return result;
     }
 
     private String generateStudentNo(String teacherId) {

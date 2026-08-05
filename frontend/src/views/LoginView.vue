@@ -66,7 +66,7 @@
       <!-- 学生登录表单 -->
       <div class="auth-form" v-if="tab === 'student'">
         <div class="student-login-tip">
-          <span>🎓 输入学号和班级密码即可登录</span>
+          <span>🎓 输入学号和你的密码（默认密码 = 学号）</span>
         </div>
         <div class="form-group">
           <label class="form-label">学号</label>
@@ -76,10 +76,10 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">班级密码</label>
+          <label class="form-label">密码</label>
           <div class="input-wrapper">
             <span class="input-icon">🔑</span>
-            <input type="password" class="form-input" v-model="studentForm.password" placeholder="请输入老师的密码" @keyup.enter="handleStudentLogin">
+            <input type="password" class="form-input" v-model="studentForm.password" placeholder="请输入你的密码" @keyup.enter="handleStudentLogin">
           </div>
         </div>
         <p v-if="error" class="error-msg show">{{ error }}</p>
@@ -153,12 +153,16 @@ async function handleRegister() {
 async function handleStudentLogin() {
   error.value = ''
   if (!studentForm.studentNo) { error.value = '请输入学号'; return }
-  if (!studentForm.password) { error.value = '请输入班级密码'; return }
+  if (!studentForm.password) { error.value = '请输入密码'; return }
   loading.value = true
   try {
-    await authStore.studentLogin(studentForm.studentNo, studentForm.password)
+    const data = await authStore.studentLogin(studentForm.studentNo, studentForm.password)
     loading.value = false
-    router.push('/student-home')
+    if (data.mustChangePassword) {
+      router.push('/change-password')
+    } else {
+      router.push('/student-home')
+    }
   } catch (e) {
     loading.value = false
     error.value = e.response?.data?.error || e.message || '登录失败'

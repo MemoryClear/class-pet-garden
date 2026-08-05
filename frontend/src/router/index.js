@@ -67,6 +67,12 @@ const routes = [
     name: 'PokemonPool',
     component: () => import('../views/PokemonPoolView.vue'),
     meta: { requiresAuth: true, activated: true, teacherOnly: true }
+  },
+  {
+    path: '/change-password',
+    name: 'ChangePassword',
+    component: () => import('../views/ChangePasswordView.vue'),
+    meta: { requiresAuth: true, forceChangePassword: true }
   }
 ]
 
@@ -84,11 +90,19 @@ router.beforeEach(async (to, from) => {
     }
     // 学生角色路由守卫
     if (auth.isStudent) {
-      if (to.name === 'StudentHome') return true
-      if (to.meta.studentOnly) return true
-      // 学生访问其他页面 → 重定向到学生首页
-      if (to.name !== 'Login' && to.name !== 'StudentHome') {
-        return { name: 'StudentHome' }
+      // 强制改密拦截：除改密页外，强制跳到改密页
+      if (auth.mustChangePassword && to.name !== 'ChangePassword') {
+        return { name: 'ChangePassword' }
+      }
+      // 学生访问非学生页面 → 学生首页
+      if (to.name !== 'ChangePassword') {
+        if (to.name === 'StudentHome') return true
+        if (to.meta.studentOnly) return true
+        if (to.name !== 'Login' && to.name !== 'StudentHome') {
+          return { name: 'StudentHome' }
+        }
+      } else {
+        return true
       }
     }
     // 教师角色路由守卫
@@ -116,6 +130,10 @@ router.beforeEach(async (to, from) => {
   }
   if (to.meta.teacherOnly && auth.isStudent) {
     return { name: 'StudentHome' }
+  }
+  // 改密页强制：改完后才能离开
+  if (to.meta.forceChangePassword && auth.isLoggedIn && !auth.mustChangePassword) {
+    return auth.isStudent ? { name: 'StudentHome' } : { name: 'Home' }
   }
 })
 

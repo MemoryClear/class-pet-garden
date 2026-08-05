@@ -2,12 +2,14 @@ package com.classpet.controller;
 
 import com.classpet.dto.AuthDto;
 import com.classpet.security.JwtTokenProvider;
+import com.classpet.security.JwtAuthenticationFilter.AuthenticatedUser;
 import com.classpet.entity.Student;
 import com.classpet.entity.Teacher;
 import com.classpet.repository.StudentRepository;
 import com.classpet.repository.TeacherRepository;
 import com.classpet.service.AuthService;
 import com.classpet.service.ScoreItemService;
+import com.classpet.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,7 @@ public class AuthController {
     @Autowired private StudentRepository studentRepository;
     @Autowired private TeacherRepository teacherRepository;
     @Autowired private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    @Autowired private StudentService studentService;
 
     @GetMapping("/test")
     public ResponseEntity<?> test() {
@@ -95,7 +98,7 @@ public class AuthController {
         }
     }
 
-    // 学生登录：学号 + 教师密码
+    // 学生登录：学号 + 学生自己的密码（取代旧版学号+教师密码模式）
     @PostMapping("/student-login")
     public ResponseEntity<?> studentLogin(@RequestBody Map<String, String> body) {
         try {
@@ -107,26 +110,37 @@ public class AuthController {
             if (password == null || password.isBlank()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "请输入密码"));
             }
-            // 查找学生
-            Student student = studentRepository.findByStudentNo(studentNo)
-                    .orElseThrow(() -> new IllegalArgumentException("学号不存在"));
-            // 用教师的密码验证
-            Teacher teacher = teacherRepository.findById(student.getTeacherId())
-                    .orElseThrow(() -> new IllegalArgumentException("教师账号不存在"));
-            if (!passwordEncoder.matches(password, teacher.getPassword())) {
-                return ResponseEntity.badRequest().body(Map.of("error", "密码错误"));
-            }
-            // 生成学生token（包含学生ID，角色为student）
+            Map<String, Object> info = studentService.studentLoginByPassword(studentNo, password);
+            Student student = studentRepository.findById((String) info.get("studentId"))
+                    .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
             String token = tokenProvider.generateStudentToken(
                     student.getName(), student.getTeacherId(), student.getId());
-            return ResponseEntity.ok(Map.of(
-                    "token", token,
-                    "role", "student",
-                    "studentId", student.getId(),
-                    "studentName", student.getName(),
-                    "studentNo", student.getStudentNo(),
-                    "teacherId", student.getTeacherId()
-            ));
+            Map<String, Object> resp = new java.util.HashMap<>();
+            resp.put("token", token);
+            resp.put("role", "student");
+            resp.put("studentId", info.get("studentId"));
+            resp.put("studentName", info.get("studentName"));
+            resp.put("studentNo", info.get("studentNo"));
+            resp.put("teacherId", info.get("teacherId"));
+            resp.put("mustChangePassword", info.get("mustChangePassword"));
+            return ResponseEntity.ok(resp);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // 学生自己修改密码（不需要旧密码，由 mustChangePassword 拦截保证安全）
+    @PostMapping("/student-change-password")
+    public ResponseEntity<?> studentChangePassword(
+            @org.springframework.security.core.annotation.AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestBody Map<String, String> body) {
+        try {
+            if (principal == null || principal.studentId() == null) {
+                return ResponseEntity.status(401).body(Map.of("error", "请先登录"));
+            }
+            String newPassword = body.get("newPassword");
+            studentService.studentChangePassword(principal.studentId(), newPassword);
+            return ResponseEntity.ok(Map.of("success", true));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }

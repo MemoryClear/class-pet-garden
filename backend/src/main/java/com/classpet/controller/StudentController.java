@@ -44,7 +44,7 @@ public class StudentController {
             @AuthenticationPrincipal AuthenticatedUser principal,
             @Valid @RequestBody StudentDto.CreateRequest req) {
         try {
-            return ResponseEntity.ok(studentService.createStudent(req.name, principal.teacherId()));
+            return ResponseEntity.ok(studentService.createStudent(req.name, principal.teacherId(), req.initialPassword));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -62,7 +62,32 @@ public class StudentController {
             if (names.isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "未提供有效姓名"));
             }
-            return ResponseEntity.ok(studentService.batchCreateStudents(names, principal.teacherId()));
+            return ResponseEntity.ok(studentService.batchCreateStudents(names, principal.teacherId(), req.initialPassword));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // 教师重置单个学生密码
+    @PostMapping("/{id}/reset-password")
+    public ResponseEntity<?> resetPassword(
+            @PathVariable String id,
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @Valid @RequestBody StudentDto.ResetPasswordRequest req) {
+        try {
+            return ResponseEntity.ok(studentService.resetStudentPassword(id, principal.teacherId(), req.newPassword));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // 教师批量重置学生密码
+    @PostMapping("/batch-reset-password")
+    public ResponseEntity<?> batchResetPassword(
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @Valid @RequestBody StudentDto.BatchResetPasswordRequest req) {
+        try {
+            return ResponseEntity.ok(studentService.batchResetStudentPassword(principal.teacherId(), req.studentIds, req.newPassword));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }

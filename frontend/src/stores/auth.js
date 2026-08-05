@@ -13,6 +13,7 @@ export const useAuthStore = defineStore('auth', {
     role: (s) => s.user?.role ?? 'teacher',
     isStudent: (s) => s.user?.role === 'student',
     studentId: (s) => s.user?.studentId ?? null,
+    mustChangePassword: (s) => Boolean(s.user?.mustChangePassword),
   },
   actions: {
     setAuth(token, user) {
@@ -27,6 +28,12 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
     },
+    setMustChangePassword(v) {
+      if (this.user) {
+        this.user.mustChangePassword = v
+        localStorage.setItem('user', JSON.stringify(this.user))
+      }
+    },
     async login(username, password) {
       const { data } = await api.post('/auth/login', { username, password })
       this.setAuth(data.token, { ...data, role: 'teacher' })
@@ -40,8 +47,14 @@ export const useAuthStore = defineStore('auth', {
         studentNo: data.studentNo,
         studentName: data.studentName,
         teacherId: data.teacherId,
-        activated: true
+        activated: true,
+        mustChangePassword: Boolean(data.mustChangePassword)
       })
+      return data
+    },
+    async studentChangePassword(newPassword) {
+      const { data } = await api.post('/auth/student-change-password', { newPassword })
+      this.setMustChangePassword(false)
       return data
     },
     async register(username, password, confirmPassword) {
