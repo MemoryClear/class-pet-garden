@@ -194,13 +194,14 @@ public class StudentService {
     @Transactional
     public List<Student> batchCreateStudents(List<String> names, String teacherId, String initialPassword) {
         int counter = getNextStudentNoCounter(teacherId);
+        String prefix = teacherPrefix(teacherId);
         List<Student> students = new ArrayList<>();
         boolean mustChange = (initialPassword == null || initialPassword.isBlank());
         for (String n : names) {
             Student s = new Student();
             s.setName(n.trim());
             s.setTeacherId(teacherId);
-            String sno = String.format("S%04d", counter++);
+            String sno = String.format("%s-S%04d", prefix, counter++);
             s.setStudentNo(sno);
             s.setPetChangeCards(3);
             String pwd = mustChange ? sno : initialPassword;
@@ -295,18 +296,34 @@ public class StudentService {
         return result;
     }
 
+    /**
+     * 根据 teacher UUID 生成班级前缀（取前 4 个十六进制字符，转大写）。
+     * 例：e8dc4add-52f3-4049-b8d8-b9337213afae → "E8DC"
+     */
+    private String teacherPrefix(String teacherId) {
+        if (teacherId == null || teacherId.length() < 4) return "T000";
+        return teacherId.replace("-", "").substring(0, 4).toUpperCase();
+    }
+
+    /**
+     * 生成学号：{班级前缀}-S{4位序号}。例 E8DC-S0001。
+     * 全局唯一（DB 上 student_no 有 unique 约束），同时一眼能看出归属班级。
+     */
     private String generateStudentNo(String teacherId) {
+        String prefix = teacherPrefix(teacherId);
         int counter = getNextStudentNoCounter(teacherId);
-        return String.format("S%04d", counter);
+        return String.format("%s-S%04d", prefix, counter);
     }
 
     private int getNextStudentNoCounter(String teacherId) {
         List<Student> existing = studentRepository.findByTeacherIdOrderByCreatedAtAsc(teacherId);
         int max = 0;
+        String prefix = teacherPrefix(teacherId) + "-S";
         for (Student s : existing) {
-            if (s.getStudentNo() != null && s.getStudentNo().startsWith("S")) {
+            String sno = s.getStudentNo();
+            if (sno != null && sno.startsWith(prefix)) {
                 try {
-                    int num = Integer.parseInt(s.getStudentNo().substring(1));
+                    int num = Integer.parseInt(sno.substring(prefix.length()));
                     if (num > max) max = num;
                 } catch (NumberFormatException ignored) {}
             }

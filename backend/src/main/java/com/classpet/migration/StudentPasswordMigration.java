@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 老学生密码迁移器。
@@ -60,7 +61,13 @@ public class StudentPasswordMigration implements ApplicationRunner {
         ensureColumnExists("must_change_password",
                 "ALTER TABLE students ADD COLUMN must_change_password BOOLEAN DEFAULT 0");
 
+        int renumbered = renumberLegacyStudentNos();
         int migrated = migrateLegacyStudents();
+        if (renumbered > 0) {
+            logger.info("学号前缀迁移：共为 {} 个老学生补齐班级前缀（不更改密码）", renumbered);
+        } else {
+            logger.info("学号前缀迁移：无需迁移（所有学生均已含班级前缀）");
+        }
         if (migrated > 0) {
             logger.info("学生密码迁移：共迁移 {} 个老学生（默认密码=学号，需强制改密）", migrated);
         } else {
@@ -105,6 +112,36 @@ public class StudentPasswordMigration implements ApplicationRunner {
             }
         }
         return migrated;
+    }
+
+    /**
+     * 给老学生补齐班级前缀。原始设计是全局 S0001 起编号，多个老师会撞。
+     * 新方案：{4位十六进制前缀}-S0001，例如 E8DC-S0001。
+     * 幂等：已含“-”的学生不动；按 teacherId 分组独立计数。
+     */
+    private int renumberLegacyStudentNos() {
+        List<Student> all = studentRepository.findAll();
+        Map<String, Integer> counter = new java.util.HashMap<>();
+        int renumbered = 0;
+        for (Student s : all) {
+            String sno = s.getStudentNo();
+            if (sno == null) continue;
+            if (sno.contains("-")) continue;  // 新格式已迁移
+            String tid = s.getTeacherId();
+            int next = counter.merge(tid, 1, Integer::sum);
+            String prefix = teacherPrefix(tid);
+            String newSno = String.format("%s-S%04d", prefix, next);
+            s.setStudentNo(newSno);
+            studentRepository.save(s);
+            renumbered++;
+            logger.info("学号迁移：{} → {} (teacherId={})", sno, newSno, tid);
+        }
+        return renumbered;
+    }
+
+    private String teacherPrefix(String teacherId) {
+        if (teacherId == null || teacherId.length() < 4) return "T000";
+        return teacherId.replace("-", "").substring(0, 4).toUpperCase();
     }
 
     /** 给运维端点用的状态查询 */
