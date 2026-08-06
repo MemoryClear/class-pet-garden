@@ -39,6 +39,10 @@
                 🎫 宠物更换卡 x{{ myInfo.petChangeCards }}
               </span>
             </div>
+            <div class="equipped-row" v-if="equippedDeoDetails.length > 0">
+              <span class="equipped-row-label">✨ 已装备：</span>
+              <span v-for="item in equippedDeoDetails" :key="item.id" class="equipped-chip" :title="item.name">{{ item.icon }}</span>
+            </div>
           </div>
         </div>
         <!-- 普通宠物图鉴 -->
@@ -487,6 +491,16 @@ const decorationItems = computed(() => {
   return [...map.values()]
 })
 
+// 已装备装饰品详情（用于宠物卡片上显示）
+const equippedDeoDetails = computed(() => {
+  return equippedItemIds.value
+    .map(id => {
+      const s = shopItems.value.find(it => it.id === id)
+      return s ? { id: s.id, name: s.name, icon: s.icon } : null
+    })
+    .filter(Boolean)
+})
+
 async function toggleEquipItem(itemId, equip) {
   try {
     const { data } = await api.post('/student/equip-item', { itemId, equip })
@@ -928,6 +942,9 @@ onMounted(async () => {
 .score-label { color: #888; font-size: 0.9rem; }
 .score-value { font-size: 2rem; font-weight: 700; color: #ff6b9d; }
 .pet-cards { margin-top: 8px; color: #8b5cf6; font-size: 0.9rem; }
+.equipped-row { margin-top: 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.equipped-row-label { color: #888; font-size: 0.9rem; }
+.equipped-chip { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #fff8f0; border: 1px solid #ffd9b3; border-radius: 8px; font-size: 18px; }
 .pet-library h4 { margin: 0 0 12px; }
 .pet-library-tabs { display: flex; gap: 8px; margin: 8px 0; }
 .pet-library-tabs button { flex: 1; padding: 6px 12px; border: 1px solid #e2e8f0; border-radius: 20px; background: #f8fafc; font-size: 13px; cursor: pointer; transition: all 0.2s; }
