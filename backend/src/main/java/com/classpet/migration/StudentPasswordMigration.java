@@ -117,10 +117,30 @@ public class StudentPasswordMigration implements ApplicationRunner {
     /**
      * 给老学生补齐班级前缀。原始设计是全局 S0001 起编号，多个老师会撞。
      * 新方案：{4位十六进制前缀}-S0001，例如 E8DC-S0001。
-     * 幂等：已含“-”的学生不动；按 teacherId 分组独立计数。
+     *
+     * <p>计数器起点 = 该老师名下已有迁移学号的最大序号 + 1，避免撞 UNIQUE。
+     * 例如老师名下已有 E8DC-S0001 / E8DC-S0002，则非法 studentNo="1" 会改名为 E8DC-S0003。</p>
      */
     private int renumberLegacyStudentNos() {
         List<Student> all = studentRepository.findAll();
+        // 第一遍：按 teacherId 算已有迁移学号的最大序号
+        Map<String, Integer> maxCounter = new java.util.HashMap<>();
+        java.util.regex.Pattern migratedPattern =
+                java.util.regex.Pattern.compile("^[A-Z0-9]{4}-S\\d{4}$");
+        for (Student s : all) {
+            String sno = s.getStudentNo();
+            if (sno == null) continue;
+            if (!migratedPattern.matcher(sno).matches()) continue;
+            int dashIdx = sno.indexOf('-');
+            int seq;
+            try {
+                seq = Integer.parseInt(sno.substring(dashIdx + 2));
+            } catch (NumberFormatException e) {
+                continue;
+            }
+            maxCounter.merge(s.getTeacherId(), seq, Math::max);
+        }
+        // 第二遍：给无迁移学号的补前缀（非法格式也改）
         Map<String, Integer> counter = new java.util.HashMap<>();
         int renumbered = 0;
         for (Student s : all) {
@@ -128,12 +148,13 @@ public class StudentPasswordMigration implements ApplicationRunner {
             if (sno == null) continue;
             if (sno.contains("-")) continue;  // 新格式已迁移
             String tid = s.getTeacherId();
-            int next = counter.merge(tid, 1, Integer::sum);
+            int next = counter.getOrDefault(tid, maxCounter.getOrDefault(tid, 0)) + 1;
             String prefix = teacherPrefix(tid);
             String newSno = String.format("%s-S%04d", prefix, next);
             s.setStudentNo(newSno);
             studentRepository.save(s);
             renumbered++;
+            counter.put(tid, next);
             logger.info("学号迁移：{} → {} (teacherId={})", sno, newSno, tid);
         }
         return renumbered;
