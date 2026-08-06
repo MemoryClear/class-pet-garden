@@ -776,7 +776,7 @@ async function exchangeItem(item) {
     $confirm.success('兑换成功！')
     await fetchMyInfo()
     await fetchShop()
-    // removed
+    await fetchRecords()
   } catch (e) {
     $confirm.error(e.response?.data?.error || '兑换失败')
   }

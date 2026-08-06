@@ -1491,6 +1491,13 @@ public class StudentService {
         giftRecord.setGiftFrom(target.getId());
         giftRecord.setGiftFromName(target.getName());
         exchangeRecordRepository.save(giftRecord);
+        // 移除赠送者的装备（如果装备了此道具）—— 否则教师端学生卡片会仍显示该装备
+        List<String> giverEquipped = parseEquippedList(giver.getEquippedItems());
+        if (giverEquipped.remove(itemId)) {
+            try { giver.setEquippedItems(objectMapper.writeValueAsString(giverEquipped)); }
+            catch (JsonProcessingException e) { giver.setEquippedItems("[]"); }
+            studentRepository.save(giver);
+        }
         // 为接收者创建新记录
         ExchangeRecord newRecord = new ExchangeRecord();
         newRecord.setStudentId(target.getId());
