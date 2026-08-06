@@ -40,6 +40,13 @@ public class ExchangeRecord {
     @Column(name = "gift_from_name")
     private String giftFromName;
 
+    // 赠送去向（null表示未转出，非null表示当前学生转给了谁——仅送出方记录有值）
+    @Column(name = "gift_to")
+    private String giftTo;
+
+    @Column(name = "gift_to_name")
+    private String giftToName;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 }

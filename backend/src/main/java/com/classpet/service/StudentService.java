@@ -1495,6 +1495,8 @@ public class StudentService {
         // 标记原记录为已赠送
         giftRecord.setGiftFrom(target.getId());
         giftRecord.setGiftFromName(target.getName());
+        giftRecord.setGiftTo(target.getId());
+        giftRecord.setGiftToName(target.getName());
         exchangeRecordRepository.save(giftRecord);
         // 为接收者创建新记录
         ExchangeRecord newRecord = new ExchangeRecord();

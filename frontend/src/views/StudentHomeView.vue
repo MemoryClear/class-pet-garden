@@ -331,7 +331,8 @@
               <span class="record-icon">{{ r.itemIcon }}</span>
               <div class="record-detail">
                 <span class="record-name">{{ r.itemName }}</span>
-                <span v-if="r.giftFromName" class="gift-tag">🎁 来自 {{ r.giftFromName }}</span>
+                <span v-if="r.giftFromName && !r.giftToName" class="gift-tag">🎁 来自 {{ r.giftFromName }}</span>
+                <span v-else-if="r.giftToName" class="gift-tag">🎁 赠送给 {{ r.giftToName }}</span>
               </div>
             </div>
             <div class="record-right">
