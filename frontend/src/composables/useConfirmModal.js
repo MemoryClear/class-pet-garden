@@ -25,6 +25,25 @@ export default {
     return _vm.show(opts)
   },
 
+  // 输入框对话框（返回 Promise<string|null>：取消返回 null，确认返回输入值）
+  prompt(message, opts = {}) {
+    return this.show({
+      title: opts.title || '请输入',
+      message,
+      okText: opts.okText || '确定',
+      cancelText: opts.cancelText || '取消',
+      icon: opts.icon || '✏️',
+      input: true,
+      inputType: opts.inputType || 'text',
+      inputValue: opts.inputValue || '',
+      inputPlaceholder: opts.inputPlaceholder || '',
+      inputHint: opts.inputHint || '',
+      inputRequired: opts.inputRequired || false,
+      danger: opts.danger || false,
+      ...opts,
+    })
+  },
+
   // 确认框（返回 Promise<boolean>）
   confirm(message, opts = {}) {
     return this.show({

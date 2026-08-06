@@ -154,10 +154,10 @@ function getScoreIcon(rec) {
 }
 
 // ============== 道具数据 ==============
-// 持有的道具（当前学生是owner的）
+// 持有的道具（当前学生是owner的且未转出）
 const myItems = computed(() => {
   return appStore.exchangeRecords
-    .filter(r => r.studentId === props.student.id)
+    .filter(r => r.studentId === props.student.id && !r.giftFrom)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 })
 

@@ -1487,17 +1487,15 @@ public class StudentService {
                 .filter(r -> r.getGiftFrom() == null)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("你没有可赠送的该道具"));
+        // 装备中的道具不能赠送，需先卸下
+        List<String> giverEquipped = parseEquippedList(giver.getEquippedItems());
+        if (giverEquipped.contains(itemId)) {
+            throw new IllegalArgumentException("该道具正在装备中，请先卸下再赠送");
+        }
         // 标记原记录为已赠送
         giftRecord.setGiftFrom(target.getId());
         giftRecord.setGiftFromName(target.getName());
         exchangeRecordRepository.save(giftRecord);
-        // 移除赠送者的装备（如果装备了此道具）—— 否则教师端学生卡片会仍显示该装备
-        List<String> giverEquipped = parseEquippedList(giver.getEquippedItems());
-        if (giverEquipped.remove(itemId)) {
-            try { giver.setEquippedItems(objectMapper.writeValueAsString(giverEquipped)); }
-            catch (JsonProcessingException e) { giver.setEquippedItems("[]"); }
-            studentRepository.save(giver);
-        }
         // 为接收者创建新记录
         ExchangeRecord newRecord = new ExchangeRecord();
         newRecord.setStudentId(target.getId());

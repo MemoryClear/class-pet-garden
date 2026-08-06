@@ -195,7 +195,7 @@ const giftError = ref(null)
 const myItems = computed(() => {
   if (!appStore.exchangeRecords.length) return []
   return appStore.exchangeRecords
-    .filter(r => r.studentId === props.student.id)
+    .filter(r => r.studentId === props.student.id && !r.giftFrom)
     .map(r => {
       const item = appStore.shopItems.find(i => i.id === r.itemId)
       return item ? { ...item, exchangeTime: r.exchangeTime } : null

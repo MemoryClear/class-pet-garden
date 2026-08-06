@@ -192,18 +192,30 @@ function toggleSelectAll() {
 }
 
 async function promptResetPwd(stu) {
-  const pwd = prompt(`为「${stu.name}」重置密码（留空则重置为学号 ${stu.studentNo}）`, '')
+  const pwd = await $confirm.prompt(`为「${stu.name}」设置新密码：`, {
+    title: '重置密码',
+    inputType: 'text',
+    inputPlaceholder: '留空则重置为学号',
+    inputHint: `学号：${stu.studentNo}（留空将使用此学号作为新密码）`,
+    okText: '重置',
+  })
   if (pwd === null) return
   try {
     const { default: api } = await import('../api/index.js')
     await api.post(`/students/${stu.id}/reset-password`, { newPassword: pwd.trim() || null })
-    alert(pwd.trim() ? `已将密码重置为：${pwd.trim()}` : `已将密码重置为学号：${stu.studentNo}`)
-  } catch (e) { manageError.value = e.response?.data?.error || e.message }
+    const actual = pwd.trim() || stu.studentNo
+    $confirm.success(`已将「${stu.name}」的密码重置为：${actual}`)
+  } catch (e) { $confirm.error(e.response?.data?.error || e.message) }
 }
 
 async function batchResetSelected() {
   if (selectedIds.value.length === 0) return
-  const pwd = prompt(`批量重置 ${selectedIds.value.length} 个学生的密码（留空则全部重置为各自学号）`, '')
+  const pwd = await $confirm.prompt(`即将批量重置 ${selectedIds.value.length} 个学生的密码：`, {
+    title: '批量重置密码',
+    inputType: 'text',
+    inputPlaceholder: '留空则全部重置为各自学号',
+    okText: '开始重置',
+  })
   if (pwd === null) return
   try {
     const { default: api } = await import('../api/index.js')
@@ -211,10 +223,10 @@ async function batchResetSelected() {
       studentIds: selectedIds.value,
       newPassword: pwd.trim() || null
     })
-    alert(`批量重置完成：成功 ${data.success}，失败 ${data.failed}`)
+    $confirm.success(`批量重置完成：成功 ${data.success}，失败 ${data.failed}`)
     selectedIds.value = []
     selectAll.value = false
-  } catch (e) { manageError.value = e.response?.data?.error || e.message }
+  } catch (e) { $confirm.error(e.response?.data?.error || e.message) }
 }
 
 async function deleteStudent(id) {

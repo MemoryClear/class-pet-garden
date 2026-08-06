@@ -245,6 +245,10 @@ public class StudentApiController {
         if (!principal.isStudent()) return ResponseEntity.status(403).body(Map.of("error", "仅限学生访问"));
         String itemId = body.get("itemId");
         String targetStudentNo = body.get("targetStudentNo");
-        return ResponseEntity.ok(studentService.giftItem(principal.studentId(), itemId, targetStudentNo));
+        try {
+            return ResponseEntity.ok(studentService.giftItem(principal.studentId(), itemId, targetStudentNo));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 }
