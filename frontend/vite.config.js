@@ -10,7 +10,7 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true
       },
-      '/pokemon': {
+      '/pokemon/': {
         target: 'http://localhost:8080',
         changeOrigin: true
       }

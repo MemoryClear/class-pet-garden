@@ -2077,7 +2077,7 @@
       "草"
     ],
     "image": "0153-月桂叶.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2088,7 +2088,7 @@
       "草"
     ],
     "image": "0154-大竺葵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2110,7 +2110,7 @@
       "火"
     ],
     "image": "0156-火岩鼠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2121,7 +2121,7 @@
       "火"
     ],
     "image": "0157-火暴兽.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2143,7 +2143,7 @@
       "水"
     ],
     "image": "0159-蓝鳄.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2154,7 +2154,7 @@
       "水"
     ],
     "image": "0160-大力鳄.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2176,7 +2176,7 @@
       "一般"
     ],
     "image": "0162-大尾立.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2200,7 +2200,7 @@
       "飞行"
     ],
     "image": "0164-猫头夜鹰.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2224,7 +2224,7 @@
       "飞行"
     ],
     "image": "0166-安瓢虫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2248,7 +2248,7 @@
       "毒"
     ],
     "image": "0168-阿利多斯.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2272,7 +2272,7 @@
       "电"
     ],
     "image": "0171-电灯怪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2329,7 +2329,7 @@
       "飞行"
     ],
     "image": "0176-波克基古.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2353,7 +2353,7 @@
       "飞行"
     ],
     "image": "0178-天然鸟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2375,7 +2375,7 @@
       "电"
     ],
     "image": "0180-茸茸羊.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2386,7 +2386,7 @@
       "电"
     ],
     "image": "0181-电龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2410,7 +2410,7 @@
       "妖精"
     ],
     "image": "0184-玛力露丽.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2445,7 +2445,7 @@
       "飞行"
     ],
     "image": "0188-毽子花.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2457,7 +2457,7 @@
       "飞行"
     ],
     "image": "0189-毽子棉.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2490,7 +2490,7 @@
       "草"
     ],
     "image": "0192-向日花怪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2526,7 +2526,7 @@
       "地面"
     ],
     "image": "0195-沼王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2606,7 +2606,7 @@
       "钢"
     ],
     "image": "0205-佛烈托斯.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2651,7 +2651,7 @@
       "妖精"
     ],
     "image": "0210-布鲁皇.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2721,7 +2721,7 @@
       "一般"
     ],
     "image": "0217-圈圈熊.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2744,7 +2744,7 @@
       "岩石"
     ],
     "image": "0219-熔岩蜗牛.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2768,7 +2768,7 @@
       "地面"
     ],
     "image": "0221-长毛猪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2802,7 +2802,7 @@
       "水"
     ],
     "image": "0224-章鱼桶.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2862,7 +2862,7 @@
       "火"
     ],
     "image": "0229-黑鲁加.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2884,7 +2884,7 @@
       "地面"
     ],
     "image": "0232-顿甲.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2928,7 +2928,7 @@
       "格斗"
     ],
     "image": "0237-战舞郎.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -2984,7 +2984,7 @@
       "一般"
     ],
     "image": "0242-幸福蛋.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3041,7 +3041,7 @@
       "地面"
     ],
     "image": "0247-沙基拉斯.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3053,7 +3053,7 @@
       "恶"
     ],
     "image": "0248-班基拉斯.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3111,7 +3111,7 @@
       "草"
     ],
     "image": "0253-森林蜥蜴.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3122,7 +3122,7 @@
       "草"
     ],
     "image": "0254-蜥蜴王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3145,7 +3145,7 @@
       "格斗"
     ],
     "image": "0256-力壮鸡.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3157,7 +3157,7 @@
       "格斗"
     ],
     "image": "0257-火焰鸡.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3180,7 +3180,7 @@
       "地面"
     ],
     "image": "0259-沼跃鱼.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3192,7 +3192,7 @@
       "地面"
     ],
     "image": "0260-巨沼怪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3214,7 +3214,7 @@
       "恶"
     ],
     "image": "0262-大狼犬.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3236,7 +3236,7 @@
       "一般"
     ],
     "image": "0264-直冲熊.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3258,7 +3258,7 @@
       "虫"
     ],
     "image": "0266-甲壳茧.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3270,7 +3270,7 @@
       "飞行"
     ],
     "image": "0267-狩猎凤蝶.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3281,7 +3281,7 @@
       "虫"
     ],
     "image": "0268-盾甲茧.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3293,7 +3293,7 @@
       "毒"
     ],
     "image": "0269-毒粉蛾.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3317,7 +3317,7 @@
       "草"
     ],
     "image": "0271-莲帽小童.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3329,7 +3329,7 @@
       "草"
     ],
     "image": "0272-乐天河童.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3352,7 +3352,7 @@
       "恶"
     ],
     "image": "0274-长鼻叶.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3364,7 +3364,7 @@
       "恶"
     ],
     "image": "0275-狡猾天狗.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3388,7 +3388,7 @@
       "飞行"
     ],
     "image": "0277-大王燕.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3412,7 +3412,7 @@
       "飞行"
     ],
     "image": "0279-大嘴鸥.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3436,7 +3436,7 @@
       "妖精"
     ],
     "image": "0281-奇鲁莉安.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3448,7 +3448,7 @@
       "妖精"
     ],
     "image": "0282-沙奈朵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3472,7 +3472,7 @@
       "飞行"
     ],
     "image": "0284-雨翅蛾.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3495,7 +3495,7 @@
       "格斗"
     ],
     "image": "0286-斗笠菇.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3517,7 +3517,7 @@
       "一般"
     ],
     "image": "0288-过动猿.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3528,7 +3528,7 @@
       "一般"
     ],
     "image": "0289-请假王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3552,7 +3552,7 @@
       "飞行"
     ],
     "image": "0291-铁面忍者.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3564,7 +3564,7 @@
       "幽灵"
     ],
     "image": "0292-脱壳忍者.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3586,7 +3586,7 @@
       "一般"
     ],
     "image": "0294-吼爆弹.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3597,7 +3597,7 @@
       "一般"
     ],
     "image": "0295-爆音怪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3619,7 +3619,7 @@
       "格斗"
     ],
     "image": "0297-铁掌力士.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3664,7 +3664,7 @@
       "一般"
     ],
     "image": "0301-优雅猫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3712,7 +3712,7 @@
       "岩石"
     ],
     "image": "0305-可多拉.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3724,7 +3724,7 @@
       "岩石"
     ],
     "image": "0306-波士可多拉.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3748,7 +3748,7 @@
       "超能"
     ],
     "image": "0308-恰雷姆.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3770,7 +3770,7 @@
       "电"
     ],
     "image": "0310-雷电兽.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3848,7 +3848,7 @@
       "毒"
     ],
     "image": "0317-吞食兽.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3872,7 +3872,7 @@
       "恶"
     ],
     "image": "0319-巨牙鲨.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3894,7 +3894,7 @@
       "水"
     ],
     "image": "0321-吼鲸王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3918,7 +3918,7 @@
       "地面"
     ],
     "image": "0323-喷火驼.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3951,7 +3951,7 @@
       "超能"
     ],
     "image": "0326-噗噗猪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3985,7 +3985,7 @@
       "龙"
     ],
     "image": "0329-超音波幼虫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -3997,7 +3997,7 @@
       "龙"
     ],
     "image": "0330-沙漠蜻蜓.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4020,7 +4020,7 @@
       "恶"
     ],
     "image": "0332-梦歌仙人掌.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4044,7 +4044,7 @@
       "飞行"
     ],
     "image": "0334-七夕青鸟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4114,7 +4114,7 @@
       "地面"
     ],
     "image": "0340-鲶鱼王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4137,7 +4137,7 @@
       "恶"
     ],
     "image": "0342-铁螯龙虾.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4161,7 +4161,7 @@
       "超能"
     ],
     "image": "0344-念力土偶.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4185,7 +4185,7 @@
       "草"
     ],
     "image": "0346-摇篮百合.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4209,7 +4209,7 @@
       "虫"
     ],
     "image": "0348-太古盔甲.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4231,7 +4231,7 @@
       "水"
     ],
     "image": "0350-美纳斯.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4264,7 +4264,7 @@
       "幽灵"
     ],
     "image": "0354-诅咒娃娃.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4286,7 +4286,7 @@
       "幽灵"
     ],
     "image": "0356-彷徨夜灵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4353,7 +4353,7 @@
       "冰"
     ],
     "image": "0362-冰鬼护.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4377,7 +4377,7 @@
       "水"
     ],
     "image": "0364-海魔狮.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4389,7 +4389,7 @@
       "水"
     ],
     "image": "0365-帝牙海狮.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4411,7 +4411,7 @@
       "水"
     ],
     "image": "0367-猎斑鱼.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4422,7 +4422,7 @@
       "水"
     ],
     "image": "0368-樱花鱼.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4467,7 +4467,7 @@
       "龙"
     ],
     "image": "0372-甲壳龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4479,7 +4479,7 @@
       "飞行"
     ],
     "image": "0373-暴飞龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4503,7 +4503,7 @@
       "超能"
     ],
     "image": "0375-金属怪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4515,7 +4515,7 @@
       "超能"
     ],
     "image": "0376-巨金怪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4618,7 +4618,7 @@
       "草"
     ],
     "image": "0388-树林龟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4630,7 +4630,7 @@
       "地面"
     ],
     "image": "0389-土台龟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4653,7 +4653,7 @@
       "格斗"
     ],
     "image": "0391-猛火猴.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4665,7 +4665,7 @@
       "格斗"
     ],
     "image": "0392-烈焰猴.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4687,7 +4687,7 @@
       "水"
     ],
     "image": "0394-波皇子.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4699,7 +4699,7 @@
       "钢"
     ],
     "image": "0395-帝王拿波.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4723,7 +4723,7 @@
       "飞行"
     ],
     "image": "0397-姆克鸟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4735,7 +4735,7 @@
       "飞行"
     ],
     "image": "0398-姆克鹰.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4758,7 +4758,7 @@
       "水"
     ],
     "image": "0400-大尾狸.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4780,7 +4780,7 @@
       "虫"
     ],
     "image": "0402-音箱蟀.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4802,7 +4802,7 @@
       "电"
     ],
     "image": "0404-勒克猫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4813,7 +4813,7 @@
       "电"
     ],
     "image": "0405-伦琴猫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4837,7 +4837,7 @@
       "毒"
     ],
     "image": "0407-罗丝雷朵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4859,7 +4859,7 @@
       "岩石"
     ],
     "image": "0409-战槌龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4883,7 +4883,7 @@
       "钢"
     ],
     "image": "0411-护城龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4895,7 +4895,7 @@
       "飞行"
     ],
     "image": "0414-绅士蛾.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4919,7 +4919,7 @@
       "飞行"
     ],
     "image": "0416-蜂女王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4952,7 +4952,7 @@
       "水"
     ],
     "image": "0419-浮潜鼬.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4974,7 +4974,7 @@
       "一般"
     ],
     "image": "0424-双尾怪手.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -4998,7 +4998,7 @@
       "飞行"
     ],
     "image": "0426-随风球.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5020,7 +5020,7 @@
       "一般"
     ],
     "image": "0428-长耳兔.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5031,7 +5031,7 @@
       "幽灵"
     ],
     "image": "0429-梦妖魔.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5043,7 +5043,7 @@
       "飞行"
     ],
     "image": "0430-乌鸦头头.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5065,7 +5065,7 @@
       "一般"
     ],
     "image": "0432-东施喵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5100,7 +5100,7 @@
       "恶"
     ],
     "image": "0435-坦克臭鼬.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5124,7 +5124,7 @@
       "超能"
     ],
     "image": "0437-青铜钟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5206,7 +5206,7 @@
       "地面"
     ],
     "image": "0444-尖牙陆鲨.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5218,7 +5218,7 @@
       "地面"
     ],
     "image": "0445-烈咬陆鲨.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5252,7 +5252,7 @@
       "钢"
     ],
     "image": "0448-路卡利欧.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5274,7 +5274,7 @@
       "地面"
     ],
     "image": "0450-河马兽.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5298,7 +5298,7 @@
       "恶"
     ],
     "image": "0452-龙王蝎.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5322,7 +5322,7 @@
       "格斗"
     ],
     "image": "0454-毒骷蛙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5355,7 +5355,7 @@
       "水"
     ],
     "image": "0457-霓虹鱼.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5391,7 +5391,7 @@
       "冰"
     ],
     "image": "0460-暴雪王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5403,7 +5403,7 @@
       "冰"
     ],
     "image": "0461-玛狃拉.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5414,7 +5414,7 @@
       "电"
     ],
     "image": "0466-电击魔兽.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5425,7 +5425,7 @@
       "火"
     ],
     "image": "0467-鸭嘴炎兽.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5437,7 +5437,7 @@
       "飞行"
     ],
     "image": "0468-波克基斯.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5449,7 +5449,7 @@
       "飞行"
     ],
     "image": "0469-远古巨蜓.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5461,7 +5461,7 @@
       "飞行"
     ],
     "image": "0472-天蝎王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5473,7 +5473,7 @@
       "地面"
     ],
     "image": "0473-象牙猪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5485,7 +5485,7 @@
       "格斗"
     ],
     "image": "0475-艾路雷朵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5497,7 +5497,7 @@
       "钢"
     ],
     "image": "0476-大朝北鼻.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5508,7 +5508,7 @@
       "幽灵"
     ],
     "image": "0477-黑夜魔灵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5520,7 +5520,7 @@
       "幽灵"
     ],
     "image": "0478-雪妖女.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5645,7 +5645,7 @@
       "水"
     ],
     "image": "0490-玛纳霏.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5701,7 +5701,7 @@
       "草"
     ],
     "image": "0496-青藤蛇.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5712,7 +5712,7 @@
       "草"
     ],
     "image": "0497-君主蛇.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5735,7 +5735,7 @@
       "格斗"
     ],
     "image": "0499-炒炒猪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5747,7 +5747,7 @@
       "格斗"
     ],
     "image": "0500-炎武王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5769,7 +5769,7 @@
       "水"
     ],
     "image": "0502-双刃丸.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5780,7 +5780,7 @@
       "水"
     ],
     "image": "0503-大剑鬼.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5802,7 +5802,7 @@
       "一般"
     ],
     "image": "0505-步哨鼠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5824,7 +5824,7 @@
       "一般"
     ],
     "image": "0507-哈约克.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5835,7 +5835,7 @@
       "一般"
     ],
     "image": "0508-长毛狗.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5857,7 +5857,7 @@
       "恶"
     ],
     "image": "0510-酷豹.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5879,7 +5879,7 @@
       "草"
     ],
     "image": "0512-花椰猿.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5901,7 +5901,7 @@
       "火"
     ],
     "image": "0514-爆香猿.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5923,7 +5923,7 @@
       "水"
     ],
     "image": "0516-冷水猿.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5945,7 +5945,7 @@
       "超能"
     ],
     "image": "0518-梦梦蚀.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5969,7 +5969,7 @@
       "飞行"
     ],
     "image": "0520-咕咕鸽.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -5991,7 +5991,7 @@
       "电"
     ],
     "image": "0523-雷电斑马.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6013,7 +6013,7 @@
       "岩石"
     ],
     "image": "0525-地幔岩.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6024,7 +6024,7 @@
       "岩石"
     ],
     "image": "0526-庞岩怪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6048,7 +6048,7 @@
       "飞行"
     ],
     "image": "0528-心蝙蝠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6071,7 +6071,7 @@
       "钢"
     ],
     "image": "0530-龙头地鼠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6104,7 +6104,7 @@
       "格斗"
     ],
     "image": "0533-铁骨土人.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6115,7 +6115,7 @@
       "格斗"
     ],
     "image": "0534-修建老匠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6138,7 +6138,7 @@
       "地面"
     ],
     "image": "0536-蓝蟾蜍.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6150,7 +6150,7 @@
       "地面"
     ],
     "image": "0537-蟾蜍王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6196,7 +6196,7 @@
       "草"
     ],
     "image": "0541-宝包茧.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6208,7 +6208,7 @@
       "草"
     ],
     "image": "0542-保姆虫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6232,7 +6232,7 @@
       "毒"
     ],
     "image": "0544-车轮球.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6244,7 +6244,7 @@
       "毒"
     ],
     "image": "0545-蜈蚣王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6268,7 +6268,7 @@
       "妖精"
     ],
     "image": "0547-风妖精.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6290,7 +6290,7 @@
       "草"
     ],
     "image": "0549-裙儿小姐.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6314,7 +6314,7 @@
       "恶"
     ],
     "image": "0552-混混鳄.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6326,7 +6326,7 @@
       "恶"
     ],
     "image": "0553-流氓鳄.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6372,7 +6372,7 @@
       "岩石"
     ],
     "image": "0558-岩殿居蟹.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6396,7 +6396,7 @@
       "格斗"
     ],
     "image": "0560-头巾混混.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6430,7 +6430,7 @@
       "幽灵"
     ],
     "image": "0563-迭失棺.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6454,7 +6454,7 @@
       "岩石"
     ],
     "image": "0565-肋骨海龟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6478,7 +6478,7 @@
       "飞行"
     ],
     "image": "0567-始祖大鸟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6500,7 +6500,7 @@
       "毒"
     ],
     "image": "0569-灰尘山.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6522,7 +6522,7 @@
       "恶"
     ],
     "image": "0571-索罗亚克.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6544,7 +6544,7 @@
       "一般"
     ],
     "image": "0573-奇诺栗鼠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6566,7 +6566,7 @@
       "超能"
     ],
     "image": "0575-哥德小童.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6577,7 +6577,7 @@
       "超能"
     ],
     "image": "0576-哥德小姐.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6599,7 +6599,7 @@
       "超能"
     ],
     "image": "0578-双卵细胞球.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6610,7 +6610,7 @@
       "超能"
     ],
     "image": "0579-人造细胞卵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6634,7 +6634,7 @@
       "飞行"
     ],
     "image": "0581-舞天鹅.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6656,7 +6656,7 @@
       "冰"
     ],
     "image": "0583-多多冰.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6667,7 +6667,7 @@
       "冰"
     ],
     "image": "0584-双倍多多冰.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6702,7 +6702,7 @@
       "钢"
     ],
     "image": "0589-骑士蜗牛.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6726,7 +6726,7 @@
       "毒"
     ],
     "image": "0591-败露球菇.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6773,7 +6773,7 @@
       "电"
     ],
     "image": "0596-电蜘蛛.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6797,7 +6797,7 @@
       "钢"
     ],
     "image": "0598-坚果哑铃.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6819,7 +6819,7 @@
       "钢"
     ],
     "image": "0600-齿轮组.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6830,7 +6830,7 @@
       "钢"
     ],
     "image": "0601-齿轮怪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6852,7 +6852,7 @@
       "电"
     ],
     "image": "0603-麻麻鳗.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6863,7 +6863,7 @@
       "电"
     ],
     "image": "0604-麻麻鳗鱼王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6885,7 +6885,7 @@
       "超能"
     ],
     "image": "0606-大宇怪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6909,7 +6909,7 @@
       "火"
     ],
     "image": "0608-灯火幽灵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6921,7 +6921,7 @@
       "火"
     ],
     "image": "0609-水晶灯火灵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6943,7 +6943,7 @@
       "龙"
     ],
     "image": "0611-斧牙龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6954,7 +6954,7 @@
       "龙"
     ],
     "image": "0612-双斧战龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -6976,7 +6976,7 @@
       "冰"
     ],
     "image": "0614-冻原熊.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7009,7 +7009,7 @@
       "虫"
     ],
     "image": "0617-敏捷虫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7043,7 +7043,7 @@
       "格斗"
     ],
     "image": "0620-师父鼬.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7078,7 +7078,7 @@
       "幽灵"
     ],
     "image": "0623-泥偶巨人.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7102,7 +7102,7 @@
       "钢"
     ],
     "image": "0625-劈斩司令.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7137,7 +7137,7 @@
       "飞行"
     ],
     "image": "0628-勇士雄鹰.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7161,7 +7161,7 @@
       "飞行"
     ],
     "image": "0630-秃鹰娜.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7208,7 +7208,7 @@
       "龙"
     ],
     "image": "0634-双首暴龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7220,7 +7220,7 @@
       "龙"
     ],
     "image": "0635-三首恶龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7244,7 +7244,7 @@
       "火"
     ],
     "image": "0637-火神蛾.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7350,7 +7350,7 @@
       "草"
     ],
     "image": "0651-胖胖哈力.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7362,7 +7362,7 @@
       "格斗"
     ],
     "image": "0652-布里卡隆.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7384,7 +7384,7 @@
       "火"
     ],
     "image": "0654-长尾火狐.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7396,7 +7396,7 @@
       "超能"
     ],
     "image": "0655-妖火红狐.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7418,7 +7418,7 @@
       "水"
     ],
     "image": "0657-呱头蛙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7430,7 +7430,7 @@
       "恶"
     ],
     "image": "0658-甲贺忍蛙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7453,7 +7453,7 @@
       "地面"
     ],
     "image": "0660-掘地兔.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7477,7 +7477,7 @@
       "飞行"
     ],
     "image": "0662-火箭雀.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7489,7 +7489,7 @@
       "飞行"
     ],
     "image": "0663-烈箭鹰.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7511,7 +7511,7 @@
       "虫"
     ],
     "image": "0665-粉蝶蛹.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7523,7 +7523,7 @@
       "飞行"
     ],
     "image": "0666-彩粉蝶.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7557,7 +7557,7 @@
       "妖精"
     ],
     "image": "0671-花洁夫人.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7579,7 +7579,7 @@
       "草"
     ],
     "image": "0673-坐骑山羊.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7602,7 +7602,7 @@
       "恶"
     ],
     "image": "0675-霸道熊猫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7648,7 +7648,7 @@
       "幽灵"
     ],
     "image": "0680-双剑鞘.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7670,7 +7670,7 @@
       "妖精"
     ],
     "image": "0683-芳香精.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7692,7 +7692,7 @@
       "妖精"
     ],
     "image": "0685-胖甜妮.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7716,7 +7716,7 @@
       "超能"
     ],
     "image": "0687-乌贼王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7740,7 +7740,7 @@
       "水"
     ],
     "image": "0689-龟足巨铠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7764,7 +7764,7 @@
       "龙"
     ],
     "image": "0691-毒藻龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7786,7 +7786,7 @@
       "水"
     ],
     "image": "0693-钢炮臂虾.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7810,7 +7810,7 @@
       "一般"
     ],
     "image": "0695-光电伞蜥.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7834,7 +7834,7 @@
       "龙"
     ],
     "image": "0697-怪颚龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7858,7 +7858,7 @@
       "冰"
     ],
     "image": "0699-冰雪巨龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7916,7 +7916,7 @@
       "龙"
     ],
     "image": "0705-黏美儿.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7927,7 +7927,7 @@
       "龙"
     ],
     "image": "0706-黏美龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7963,7 +7963,7 @@
       "草"
     ],
     "image": "0709-朽木妖.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -7985,7 +7985,7 @@
       "冰"
     ],
     "image": "0713-冰岩怪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8009,7 +8009,7 @@
       "龙"
     ],
     "image": "0715-音波龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8069,7 +8069,7 @@
       "飞行"
     ],
     "image": "0723-投羽枭.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8081,7 +8081,7 @@
       "幽灵"
     ],
     "image": "0724-狙射树枭.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8103,7 +8103,7 @@
       "火"
     ],
     "image": "0726-炎热喵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8115,7 +8115,7 @@
       "恶"
     ],
     "image": "0727-炽焰咆哮虎.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8137,7 +8137,7 @@
       "水"
     ],
     "image": "0729-花漾海狮.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8149,7 +8149,7 @@
       "妖精"
     ],
     "image": "0730-西狮海壬.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8173,7 +8173,7 @@
       "飞行"
     ],
     "image": "0732-喇叭啄鸟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8185,7 +8185,7 @@
       "飞行"
     ],
     "image": "0733-铳嘴大鸟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8207,7 +8207,7 @@
       "一般"
     ],
     "image": "0735-猫鼬探长.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8230,7 +8230,7 @@
       "电"
     ],
     "image": "0737-虫电宝.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8242,7 +8242,7 @@
       "电"
     ],
     "image": "0738-锹农炮虫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8265,7 +8265,7 @@
       "冰"
     ],
     "image": "0740-好胜毛蟹.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8289,7 +8289,7 @@
       "妖精"
     ],
     "image": "0743-蝶结萌虻.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8324,7 +8324,7 @@
       "水"
     ],
     "image": "0748-超坏星.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8346,7 +8346,7 @@
       "地面"
     ],
     "image": "0750-重泥挽马.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8370,7 +8370,7 @@
       "虫"
     ],
     "image": "0752-滴蛛霸.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8392,7 +8392,7 @@
       "草"
     ],
     "image": "0754-兰螳花.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8416,7 +8416,7 @@
       "妖精"
     ],
     "image": "0756-灯罩夜菇.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8440,7 +8440,7 @@
       "火"
     ],
     "image": "0758-焰后蜥.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8464,7 +8464,7 @@
       "格斗"
     ],
     "image": "0760-穿着熊.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8486,7 +8486,7 @@
       "草"
     ],
     "image": "0762-甜舞妮.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8497,7 +8497,7 @@
       "草"
     ],
     "image": "0763-甜冷美后.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8555,7 +8555,7 @@
       "水"
     ],
     "image": "0768-具甲武者.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8579,7 +8579,7 @@
       "地面"
     ],
     "image": "0770-噬沙堡爷.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8612,7 +8612,7 @@
       "一般"
     ],
     "image": "0773-银伴战兽.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8706,7 +8706,7 @@
       "格斗"
     ],
     "image": "0783-鳞甲龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8718,7 +8718,7 @@
       "格斗"
     ],
     "image": "0784-杖尾鳞甲龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8788,7 +8788,7 @@
       "超能"
     ],
     "image": "0790-科斯莫姆.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8894,7 +8894,7 @@
       "龙"
     ],
     "image": "0804-四颚针龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8973,7 +8973,7 @@
       "草"
     ],
     "image": "0811-啪咚猴.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -8984,7 +8984,7 @@
       "草"
     ],
     "image": "0812-轰擂金刚猩.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9006,7 +9006,7 @@
       "火"
     ],
     "image": "0814-腾蹴小将.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9017,7 +9017,7 @@
       "火"
     ],
     "image": "0815-闪焰王牌.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9039,7 +9039,7 @@
       "水"
     ],
     "image": "0817-变涩蜥.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9050,7 +9050,7 @@
       "水"
     ],
     "image": "0818-千面避役.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9072,7 +9072,7 @@
       "一般"
     ],
     "image": "0820-藏饱栗鼠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9094,7 +9094,7 @@
       "飞行"
     ],
     "image": "0822-蓝鸦.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9106,7 +9106,7 @@
       "钢"
     ],
     "image": "0823-钢铠鸦.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9129,7 +9129,7 @@
       "超能"
     ],
     "image": "0825-天罩虫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9141,7 +9141,7 @@
       "超能"
     ],
     "image": "0826-以欧路普.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9163,7 +9163,7 @@
       "恶"
     ],
     "image": "0828-猾大狐.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9185,7 +9185,7 @@
       "草"
     ],
     "image": "0830-白蓬蓬.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9207,7 +9207,7 @@
       "一般"
     ],
     "image": "0832-毛毛角羊.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9230,7 +9230,7 @@
       "岩石"
     ],
     "image": "0834-暴噬龟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9252,7 +9252,7 @@
       "电"
     ],
     "image": "0836-逐电犬.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9275,7 +9275,7 @@
       "火"
     ],
     "image": "0838-大炭车.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9287,7 +9287,7 @@
       "火"
     ],
     "image": "0839-巨炭山.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9311,7 +9311,7 @@
       "龙"
     ],
     "image": "0841-苹裹龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9323,7 +9323,7 @@
       "龙"
     ],
     "image": "0842-丰蜜龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9345,7 +9345,7 @@
       "地面"
     ],
     "image": "0844-沙螺蟒.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9379,7 +9379,7 @@
       "水"
     ],
     "image": "0847-戽斗尖梭.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9415,7 +9415,7 @@
       "虫"
     ],
     "image": "0851-焚焰蚣.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9437,7 +9437,7 @@
       "格斗"
     ],
     "image": "0853-八爪武师.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9459,7 +9459,7 @@
       "幽灵"
     ],
     "image": "0855-怖思壶.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9481,7 +9481,7 @@
       "超能"
     ],
     "image": "0857-提布莉姆.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9493,7 +9493,7 @@
       "妖精"
     ],
     "image": "0858-布莉姆温.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9517,7 +9517,7 @@
       "妖精"
     ],
     "image": "0860-诈唬魔.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9529,7 +9529,7 @@
       "妖精"
     ],
     "image": "0861-长毛巨魔.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9541,7 +9541,7 @@
       "一般"
     ],
     "image": "0862-堵拦熊.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9552,7 +9552,7 @@
       "幽灵"
     ],
     "image": "0864-魔灵珊瑚.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9564,7 +9564,7 @@
       "超能"
     ],
     "image": "0866-踏冰人偶.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9576,7 +9576,7 @@
       "幽灵"
     ],
     "image": "0867-迭失板.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9598,7 +9598,7 @@
       "妖精"
     ],
     "image": "0869-霜奶仙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9644,7 +9644,7 @@
       "虫"
     ],
     "image": "0873-雪绒蛾.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9677,7 +9677,7 @@
       "钢"
     ],
     "image": "0879-大王铜象.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9761,7 +9761,7 @@
       "幽灵"
     ],
     "image": "0886-多龙奇.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9773,7 +9773,7 @@
       "幽灵"
     ],
     "image": "0887-多龙巴鲁托.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9876,7 +9876,7 @@
       "超能"
     ],
     "image": "0899-诡角鹿.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9888,7 +9888,7 @@
       "一般"
     ],
     "image": "0901-月月熊.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9900,7 +9900,7 @@
       "毒"
     ],
     "image": "0903-大狃拉.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9912,7 +9912,7 @@
       "毒"
     ],
     "image": "0904-万针鱼.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9934,7 +9934,7 @@
       "草"
     ],
     "image": "0907-蒂蕾喵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9946,7 +9946,7 @@
       "恶"
     ],
     "image": "0908-魔幻假面喵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9968,7 +9968,7 @@
       "火"
     ],
     "image": "0910-炙烫鳄.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -9980,7 +9980,7 @@
       "幽灵"
     ],
     "image": "0911-骨纹巨声鳄.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10002,7 +10002,7 @@
       "水"
     ],
     "image": "0913-涌跃鸭.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10014,7 +10014,7 @@
       "格斗"
     ],
     "image": "0914-狂欢浪舞鸭.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10047,7 +10047,7 @@
       "虫"
     ],
     "image": "0918-操陷蛛.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10070,7 +10070,7 @@
       "恶"
     ],
     "image": "0920-烈腿蝗.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10093,7 +10093,7 @@
       "格斗"
     ],
     "image": "0922-布土拨.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10105,7 +10105,7 @@
       "格斗"
     ],
     "image": "0923-巴布土拨.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10138,7 +10138,7 @@
       "妖精"
     ],
     "image": "0927-麻花犬.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10162,7 +10162,7 @@
       "一般"
     ],
     "image": "0929-奥利纽.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10174,7 +10174,7 @@
       "一般"
     ],
     "image": "0930-奥利瓦.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10196,7 +10196,7 @@
       "岩石"
     ],
     "image": "0933-盐石垒.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10207,7 +10207,7 @@
       "岩石"
     ],
     "image": "0934-盐石巨灵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10230,7 +10230,7 @@
       "超能"
     ],
     "image": "0936-红莲铠骑.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10242,7 +10242,7 @@
       "幽灵"
     ],
     "image": "0937-苍炎刃鬼.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10264,7 +10264,7 @@
       "电"
     ],
     "image": "0939-电肚蛙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10288,7 +10288,7 @@
       "飞行"
     ],
     "image": "0941-大电海燕.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10310,7 +10310,7 @@
       "恶"
     ],
     "image": "0943-獒教父.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10334,7 +10334,7 @@
       "一般"
     ],
     "image": "0945-涂标客.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10358,7 +10358,7 @@
       "幽灵"
     ],
     "image": "0947-怖纳噬草.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10382,7 +10382,7 @@
       "草"
     ],
     "image": "0949-陆地水母.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10416,7 +10416,7 @@
       "火"
     ],
     "image": "0952-狠辣椒.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10439,7 +10439,7 @@
       "超能"
     ],
     "image": "0954-虫甲圣.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10461,7 +10461,7 @@
       "超能"
     ],
     "image": "0956-超能艳鸵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10485,7 +10485,7 @@
       "钢"
     ],
     "image": "0958-巧锻匠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10497,7 +10497,7 @@
       "钢"
     ],
     "image": "0959-巨锻匠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10519,7 +10519,7 @@
       "水"
     ],
     "image": "0961-三海地鼠.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10566,7 +10566,7 @@
       "毒"
     ],
     "image": "0966-普隆隆姆.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10613,7 +10613,7 @@
       "毒"
     ],
     "image": "0970-晶光花.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10635,7 +10635,7 @@
       "幽灵"
     ],
     "image": "0972-墓扬犬.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10669,7 +10669,7 @@
       "冰"
     ],
     "image": "0975-浩大鲸.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10704,7 +10704,7 @@
       "地面"
     ],
     "image": "0980-土王.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10716,7 +10716,7 @@
       "超能"
     ],
     "image": "0981-奇麒麟.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10728,7 +10728,7 @@
       "钢"
     ],
     "image": "0983-仆刀将军.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10896,7 +10896,7 @@
       "冰"
     ],
     "image": "0997-冻脊龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10908,7 +10908,7 @@
       "冰"
     ],
     "image": "0998-戟脊龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -10920,7 +10920,7 @@
       "幽灵"
     ],
     "image": "1000-赛富豪.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -11052,7 +11052,7 @@
       "龙"
     ],
     "image": "1011-裹蜜虫.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -11076,7 +11076,7 @@
       "幽灵"
     ],
     "image": "1013-来悲粗茶.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -11124,7 +11124,7 @@
       "龙"
     ],
     "image": "1018-铝钢桥龙.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -11136,7 +11136,7 @@
       "龙"
     ],
     "image": "1019-蜜集大蛇.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -13573,7 +13573,7 @@
       "草"
     ],
     "image": "0413-结草贵妇-垃圾蓑衣.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -13608,7 +13608,7 @@
       "草"
     ],
     "image": "0421-樱花儿-晴天形态.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -13653,7 +13653,7 @@
       "地面"
     ],
     "image": "0423-海兔兽-东海.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -13723,7 +13723,7 @@
       "飞行"
     ],
     "image": "0521-高傲雉鸡-雄性的样子.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -13779,7 +13779,7 @@
       "火"
     ],
     "image": "0555-达摩狒狒-伽勒尔达摩狒狒（普通模式）.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -13872,7 +13872,7 @@
       "草"
     ],
     "image": "0586-萌芽鹿-冬天的样子.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -13920,7 +13920,7 @@
       "幽灵"
     ],
     "image": "0593-胖嘟嘟-雄性的样子.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14062,7 +14062,7 @@
       "一般"
     ],
     "image": "0668-火炎狮-超级火炎狮.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14097,7 +14097,7 @@
       "妖精"
     ],
     "image": "0670-花叶蒂-永恒之花.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14130,7 +14130,7 @@
       "超能"
     ],
     "image": "0678-超能妙喵-超级超能妙喵.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14164,7 +14164,7 @@
       "幽灵"
     ],
     "image": "0681-坚盾剑怪-刀剑形态.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14236,7 +14236,7 @@
       "草"
     ],
     "image": "0711-南瓜怪人-中颗种.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14425,7 +14425,7 @@
       "岩石"
     ],
     "image": "0745-鬃岩狼人-白昼的样子.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14529,7 +14529,7 @@
       "钢"
     ],
     "image": "0791-索尔迦雷欧-一般状态.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14553,7 +14553,7 @@
       "幽灵"
     ],
     "image": "0792-露奈雅拉-一般状态.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14693,7 +14693,7 @@
       "毒"
     ],
     "image": "0849-颤弦蝾螈-低调的样子.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14843,7 +14843,7 @@
       "恶"
     ],
     "image": "0892-武道熊师-一击流.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14891,7 +14891,7 @@
       "幽灵"
     ],
     "image": "0902-幽尾玄鱼-雄性的样子.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14938,7 +14938,7 @@
       "一般"
     ],
     "image": "0916-飘香豚-雄性的样子.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -14960,7 +14960,7 @@
       "一般"
     ],
     "image": "0925-一家鼠-三只家庭.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -15030,7 +15030,7 @@
       "水"
     ],
     "image": "0964-海豚侠-全能形态.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
@@ -15124,7 +15124,7 @@
       "一般"
     ],
     "image": "0982-土龙节节-三节形态.png",
-    "tier": 1,
+    "tier": 0,
     "stage": 0,
     "formName": null
   },
