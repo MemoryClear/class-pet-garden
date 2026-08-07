@@ -265,11 +265,20 @@ public class PokemonPoolController {
     }
 
     /**
-     * 获取默认的 Gen1 宝可梦 ID 列表（1-151）
+     * 获取默认的 Gen1 宝可梦 ID 列表（1-151），过滤掉非基础形态：
+     * - tier != 1 的（中间/终态、Mega、极巨化等）
+     * - formName 非空的（变体形态，如阿罗拉）
+     * 玩家只能从这些基础形态抽取，再进化上去
      */
     private List<Integer> getDefaultGen1Ids() {
         List<Integer> ids = new java.util.ArrayList<>();
         for (int i = 1; i <= 151; i++) {
+            Map<String, Object> s = speciesMap.get(i);
+            if (s == null) continue;
+            Object tier = s.get("tier");
+            Object formName = s.get("formName");
+            if (tier == null || ((Number) tier).intValue() != 1) continue;
+            if (formName != null && !formName.toString().isEmpty()) continue;
             ids.add(i);
         }
         return ids;
