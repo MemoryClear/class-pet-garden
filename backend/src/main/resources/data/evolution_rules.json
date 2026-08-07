@@ -218,6 +218,26 @@
       "toStage": 1
     }
   ],
+  "25": [
+    {
+      "toPokedexId": 26,
+      "toName": "雷丘",
+      "condition": "使用雷之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 26,
+      "toName": "雷丘",
+      "condition": "使用雷之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
   "27": [
     {
       "toPokedexId": 28,
@@ -268,6 +288,26 @@
       "toStage": 2
     }
   ],
+  "35": [
+    {
+      "toPokedexId": 36,
+      "toName": "皮可西",
+      "condition": "使用月之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 36,
+      "toName": "皮可西",
+      "condition": "使用月之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
   "37": [
     {
       "toPokedexId": 38,
@@ -276,6 +316,26 @@
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
+    }
+  ],
+  "39": [
+    {
+      "toPokedexId": 40,
+      "toName": "胖可丁",
+      "condition": "使用月之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 40,
+      "toName": "胖可丁",
+      "condition": "使用月之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
     }
   ],
   "41": [
@@ -750,6 +810,26 @@
       "toStage": 2
     }
   ],
+  "113": [
+    {
+      "toPokedexId": 242,
+      "toName": "幸福蛋",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 242,
+      "toName": "幸福蛋",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
   "114": [
     {
       "toPokedexId": 465,
@@ -800,6 +880,26 @@
       "toStage": 1
     }
   ],
+  "122": [
+    {
+      "toPokedexId": 866,
+      "toName": "踏冰人偶",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 866,
+      "toName": "踏冰人偶",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
   "123": [
     {
       "toPokedexId": 212,
@@ -816,6 +916,46 @@
       "toFormName": null,
       "fromStage": 0,
       "toStage": 1
+    }
+  ],
+  "125": [
+    {
+      "toPokedexId": 466,
+      "toName": "电击魔兽",
+      "condition": "使用电气珠",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    },
+    {
+      "toPokedexId": 466,
+      "toName": "电击魔兽",
+      "condition": "使用电气珠",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": null
+    }
+  ],
+  "126": [
+    {
+      "toPokedexId": 467,
+      "toName": "鸭嘴炎兽",
+      "condition": "使用熔岩器具",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    },
+    {
+      "toPokedexId": 467,
+      "toName": "鸭嘴炎兽",
+      "condition": "使用熔岩器具",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": null
     }
   ],
   "129": [
@@ -944,6 +1084,589 @@
       "toStage": 2
     }
   ],
+  "152": [
+    {
+      "toPokedexId": 153,
+      "toName": "月桂叶",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "153": [
+    {
+      "toPokedexId": 154,
+      "toName": "大竺葵",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 154,
+      "toName": "大竺葵",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "155": [
+    {
+      "toPokedexId": 156,
+      "toName": "火岩鼠",
+      "condition": "等级14以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "156": [
+    {
+      "toPokedexId": 157,
+      "toName": "火暴兽",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 157,
+      "toName": "火暴兽",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "158": [
+    {
+      "toPokedexId": 159,
+      "toName": "蓝鳄",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "159": [
+    {
+      "toPokedexId": 160,
+      "toName": "大力鳄",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 160,
+      "toName": "大力鳄",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "161": [
+    {
+      "toPokedexId": 162,
+      "toName": "大尾立",
+      "condition": "等级15以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "163": [
+    {
+      "toPokedexId": 164,
+      "toName": "猫头夜鹰",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "165": [
+    {
+      "toPokedexId": 166,
+      "toName": "安瓢虫",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "167": [
+    {
+      "toPokedexId": 168,
+      "toName": "阿利多斯",
+      "condition": "等级22以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "170": [
+    {
+      "toPokedexId": 171,
+      "toName": "电灯怪",
+      "condition": "等级27以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "172": [
+    {
+      "toPokedexId": 25,
+      "toName": "皮卡丘",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "173": [
+    {
+      "toPokedexId": 35,
+      "toName": "皮皮",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "174": [
+    {
+      "toPokedexId": 39,
+      "toName": "胖丁",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "175": [
+    {
+      "toPokedexId": 176,
+      "toName": "波克基古",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "176": [
+    {
+      "toPokedexId": 468,
+      "toName": "波克基斯",
+      "condition": "使用光之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 468,
+      "toName": "波克基斯",
+      "condition": "使用光之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "177": [
+    {
+      "toPokedexId": 178,
+      "toName": "天然鸟",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "179": [
+    {
+      "toPokedexId": 180,
+      "toName": "茸茸羊",
+      "condition": "等级15以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "180": [
+    {
+      "toPokedexId": 181,
+      "toName": "电龙",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 181,
+      "toName": "电龙",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "183": [
+    {
+      "toPokedexId": 184,
+      "toName": "玛力露丽",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 184,
+      "toName": "玛力露丽",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "187": [
+    {
+      "toPokedexId": 188,
+      "toName": "毽子花",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "188": [
+    {
+      "toPokedexId": 189,
+      "toName": "毽子棉",
+      "condition": "等级27以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 189,
+      "toName": "毽子棉",
+      "condition": "等级27以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "190": [
+    {
+      "toPokedexId": 424,
+      "toName": "双尾怪手",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "191": [
+    {
+      "toPokedexId": 192,
+      "toName": "向日花怪",
+      "condition": "使用日之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "193": [
+    {
+      "toPokedexId": 469,
+      "toName": "远古巨蜓",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "194": [
+    {
+      "toPokedexId": 195,
+      "toName": "沼王",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 980,
+      "toName": "土王",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "198": [
+    {
+      "toPokedexId": 430,
+      "toName": "乌鸦头头",
+      "condition": "使用觉醒之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "200": [
+    {
+      "toPokedexId": 429,
+      "toName": "梦妖魔",
+      "condition": "使用觉醒之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "203": [
+    {
+      "toPokedexId": 981,
+      "toName": "奇麒麟",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "204": [
+    {
+      "toPokedexId": 205,
+      "toName": "佛烈托斯",
+      "condition": "等级31以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "206": [
+    {
+      "toPokedexId": 982,
+      "toName": "土龙节节",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "207": [
+    {
+      "toPokedexId": 472,
+      "toName": "天蝎王",
+      "condition": "使用锐利之牙",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "209": [
+    {
+      "toPokedexId": 210,
+      "toName": "布鲁皇",
+      "condition": "等级23以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "211": [
+    {
+      "toPokedexId": 904,
+      "toName": "万针鱼",
+      "condition": "触发:strong-style-move",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": false
+    }
+  ],
+  "215": [
+    {
+      "toPokedexId": 461,
+      "toName": "玛狃拉",
+      "condition": "使用锐利之爪",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 903,
+      "toName": "大狃拉",
+      "condition": "使用锐利之爪",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "216": [
+    {
+      "toPokedexId": 217,
+      "toName": "圈圈熊",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "217": [
+    {
+      "toPokedexId": 901,
+      "toName": "月月熊",
+      "condition": "使用泥炭块",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 901,
+      "toName": "月月熊",
+      "condition": "使用泥炭块",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "218": [
+    {
+      "toPokedexId": 219,
+      "toName": "熔岩蜗牛",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "220": [
+    {
+      "toPokedexId": 221,
+      "toName": "长毛猪",
+      "condition": "等级33以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "221": [
+    {
+      "toPokedexId": 473,
+      "toName": "象牙猪",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    },
+    {
+      "toPokedexId": 473,
+      "toName": "象牙猪",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": null
+    }
+  ],
+  "222": [
+    {
+      "toPokedexId": 864,
+      "toName": "魔灵珊瑚",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "223": [
+    {
+      "toPokedexId": 224,
+      "toName": "章鱼桶",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "228": [
+    {
+      "toPokedexId": 229,
+      "toName": "黑鲁加",
+      "condition": "等级24以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "231": [
+    {
+      "toPokedexId": 232,
+      "toName": "顿甲",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
   "233": [
     {
       "toPokedexId": 474,
@@ -952,6 +1675,4449 @@
       "toFormName": null,
       "fromStage": 1,
       "toStage": 2
+    }
+  ],
+  "234": [
+    {
+      "toPokedexId": 899,
+      "toName": "诡角鹿",
+      "condition": "触发:agile-style-move",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": false
+    }
+  ],
+  "236": [
+    {
+      "toPokedexId": 106,
+      "toName": "飞腿郎",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 107,
+      "toName": "快拳郎",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 237,
+      "toName": "战舞郎",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "238": [
+    {
+      "toPokedexId": 124,
+      "toName": "迷唇姐",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "239": [
+    {
+      "toPokedexId": 125,
+      "toName": "电击兽",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "240": [
+    {
+      "toPokedexId": 126,
+      "toName": "鸭嘴火兽",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "246": [
+    {
+      "toPokedexId": 247,
+      "toName": "沙基拉斯",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "247": [
+    {
+      "toPokedexId": 248,
+      "toName": "班基拉斯",
+      "condition": "等级55以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 248,
+      "toName": "班基拉斯",
+      "condition": "等级55以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "252": [
+    {
+      "toPokedexId": 253,
+      "toName": "森林蜥蜴",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "253": [
+    {
+      "toPokedexId": 254,
+      "toName": "蜥蜴王",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 254,
+      "toName": "蜥蜴王",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "255": [
+    {
+      "toPokedexId": 256,
+      "toName": "力壮鸡",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "256": [
+    {
+      "toPokedexId": 257,
+      "toName": "火焰鸡",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 257,
+      "toName": "火焰鸡",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "258": [
+    {
+      "toPokedexId": 259,
+      "toName": "沼跃鱼",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "259": [
+    {
+      "toPokedexId": 260,
+      "toName": "巨沼怪",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 260,
+      "toName": "巨沼怪",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "261": [
+    {
+      "toPokedexId": 262,
+      "toName": "大狼犬",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "263": [
+    {
+      "toPokedexId": 264,
+      "toName": "直冲熊",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "264": [
+    {
+      "toPokedexId": 862,
+      "toName": "堵拦熊",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 862,
+      "toName": "堵拦熊",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "265": [
+    {
+      "toPokedexId": 266,
+      "toName": "甲壳茧",
+      "condition": "等级7以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 268,
+      "toName": "盾甲茧",
+      "condition": "等级7以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "266": [
+    {
+      "toPokedexId": 267,
+      "toName": "狩猎凤蝶",
+      "condition": "等级10以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 267,
+      "toName": "狩猎凤蝶",
+      "condition": "等级10以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "268": [
+    {
+      "toPokedexId": 269,
+      "toName": "毒粉蛾",
+      "condition": "等级10以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 269,
+      "toName": "毒粉蛾",
+      "condition": "等级10以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "270": [
+    {
+      "toPokedexId": 271,
+      "toName": "莲帽小童",
+      "condition": "等级14以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "271": [
+    {
+      "toPokedexId": 272,
+      "toName": "乐天河童",
+      "condition": "使用水之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 272,
+      "toName": "乐天河童",
+      "condition": "使用水之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "273": [
+    {
+      "toPokedexId": 274,
+      "toName": "长鼻叶",
+      "condition": "等级14以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "274": [
+    {
+      "toPokedexId": 275,
+      "toName": "狡猾天狗",
+      "condition": "使用叶之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 275,
+      "toName": "狡猾天狗",
+      "condition": "使用叶之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "276": [
+    {
+      "toPokedexId": 277,
+      "toName": "大王燕",
+      "condition": "等级22以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "278": [
+    {
+      "toPokedexId": 279,
+      "toName": "大嘴鸥",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "280": [
+    {
+      "toPokedexId": 281,
+      "toName": "奇鲁莉安",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "281": [
+    {
+      "toPokedexId": 282,
+      "toName": "沙奈朵",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 475,
+      "toName": "艾路雷朵",
+      "condition": "使用dawn-stone",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 282,
+      "toName": "沙奈朵",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 475,
+      "toName": "艾路雷朵",
+      "condition": "使用dawn-stone",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "283": [
+    {
+      "toPokedexId": 284,
+      "toName": "雨翅蛾",
+      "condition": "等级22以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "285": [
+    {
+      "toPokedexId": 286,
+      "toName": "斗笠菇",
+      "condition": "等级23以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "287": [
+    {
+      "toPokedexId": 288,
+      "toName": "过动猿",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "288": [
+    {
+      "toPokedexId": 289,
+      "toName": "请假王",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 289,
+      "toName": "请假王",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "290": [
+    {
+      "toPokedexId": 291,
+      "toName": "铁面忍者",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 292,
+      "toName": "脱壳忍者",
+      "condition": "触发:shed",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": false
+    }
+  ],
+  "293": [
+    {
+      "toPokedexId": 294,
+      "toName": "吼爆弹",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "294": [
+    {
+      "toPokedexId": 295,
+      "toName": "爆音怪",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 295,
+      "toName": "爆音怪",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "296": [
+    {
+      "toPokedexId": 297,
+      "toName": "铁掌力士",
+      "condition": "等级24以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "298": [
+    {
+      "toPokedexId": 183,
+      "toName": "玛力露",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "299": [
+    {
+      "toPokedexId": 476,
+      "toName": "大朝北鼻",
+      "condition": "使用雷之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "300": [
+    {
+      "toPokedexId": 301,
+      "toName": "优雅猫",
+      "condition": "使用月之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "304": [
+    {
+      "toPokedexId": 305,
+      "toName": "可多拉",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "305": [
+    {
+      "toPokedexId": 306,
+      "toName": "波士可多拉",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 306,
+      "toName": "波士可多拉",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "307": [
+    {
+      "toPokedexId": 308,
+      "toName": "恰雷姆",
+      "condition": "等级37以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "309": [
+    {
+      "toPokedexId": 310,
+      "toName": "雷电兽",
+      "condition": "等级26以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "315": [
+    {
+      "toPokedexId": 407,
+      "toName": "罗丝雷朵",
+      "condition": "使用光之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 407,
+      "toName": "罗丝雷朵",
+      "condition": "使用光之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "316": [
+    {
+      "toPokedexId": 317,
+      "toName": "吞食兽",
+      "condition": "等级26以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "318": [
+    {
+      "toPokedexId": 319,
+      "toName": "巨牙鲨",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "320": [
+    {
+      "toPokedexId": 321,
+      "toName": "吼鲸王",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "322": [
+    {
+      "toPokedexId": 323,
+      "toName": "喷火驼",
+      "condition": "等级33以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "325": [
+    {
+      "toPokedexId": 326,
+      "toName": "噗噗猪",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "328": [
+    {
+      "toPokedexId": 329,
+      "toName": "超音波幼虫",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "329": [
+    {
+      "toPokedexId": 330,
+      "toName": "沙漠蜻蜓",
+      "condition": "等级45以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 330,
+      "toName": "沙漠蜻蜓",
+      "condition": "等级45以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "331": [
+    {
+      "toPokedexId": 332,
+      "toName": "梦歌仙人掌",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "333": [
+    {
+      "toPokedexId": 334,
+      "toName": "七夕青鸟",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "339": [
+    {
+      "toPokedexId": 340,
+      "toName": "鲶鱼王",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "341": [
+    {
+      "toPokedexId": 342,
+      "toName": "铁螯龙虾",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "343": [
+    {
+      "toPokedexId": 344,
+      "toName": "念力土偶",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "345": [
+    {
+      "toPokedexId": 346,
+      "toName": "摇篮百合",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "347": [
+    {
+      "toPokedexId": 348,
+      "toName": "太古盔甲",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "349": [
+    {
+      "toPokedexId": 350,
+      "toName": "美纳斯",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "353": [
+    {
+      "toPokedexId": 354,
+      "toName": "诅咒娃娃",
+      "condition": "等级37以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "355": [
+    {
+      "toPokedexId": 356,
+      "toName": "彷徨夜灵",
+      "condition": "等级37以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "356": [
+    {
+      "toPokedexId": 477,
+      "toName": "黑夜魔灵",
+      "condition": "使用灵界之布",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    },
+    {
+      "toPokedexId": 477,
+      "toName": "黑夜魔灵",
+      "condition": "使用灵界之布",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": null
+    }
+  ],
+  "360": [
+    {
+      "toPokedexId": 202,
+      "toName": "果然翁",
+      "condition": "等级15以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "361": [
+    {
+      "toPokedexId": 362,
+      "toName": "冰鬼护",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 478,
+      "toName": "雪妖女",
+      "condition": "使用dawn-stone",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "363": [
+    {
+      "toPokedexId": 364,
+      "toName": "海魔狮",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "364": [
+    {
+      "toPokedexId": 365,
+      "toName": "帝牙海狮",
+      "condition": "等级44以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 365,
+      "toName": "帝牙海狮",
+      "condition": "等级44以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "366": [
+    {
+      "toPokedexId": 367,
+      "toName": "猎斑鱼",
+      "condition": "使用深海之牙",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    },
+    {
+      "toPokedexId": 368,
+      "toName": "樱花鱼",
+      "condition": "使用深海鳞片",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "371": [
+    {
+      "toPokedexId": 372,
+      "toName": "甲壳龙",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "372": [
+    {
+      "toPokedexId": 373,
+      "toName": "暴飞龙",
+      "condition": "等级50以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 373,
+      "toName": "暴飞龙",
+      "condition": "等级50以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "374": [
+    {
+      "toPokedexId": 375,
+      "toName": "金属怪",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "375": [
+    {
+      "toPokedexId": 376,
+      "toName": "巨金怪",
+      "condition": "等级45以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 376,
+      "toName": "巨金怪",
+      "condition": "等级45以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "387": [
+    {
+      "toPokedexId": 388,
+      "toName": "树林龟",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "388": [
+    {
+      "toPokedexId": 389,
+      "toName": "土台龟",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 389,
+      "toName": "土台龟",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "390": [
+    {
+      "toPokedexId": 391,
+      "toName": "猛火猴",
+      "condition": "等级14以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "391": [
+    {
+      "toPokedexId": 392,
+      "toName": "烈焰猴",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 392,
+      "toName": "烈焰猴",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "393": [
+    {
+      "toPokedexId": 394,
+      "toName": "波皇子",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "394": [
+    {
+      "toPokedexId": 395,
+      "toName": "帝王拿波",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 395,
+      "toName": "帝王拿波",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "396": [
+    {
+      "toPokedexId": 397,
+      "toName": "姆克鸟",
+      "condition": "等级14以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "397": [
+    {
+      "toPokedexId": 398,
+      "toName": "姆克鹰",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 398,
+      "toName": "姆克鹰",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "399": [
+    {
+      "toPokedexId": 400,
+      "toName": "大尾狸",
+      "condition": "等级15以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "401": [
+    {
+      "toPokedexId": 402,
+      "toName": "音箱蟀",
+      "condition": "等级10以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "403": [
+    {
+      "toPokedexId": 404,
+      "toName": "勒克猫",
+      "condition": "等级15以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "404": [
+    {
+      "toPokedexId": 405,
+      "toName": "伦琴猫",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 405,
+      "toName": "伦琴猫",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "406": [
+    {
+      "toPokedexId": 315,
+      "toName": "毒蔷薇",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "408": [
+    {
+      "toPokedexId": 409,
+      "toName": "战槌龙",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "410": [
+    {
+      "toPokedexId": 411,
+      "toName": "护城龙",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "412": [
+    {
+      "toPokedexId": 413,
+      "toName": "结草贵妇",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 414,
+      "toName": "绅士蛾",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "415": [
+    {
+      "toPokedexId": 416,
+      "toName": "蜂女王",
+      "condition": "等级21以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "418": [
+    {
+      "toPokedexId": 419,
+      "toName": "浮潜鼬",
+      "condition": "等级26以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "420": [
+    {
+      "toPokedexId": 421,
+      "toName": "樱花儿",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "422": [
+    {
+      "toPokedexId": 423,
+      "toName": "海兔兽",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "425": [
+    {
+      "toPokedexId": 426,
+      "toName": "随风球",
+      "condition": "等级28以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "427": [
+    {
+      "toPokedexId": 428,
+      "toName": "长耳兔",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "431": [
+    {
+      "toPokedexId": 432,
+      "toName": "东施喵",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "433": [
+    {
+      "toPokedexId": 358,
+      "toName": "风铃铃",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "434": [
+    {
+      "toPokedexId": 435,
+      "toName": "坦克臭鼬",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "436": [
+    {
+      "toPokedexId": 437,
+      "toName": "青铜钟",
+      "condition": "等级33以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "438": [
+    {
+      "toPokedexId": 185,
+      "toName": "树才怪",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "439": [
+    {
+      "toPokedexId": 122,
+      "toName": "魔墙人偶",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "440": [
+    {
+      "toPokedexId": 113,
+      "toName": "吉利蛋",
+      "condition": "使用圆之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "443": [
+    {
+      "toPokedexId": 444,
+      "toName": "尖牙陆鲨",
+      "condition": "等级24以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "444": [
+    {
+      "toPokedexId": 445,
+      "toName": "烈咬陆鲨",
+      "condition": "等级48以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 445,
+      "toName": "烈咬陆鲨",
+      "condition": "等级48以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "446": [
+    {
+      "toPokedexId": 143,
+      "toName": "卡比兽",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "447": [
+    {
+      "toPokedexId": 448,
+      "toName": "路卡利欧",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "449": [
+    {
+      "toPokedexId": 450,
+      "toName": "河马兽",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "451": [
+    {
+      "toPokedexId": 452,
+      "toName": "龙王蝎",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "453": [
+    {
+      "toPokedexId": 454,
+      "toName": "毒骷蛙",
+      "condition": "等级37以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "456": [
+    {
+      "toPokedexId": 457,
+      "toName": "霓虹鱼",
+      "condition": "等级31以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "458": [
+    {
+      "toPokedexId": 226,
+      "toName": "巨翅飞鱼",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "459": [
+    {
+      "toPokedexId": 460,
+      "toName": "暴雪王",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "489": [
+    {
+      "toPokedexId": 490,
+      "toName": "玛纳霏",
+      "condition": "满足条件后进化",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": false
+    }
+  ],
+  "495": [
+    {
+      "toPokedexId": 496,
+      "toName": "青藤蛇",
+      "condition": "等级17以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "496": [
+    {
+      "toPokedexId": 497,
+      "toName": "君主蛇",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 497,
+      "toName": "君主蛇",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "498": [
+    {
+      "toPokedexId": 499,
+      "toName": "炒炒猪",
+      "condition": "等级17以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "499": [
+    {
+      "toPokedexId": 500,
+      "toName": "炎武王",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 500,
+      "toName": "炎武王",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "501": [
+    {
+      "toPokedexId": 502,
+      "toName": "双刃丸",
+      "condition": "等级17以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "502": [
+    {
+      "toPokedexId": 503,
+      "toName": "大剑鬼",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 503,
+      "toName": "大剑鬼",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "504": [
+    {
+      "toPokedexId": 505,
+      "toName": "步哨鼠",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "506": [
+    {
+      "toPokedexId": 507,
+      "toName": "哈约克",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "507": [
+    {
+      "toPokedexId": 508,
+      "toName": "长毛狗",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 508,
+      "toName": "长毛狗",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "509": [
+    {
+      "toPokedexId": 510,
+      "toName": "酷豹",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "511": [
+    {
+      "toPokedexId": 512,
+      "toName": "花椰猿",
+      "condition": "使用叶之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "513": [
+    {
+      "toPokedexId": 514,
+      "toName": "爆香猿",
+      "condition": "使用火之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "515": [
+    {
+      "toPokedexId": 516,
+      "toName": "冷水猿",
+      "condition": "使用水之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "517": [
+    {
+      "toPokedexId": 518,
+      "toName": "梦梦蚀",
+      "condition": "使用月之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "519": [
+    {
+      "toPokedexId": 520,
+      "toName": "咕咕鸽",
+      "condition": "等级21以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "520": [
+    {
+      "toPokedexId": 521,
+      "toName": "高傲雉鸡",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 521,
+      "toName": "高傲雉鸡",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "522": [
+    {
+      "toPokedexId": 523,
+      "toName": "雷电斑马",
+      "condition": "等级27以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "524": [
+    {
+      "toPokedexId": 525,
+      "toName": "地幔岩",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "525": [
+    {
+      "toPokedexId": 526,
+      "toName": "庞岩怪",
+      "condition": "使用通讯交换石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    },
+    {
+      "toPokedexId": 526,
+      "toName": "庞岩怪",
+      "condition": "使用通讯交换石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": null
+    }
+  ],
+  "527": [
+    {
+      "toPokedexId": 528,
+      "toName": "心蝙蝠",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "529": [
+    {
+      "toPokedexId": 530,
+      "toName": "龙头地鼠",
+      "condition": "等级31以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "532": [
+    {
+      "toPokedexId": 533,
+      "toName": "铁骨土人",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "533": [
+    {
+      "toPokedexId": 534,
+      "toName": "修建老匠",
+      "condition": "使用通讯交换石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    },
+    {
+      "toPokedexId": 534,
+      "toName": "修建老匠",
+      "condition": "使用通讯交换石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": null
+    }
+  ],
+  "535": [
+    {
+      "toPokedexId": 536,
+      "toName": "蓝蟾蜍",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "536": [
+    {
+      "toPokedexId": 537,
+      "toName": "蟾蜍王",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 537,
+      "toName": "蟾蜍王",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "540": [
+    {
+      "toPokedexId": 541,
+      "toName": "宝包茧",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "541": [
+    {
+      "toPokedexId": 542,
+      "toName": "保姆虫",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 542,
+      "toName": "保姆虫",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "543": [
+    {
+      "toPokedexId": 544,
+      "toName": "车轮球",
+      "condition": "等级22以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "544": [
+    {
+      "toPokedexId": 545,
+      "toName": "蜈蚣王",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 545,
+      "toName": "蜈蚣王",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "546": [
+    {
+      "toPokedexId": 547,
+      "toName": "风妖精",
+      "condition": "使用日之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "548": [
+    {
+      "toPokedexId": 549,
+      "toName": "裙儿小姐",
+      "condition": "使用日之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "550": [
+    {
+      "toPokedexId": 902,
+      "toName": "幽尾玄鱼",
+      "condition": "触发:recoil-damage",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": false
+    }
+  ],
+  "551": [
+    {
+      "toPokedexId": 552,
+      "toName": "混混鳄",
+      "condition": "等级29以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "552": [
+    {
+      "toPokedexId": 553,
+      "toName": "流氓鳄",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 553,
+      "toName": "流氓鳄",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "554": [
+    {
+      "toPokedexId": 555,
+      "toName": "达摩狒狒",
+      "condition": "使用冰之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "557": [
+    {
+      "toPokedexId": 558,
+      "toName": "岩殿居蟹",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "559": [
+    {
+      "toPokedexId": 560,
+      "toName": "头巾混混",
+      "condition": "等级39以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "562": [
+    {
+      "toPokedexId": 563,
+      "toName": "迭失棺",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 867,
+      "toName": "迭失板",
+      "condition": "触发:take-damage",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": false
+    }
+  ],
+  "564": [
+    {
+      "toPokedexId": 565,
+      "toName": "肋骨海龟",
+      "condition": "等级37以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "566": [
+    {
+      "toPokedexId": 567,
+      "toName": "始祖大鸟",
+      "condition": "等级37以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "568": [
+    {
+      "toPokedexId": 569,
+      "toName": "灰尘山",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "570": [
+    {
+      "toPokedexId": 571,
+      "toName": "索罗亚克",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "572": [
+    {
+      "toPokedexId": 573,
+      "toName": "奇诺栗鼠",
+      "condition": "使用光之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "574": [
+    {
+      "toPokedexId": 575,
+      "toName": "哥德小童",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "575": [
+    {
+      "toPokedexId": 576,
+      "toName": "哥德小姐",
+      "condition": "等级41以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 576,
+      "toName": "哥德小姐",
+      "condition": "等级41以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "577": [
+    {
+      "toPokedexId": 578,
+      "toName": "双卵细胞球",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "578": [
+    {
+      "toPokedexId": 579,
+      "toName": "人造细胞卵",
+      "condition": "等级41以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 579,
+      "toName": "人造细胞卵",
+      "condition": "等级41以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "580": [
+    {
+      "toPokedexId": 581,
+      "toName": "舞天鹅",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "582": [
+    {
+      "toPokedexId": 583,
+      "toName": "多多冰",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "583": [
+    {
+      "toPokedexId": 584,
+      "toName": "双倍多多冰",
+      "condition": "等级47以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 584,
+      "toName": "双倍多多冰",
+      "condition": "等级47以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "585": [
+    {
+      "toPokedexId": 586,
+      "toName": "萌芽鹿",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "588": [
+    {
+      "toPokedexId": 589,
+      "toName": "骑士蜗牛",
+      "condition": "使用通讯交换石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "590": [
+    {
+      "toPokedexId": 591,
+      "toName": "败露球菇",
+      "condition": "等级39以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "592": [
+    {
+      "toPokedexId": 593,
+      "toName": "胖嘟嘟",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "595": [
+    {
+      "toPokedexId": 596,
+      "toName": "电蜘蛛",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "597": [
+    {
+      "toPokedexId": 598,
+      "toName": "坚果哑铃",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "599": [
+    {
+      "toPokedexId": 600,
+      "toName": "齿轮组",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "600": [
+    {
+      "toPokedexId": 601,
+      "toName": "齿轮怪",
+      "condition": "等级49以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 601,
+      "toName": "齿轮怪",
+      "condition": "等级49以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "602": [
+    {
+      "toPokedexId": 603,
+      "toName": "麻麻鳗",
+      "condition": "等级39以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "603": [
+    {
+      "toPokedexId": 604,
+      "toName": "麻麻鳗鱼王",
+      "condition": "使用雷之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 604,
+      "toName": "麻麻鳗鱼王",
+      "condition": "使用雷之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "605": [
+    {
+      "toPokedexId": 606,
+      "toName": "大宇怪",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "607": [
+    {
+      "toPokedexId": 608,
+      "toName": "灯火幽灵",
+      "condition": "等级41以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "608": [
+    {
+      "toPokedexId": 609,
+      "toName": "水晶灯火灵",
+      "condition": "使用觉醒之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 609,
+      "toName": "水晶灯火灵",
+      "condition": "使用觉醒之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "610": [
+    {
+      "toPokedexId": 611,
+      "toName": "斧牙龙",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "611": [
+    {
+      "toPokedexId": 612,
+      "toName": "双斧战龙",
+      "condition": "等级48以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 612,
+      "toName": "双斧战龙",
+      "condition": "等级48以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "613": [
+    {
+      "toPokedexId": 614,
+      "toName": "冻原熊",
+      "condition": "等级37以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "616": [
+    {
+      "toPokedexId": 617,
+      "toName": "敏捷虫",
+      "condition": "使用通讯交换石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "619": [
+    {
+      "toPokedexId": 620,
+      "toName": "师父鼬",
+      "condition": "等级50以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "622": [
+    {
+      "toPokedexId": 623,
+      "toName": "泥偶巨人",
+      "condition": "等级43以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "624": [
+    {
+      "toPokedexId": 625,
+      "toName": "劈斩司令",
+      "condition": "等级52以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "625": [
+    {
+      "toPokedexId": 983,
+      "toName": "仆刀将军",
+      "condition": "触发:three-defeated-bisharp",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": false
+    },
+    {
+      "toPokedexId": 983,
+      "toName": "仆刀将军",
+      "condition": "触发:three-defeated-bisharp",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": false
+    }
+  ],
+  "627": [
+    {
+      "toPokedexId": 628,
+      "toName": "勇士雄鹰",
+      "condition": "等级54以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "629": [
+    {
+      "toPokedexId": 630,
+      "toName": "秃鹰娜",
+      "condition": "等级54以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "633": [
+    {
+      "toPokedexId": 634,
+      "toName": "双首暴龙",
+      "condition": "等级50以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "634": [
+    {
+      "toPokedexId": 635,
+      "toName": "三首恶龙",
+      "condition": "等级64以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 635,
+      "toName": "三首恶龙",
+      "condition": "等级64以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "636": [
+    {
+      "toPokedexId": 637,
+      "toName": "火神蛾",
+      "condition": "等级59以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "650": [
+    {
+      "toPokedexId": 651,
+      "toName": "胖胖哈力",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "651": [
+    {
+      "toPokedexId": 652,
+      "toName": "布里卡隆",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 652,
+      "toName": "布里卡隆",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "653": [
+    {
+      "toPokedexId": 654,
+      "toName": "长尾火狐",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "654": [
+    {
+      "toPokedexId": 655,
+      "toName": "妖火红狐",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 655,
+      "toName": "妖火红狐",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "656": [
+    {
+      "toPokedexId": 657,
+      "toName": "呱头蛙",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "657": [
+    {
+      "toPokedexId": 658,
+      "toName": "甲贺忍蛙",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 658,
+      "toName": "甲贺忍蛙",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "659": [
+    {
+      "toPokedexId": 660,
+      "toName": "掘地兔",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "661": [
+    {
+      "toPokedexId": 662,
+      "toName": "火箭雀",
+      "condition": "等级17以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "662": [
+    {
+      "toPokedexId": 663,
+      "toName": "烈箭鹰",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 663,
+      "toName": "烈箭鹰",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "664": [
+    {
+      "toPokedexId": 665,
+      "toName": "粉蝶蛹",
+      "condition": "等级9以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "665": [
+    {
+      "toPokedexId": 666,
+      "toName": "彩粉蝶",
+      "condition": "等级12以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 666,
+      "toName": "彩粉蝶",
+      "condition": "等级12以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "667": [
+    {
+      "toPokedexId": 668,
+      "toName": "火炎狮",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "669": [
+    {
+      "toPokedexId": 670,
+      "toName": "花叶蒂",
+      "condition": "等级19以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "670": [
+    {
+      "toPokedexId": 671,
+      "toName": "花洁夫人",
+      "condition": "使用光之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 671,
+      "toName": "花洁夫人",
+      "condition": "使用光之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "672": [
+    {
+      "toPokedexId": 673,
+      "toName": "坐骑山羊",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "674": [
+    {
+      "toPokedexId": 675,
+      "toName": "霸道熊猫",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "677": [
+    {
+      "toPokedexId": 678,
+      "toName": "超能妙喵",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "679": [
+    {
+      "toPokedexId": 680,
+      "toName": "双剑鞘",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "680": [
+    {
+      "toPokedexId": 681,
+      "toName": "坚盾剑怪",
+      "condition": "使用觉醒之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 681,
+      "toName": "坚盾剑怪",
+      "condition": "使用觉醒之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "682": [
+    {
+      "toPokedexId": 683,
+      "toName": "芳香精",
+      "condition": "使用香袋",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "684": [
+    {
+      "toPokedexId": 685,
+      "toName": "胖甜妮",
+      "condition": "使用奶油蛋糕",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "686": [
+    {
+      "toPokedexId": 687,
+      "toName": "乌贼王",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "688": [
+    {
+      "toPokedexId": 689,
+      "toName": "龟足巨铠",
+      "condition": "等级39以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "690": [
+    {
+      "toPokedexId": 691,
+      "toName": "毒藻龙",
+      "condition": "等级48以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "692": [
+    {
+      "toPokedexId": 693,
+      "toName": "钢炮臂虾",
+      "condition": "等级37以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "694": [
+    {
+      "toPokedexId": 695,
+      "toName": "光电伞蜥",
+      "condition": "使用日之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "696": [
+    {
+      "toPokedexId": 697,
+      "toName": "怪颚龙",
+      "condition": "等级39以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "698": [
+    {
+      "toPokedexId": 699,
+      "toName": "冰雪巨龙",
+      "condition": "等级39以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "704": [
+    {
+      "toPokedexId": 705,
+      "toName": "黏美儿",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "705": [
+    {
+      "toPokedexId": 706,
+      "toName": "黏美龙",
+      "condition": "等级50以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 706,
+      "toName": "黏美龙",
+      "condition": "等级50以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "708": [
+    {
+      "toPokedexId": 709,
+      "toName": "朽木妖",
+      "condition": "使用通讯交换石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "710": [
+    {
+      "toPokedexId": 711,
+      "toName": "南瓜怪人",
+      "condition": "使用通讯交换石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "712": [
+    {
+      "toPokedexId": 713,
+      "toName": "冰岩怪",
+      "condition": "等级37以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "714": [
+    {
+      "toPokedexId": 715,
+      "toName": "音波龙",
+      "condition": "等级48以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "722": [
+    {
+      "toPokedexId": 723,
+      "toName": "投羽枭",
+      "condition": "等级17以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "723": [
+    {
+      "toPokedexId": 724,
+      "toName": "狙射树枭",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 724,
+      "toName": "狙射树枭",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "725": [
+    {
+      "toPokedexId": 726,
+      "toName": "炎热喵",
+      "condition": "等级17以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "726": [
+    {
+      "toPokedexId": 727,
+      "toName": "炽焰咆哮虎",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 727,
+      "toName": "炽焰咆哮虎",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "728": [
+    {
+      "toPokedexId": 729,
+      "toName": "花漾海狮",
+      "condition": "等级17以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "729": [
+    {
+      "toPokedexId": 730,
+      "toName": "西狮海壬",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 730,
+      "toName": "西狮海壬",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "731": [
+    {
+      "toPokedexId": 732,
+      "toName": "喇叭啄鸟",
+      "condition": "等级14以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "732": [
+    {
+      "toPokedexId": 733,
+      "toName": "铳嘴大鸟",
+      "condition": "等级28以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 733,
+      "toName": "铳嘴大鸟",
+      "condition": "等级28以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "734": [
+    {
+      "toPokedexId": 735,
+      "toName": "猫鼬探长",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "736": [
+    {
+      "toPokedexId": 737,
+      "toName": "虫电宝",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "737": [
+    {
+      "toPokedexId": 738,
+      "toName": "锹农炮虫",
+      "condition": "使用雷之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 738,
+      "toName": "锹农炮虫",
+      "condition": "使用雷之石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "739": [
+    {
+      "toPokedexId": 740,
+      "toName": "好胜毛蟹",
+      "condition": "使用冰之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "742": [
+    {
+      "toPokedexId": 743,
+      "toName": "蝶结萌虻",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "744": [
+    {
+      "toPokedexId": 745,
+      "toName": "鬃岩狼人",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "747": [
+    {
+      "toPokedexId": 748,
+      "toName": "超坏星",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "749": [
+    {
+      "toPokedexId": 750,
+      "toName": "重泥挽马",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "751": [
+    {
+      "toPokedexId": 752,
+      "toName": "滴蛛霸",
+      "condition": "等级22以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "753": [
+    {
+      "toPokedexId": 754,
+      "toName": "兰螳花",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "755": [
+    {
+      "toPokedexId": 756,
+      "toName": "灯罩夜菇",
+      "condition": "等级24以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "757": [
+    {
+      "toPokedexId": 758,
+      "toName": "焰后蜥",
+      "condition": "等级33以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "759": [
+    {
+      "toPokedexId": 760,
+      "toName": "穿着熊",
+      "condition": "等级27以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "761": [
+    {
+      "toPokedexId": 762,
+      "toName": "甜舞妮",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "762": [
+    {
+      "toPokedexId": 763,
+      "toName": "甜冷美后",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    },
+    {
+      "toPokedexId": 763,
+      "toName": "甜冷美后",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": null
+    }
+  ],
+  "767": [
+    {
+      "toPokedexId": 768,
+      "toName": "具甲武者",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "769": [
+    {
+      "toPokedexId": 770,
+      "toName": "噬沙堡爷",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "772": [
+    {
+      "toPokedexId": 773,
+      "toName": "银伴战兽",
+      "condition": "高亲密度",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "782": [
+    {
+      "toPokedexId": 783,
+      "toName": "鳞甲龙",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "783": [
+    {
+      "toPokedexId": 784,
+      "toName": "杖尾鳞甲龙",
+      "condition": "等级45以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 784,
+      "toName": "杖尾鳞甲龙",
+      "condition": "等级45以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "789": [
+    {
+      "toPokedexId": 790,
+      "toName": "科斯莫姆",
+      "condition": "等级43以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "790": [
+    {
+      "toPokedexId": 791,
+      "toName": "索尔迦雷欧",
+      "condition": "等级53以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 792,
+      "toName": "露奈雅拉",
+      "condition": "等级53以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 791,
+      "toName": "索尔迦雷欧",
+      "condition": "等级53以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 792,
+      "toName": "露奈雅拉",
+      "condition": "等级53以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "803": [
+    {
+      "toPokedexId": 804,
+      "toName": "四颚针龙",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "810": [
+    {
+      "toPokedexId": 811,
+      "toName": "啪咚猴",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "811": [
+    {
+      "toPokedexId": 812,
+      "toName": "轰擂金刚猩",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 812,
+      "toName": "轰擂金刚猩",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "813": [
+    {
+      "toPokedexId": 814,
+      "toName": "腾蹴小将",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "814": [
+    {
+      "toPokedexId": 815,
+      "toName": "闪焰王牌",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 815,
+      "toName": "闪焰王牌",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "816": [
+    {
+      "toPokedexId": 817,
+      "toName": "变涩蜥",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "817": [
+    {
+      "toPokedexId": 818,
+      "toName": "千面避役",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 818,
+      "toName": "千面避役",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "819": [
+    {
+      "toPokedexId": 820,
+      "toName": "藏饱栗鼠",
+      "condition": "等级24以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "821": [
+    {
+      "toPokedexId": 822,
+      "toName": "蓝鸦",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "822": [
+    {
+      "toPokedexId": 823,
+      "toName": "钢铠鸦",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 823,
+      "toName": "钢铠鸦",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "824": [
+    {
+      "toPokedexId": 825,
+      "toName": "天罩虫",
+      "condition": "等级10以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "825": [
+    {
+      "toPokedexId": 826,
+      "toName": "以欧路普",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 826,
+      "toName": "以欧路普",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "827": [
+    {
+      "toPokedexId": 828,
+      "toName": "猾大狐",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "829": [
+    {
+      "toPokedexId": 830,
+      "toName": "白蓬蓬",
+      "condition": "等级20以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "831": [
+    {
+      "toPokedexId": 832,
+      "toName": "毛毛角羊",
+      "condition": "等级24以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "833": [
+    {
+      "toPokedexId": 834,
+      "toName": "暴噬龟",
+      "condition": "等级22以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "835": [
+    {
+      "toPokedexId": 836,
+      "toName": "逐电犬",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "837": [
+    {
+      "toPokedexId": 838,
+      "toName": "大炭车",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "838": [
+    {
+      "toPokedexId": 839,
+      "toName": "巨炭山",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 839,
+      "toName": "巨炭山",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "840": [
+    {
+      "toPokedexId": 841,
+      "toName": "苹裹龙",
+      "condition": "使用酸酸苹果",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 842,
+      "toName": "丰蜜龙",
+      "condition": "使用甜甜苹果",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 1011,
+      "toName": "裹蜜虫",
+      "condition": "使用syrupy-apple",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "843": [
+    {
+      "toPokedexId": 844,
+      "toName": "沙螺蟒",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "846": [
+    {
+      "toPokedexId": 847,
+      "toName": "戽斗尖梭",
+      "condition": "等级26以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "848": [
+    {
+      "toPokedexId": 849,
+      "toName": "颤弦蝾螈",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "850": [
+    {
+      "toPokedexId": 851,
+      "toName": "焚焰蚣",
+      "condition": "等级28以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "852": [
+    {
+      "toPokedexId": 853,
+      "toName": "八爪武师",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "854": [
+    {
+      "toPokedexId": 855,
+      "toName": "怖思壶",
+      "condition": "使用破裂的壶",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "856": [
+    {
+      "toPokedexId": 857,
+      "toName": "提布莉姆",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "857": [
+    {
+      "toPokedexId": 858,
+      "toName": "布莉姆温",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 858,
+      "toName": "布莉姆温",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "859": [
+    {
+      "toPokedexId": 860,
+      "toName": "诈唬魔",
+      "condition": "等级32以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "860": [
+    {
+      "toPokedexId": 861,
+      "toName": "长毛巨魔",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 861,
+      "toName": "长毛巨魔",
+      "condition": "等级42以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "868": [
+    {
+      "toPokedexId": 869,
+      "toName": "霜奶仙",
+      "condition": "触发:spin",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": false
+    }
+  ],
+  "872": [
+    {
+      "toPokedexId": 873,
+      "toName": "雪绒蛾",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "878": [
+    {
+      "toPokedexId": 879,
+      "toName": "大王铜象",
+      "condition": "等级34以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "884": [
+    {
+      "toPokedexId": 1018,
+      "toName": "铝钢桥龙",
+      "condition": "使用metal-alloy",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "885": [
+    {
+      "toPokedexId": 886,
+      "toName": "多龙奇",
+      "condition": "等级50以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "886": [
+    {
+      "toPokedexId": 887,
+      "toName": "多龙巴鲁托",
+      "condition": "等级60以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 887,
+      "toName": "多龙巴鲁托",
+      "condition": "等级60以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "891": [
+    {
+      "toPokedexId": 892,
+      "toName": "武道熊师",
+      "condition": "使用scroll-of-darkness",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "906": [
+    {
+      "toPokedexId": 907,
+      "toName": "蒂蕾喵",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "907": [
+    {
+      "toPokedexId": 908,
+      "toName": "魔幻假面喵",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 908,
+      "toName": "魔幻假面喵",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "909": [
+    {
+      "toPokedexId": 910,
+      "toName": "炙烫鳄",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "910": [
+    {
+      "toPokedexId": 911,
+      "toName": "骨纹巨声鳄",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 911,
+      "toName": "骨纹巨声鳄",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "912": [
+    {
+      "toPokedexId": 913,
+      "toName": "涌跃鸭",
+      "condition": "等级16以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "913": [
+    {
+      "toPokedexId": 914,
+      "toName": "狂欢浪舞鸭",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 914,
+      "toName": "狂欢浪舞鸭",
+      "condition": "等级36以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "915": [
+    {
+      "toPokedexId": 916,
+      "toName": "飘香豚",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "917": [
+    {
+      "toPokedexId": 918,
+      "toName": "操陷蛛",
+      "condition": "等级15以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "919": [
+    {
+      "toPokedexId": 920,
+      "toName": "烈腿蝗",
+      "condition": "等级24以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "921": [
+    {
+      "toPokedexId": 922,
+      "toName": "布土拨",
+      "condition": "等级18以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "922": [
+    {
+      "toPokedexId": 923,
+      "toName": "巴布土拨",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    },
+    {
+      "toPokedexId": 923,
+      "toName": "巴布土拨",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": null
+    }
+  ],
+  "924": [
+    {
+      "toPokedexId": 925,
+      "toName": "一家鼠",
+      "condition": "触发:other",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": false
+    }
+  ],
+  "926": [
+    {
+      "toPokedexId": 927,
+      "toName": "麻花犬",
+      "condition": "等级26以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "928": [
+    {
+      "toPokedexId": 929,
+      "toName": "奥利纽",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "929": [
+    {
+      "toPokedexId": 930,
+      "toName": "奥利瓦",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 930,
+      "toName": "奥利瓦",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "932": [
+    {
+      "toPokedexId": 933,
+      "toName": "盐石垒",
+      "condition": "等级24以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "933": [
+    {
+      "toPokedexId": 934,
+      "toName": "盐石巨灵",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 934,
+      "toName": "盐石巨灵",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "935": [
+    {
+      "toPokedexId": 936,
+      "toName": "红莲铠骑",
+      "condition": "使用吉利之铠",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 937,
+      "toName": "苍炎刃鬼",
+      "condition": "使用凶兆之铠",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "938": [
+    {
+      "toPokedexId": 939,
+      "toName": "电肚蛙",
+      "condition": "使用雷之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "940": [
+    {
+      "toPokedexId": 941,
+      "toName": "大电海燕",
+      "condition": "等级25以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "942": [
+    {
+      "toPokedexId": 943,
+      "toName": "獒教父",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "944": [
+    {
+      "toPokedexId": 945,
+      "toName": "涂标客",
+      "condition": "等级28以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "946": [
+    {
+      "toPokedexId": 947,
+      "toName": "怖纳噬草",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "948": [
+    {
+      "toPokedexId": 949,
+      "toName": "陆地水母",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "951": [
+    {
+      "toPokedexId": 952,
+      "toName": "狠辣椒",
+      "condition": "使用火之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "953": [
+    {
+      "toPokedexId": 954,
+      "toName": "虫甲圣",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    }
+  ],
+  "955": [
+    {
+      "toPokedexId": 956,
+      "toName": "超能艳鸵",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "957": [
+    {
+      "toPokedexId": 958,
+      "toName": "巧锻匠",
+      "condition": "等级24以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "958": [
+    {
+      "toPokedexId": 959,
+      "toName": "巨锻匠",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 959,
+      "toName": "巨锻匠",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "960": [
+    {
+      "toPokedexId": 961,
+      "toName": "三海地鼠",
+      "condition": "等级26以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "963": [
+    {
+      "toPokedexId": 964,
+      "toName": "海豚侠",
+      "condition": "等级38以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "965": [
+    {
+      "toPokedexId": 966,
+      "toName": "普隆隆姆",
+      "condition": "等级40以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "969": [
+    {
+      "toPokedexId": 970,
+      "toName": "晶光花",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "971": [
+    {
+      "toPokedexId": 972,
+      "toName": "墓扬犬",
+      "condition": "等级30以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "974": [
+    {
+      "toPokedexId": 975,
+      "toName": "浩大鲸",
+      "condition": "使用冰之石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "996": [
+    {
+      "toPokedexId": 997,
+      "toName": "冻脊龙",
+      "condition": "等级35以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    }
+  ],
+  "997": [
+    {
+      "toPokedexId": 998,
+      "toName": "戟脊龙",
+      "condition": "等级54以上",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
+    },
+    {
+      "toPokedexId": 998,
+      "toName": "戟脊龙",
+      "condition": "等级54以上",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": true
+    }
+  ],
+  "999": [
+    {
+      "toPokedexId": 1000,
+      "toName": "赛富豪",
+      "condition": "触发:gimmighoul-coins",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": false
+    }
+  ],
+  "1011": [
+    {
+      "toPokedexId": 1019,
+      "toName": "蜜集大蛇",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": null
+    },
+    {
+      "toPokedexId": 1019,
+      "toName": "蜜集大蛇",
+      "condition": "使用亲密度进化石",
+      "toFormName": null,
+      "fromStage": 1,
+      "toStage": 2,
+      "implemented": null
+    }
+  ],
+  "1012": [
+    {
+      "toPokedexId": 1013,
+      "toName": "来悲粗茶",
+      "condition": "使用unremarkable-teacup",
+      "toFormName": null,
+      "fromStage": 0,
+      "toStage": 1,
+      "implemented": true
     }
   ]
 }
