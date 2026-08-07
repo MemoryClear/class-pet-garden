@@ -284,8 +284,35 @@
           <span>💰 我的积分: {{ myInfo.food }}</span>
           <span class="shop-bal" style="margin-left:12px">⚪ 精灵球: {{ myInfo.pokemonBalls || 0 }}</span>
         </div>
-        <div class="shop-grid">
-          <div v-for="item in shopItems" :key="item.id" class="shop-item">
+
+        <!-- 搜索 + 分类筛选 -->
+        <div v-if="shopItems.length > 0" class="shop-filter">
+          <input
+            v-model="shopSearchKeyword"
+            type="text"
+            class="shop-search-input"
+            placeholder="🔍 搜索道具..."
+          />
+          <div class="shop-cat-tabs">
+            <button :class="['shop-cat', { active: shopCategoryFilter === 'all' }]" @click="shopCategoryFilter = 'all'">全部</button>
+            <button :class="['shop-cat', { active: shopCategoryFilter === 'decoration' }]" @click="shopCategoryFilter = 'decoration'">🎀 装饰</button>
+            <button :class="['shop-cat', { active: shopCategoryFilter === 'evolution_item' }]" @click="shopCategoryFilter = 'evolution_item'">✨ 进化石</button>
+            <button :class="['shop-cat', { active: shopCategoryFilter === 'pet_change_card' }]" @click="shopCategoryFilter = 'pet_change_card'">🔄 更换卡</button>
+            <button :class="['shop-cat', { active: shopCategoryFilter === 'pokemon_ball' }]" @click="shopCategoryFilter = 'pokemon_ball'">⚪ 精灵球</button>
+            <button :class="['shop-cat', { active: shopCategoryFilter === 'affordable' }]" @click="shopCategoryFilter = 'affordable'">💰 买得起</button>
+          </div>
+          <div v-if="shopSearchKeyword || shopCategoryFilter !== 'all'" class="shop-filter-summary">
+            匹配 {{ filteredShopItems.length }} / {{ shopItems.length }} 件
+            <button class="shop-clear-filter" @click="clearShopFilters">✕ 清空</button>
+          </div>
+        </div>
+
+        <div v-if="filteredShopItems.length === 0" class="shop-empty">
+          🔍 没有匹配的商品
+        </div>
+
+        <div v-else class="shop-grid">
+          <div v-for="item in filteredShopItems" :key="item.id" class="shop-item">
             <span class="item-icon">{{ item.icon }}</span>
             <span class="item-name">{{ item.name }}</span>
             <span class="item-price">{{ item.price }}分</span>
@@ -541,6 +568,27 @@ async function confirmGift(mate) {
 }
 const petLibraryTab = ref('pet') // 'pet' | 'pokemon'
 const shopItems = ref([])
+const shopSearchKeyword = ref('')
+const shopCategoryFilter = ref('all')
+
+const filteredShopItems = computed(() => {
+  let list = shopItems.value
+  if (shopCategoryFilter.value === 'affordable') {
+    list = list.filter(i => myInfo.food >= i.price)
+  } else if (shopCategoryFilter.value !== 'all') {
+    list = list.filter(i => (i.itemType || 'decoration') === shopCategoryFilter.value)
+  }
+  const kw = shopSearchKeyword.value.trim().toLowerCase()
+  if (kw) {
+    list = list.filter(i => (i.name || '').toLowerCase().includes(kw))
+  }
+  return list
+})
+
+const clearShopFilters = () => {
+  shopSearchKeyword.value = ''
+  shopCategoryFilter.value = 'all'
+}
 const recordTab = ref('score')
 const scoreHistory = ref([])
 const exchangeHistory = ref([])
@@ -1100,6 +1148,72 @@ onMounted(async () => {
 .lb-score { font-weight: 600; color: #ff6b9d; }
 
 .shop-header { margin-bottom: 16px; font-size: 1.1rem; font-weight: 600; }
+.shop-filter {
+  background: white;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.1);
+}
+.shop-search-input {
+  width: 100%;
+  padding: 7px 14px;
+  border: 2px solid #fbbf24;
+  border-radius: 18px;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+.shop-search-input:focus {
+  border-color: #ea580c;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+}
+.shop-cat-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.shop-cat {
+  padding: 4px 10px;
+  border: 1px solid #fbbf24;
+  background: white;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #92400e;
+}
+.shop-cat.active {
+  background: linear-gradient(135deg, #f59e0b, #ea580c);
+  color: white;
+  border-color: #ea580c;
+  font-weight: 600;
+}
+.shop-filter-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #92400e;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed #fde68a;
+}
+.shop-clear-filter {
+  background: none;
+  border: none;
+  color: #b45309;
+  cursor: pointer;
+  font-size: 11px;
+  text-decoration: underline;
+}
+.shop-empty {
+  text-align: center;
+  padding: 30px;
+  color: #92400e;
+  font-size: 14px;
+}
+
 .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
 .shop-item { background: #fafafa; border-radius: 12px; padding: 14px; text-align: center; }
 .item-icon { font-size: 28px; display: block; margin-bottom: 6px; }

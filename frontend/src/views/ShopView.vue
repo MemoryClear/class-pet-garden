@@ -28,13 +28,37 @@
         ➕ 添加商品
       </button>
 
-      <!-- 商品卡片 -->
-      <div v-if="items.length === 0" class="empty-tip">
-        暂无商品，点击"添加商品"创建第一个商品
+      <!-- 搜索 + 分类筛选 -->
+    <div v-if="items.length > 0" class="filter-bar">
+      <input
+        v-model="searchKeyword"
+        type="text"
+        class="search-input"
+        placeholder="🔍 搜索商品名称或描述..."
+      />
+      <div class="category-tabs">
+        <button :class="['cat-tab', { active: categoryFilter === 'all' }]" @click="categoryFilter = 'all'">全部</button>
+        <button :class="['cat-tab', { active: categoryFilter === 'decoration' }]" @click="categoryFilter = 'decoration'">🎀 装饰</button>
+        <button :class="['cat-tab', { active: categoryFilter === 'evolution_item' }]" @click="categoryFilter = 'evolution_item'">✨ 进化道具</button>
+        <button :class="['cat-tab', { active: categoryFilter === 'pet_change_card' }]" @click="categoryFilter = 'pet_change_card'">🔄 更换卡</button>
+        <button :class="['cat-tab', { active: categoryFilter === 'pokemon_ball' }]" @click="categoryFilter = 'pokemon_ball'">⚪ 精灵球</button>
       </div>
-      
-      <div v-else class="items-grid">
-        <div v-for="item in items" :key="item.id" class="item-card">
+      <div class="filter-summary" v-if="searchKeyword || categoryFilter !== 'all'">
+        <span class="match-count">匹配 {{ filteredItems.length }} / {{ items.length }} 件</span>
+        <button class="clear-filter" @click="clearFilters">✕ 清空筛选</button>
+      </div>
+    </div>
+
+    <!-- 商品卡片 -->
+    <div v-if="items.length === 0" class="empty-tip">
+      暂无商品，点击"添加商品"创建第一个商品
+    </div>
+    <div v-else-if="filteredItems.length === 0" class="empty-tip">
+      没有匹配的商品
+    </div>
+
+    <div v-else class="items-grid">
+      <div v-for="item in filteredItems" :key="item.id" class="item-card">
           <div class="item-icon">{{ item.icon }}</div>
           <div class="item-name">{{ item.name }}</div>
           <div class="item-desc" v-if="item.description">{{ item.description }}</div>
@@ -130,7 +154,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/index.js'
 import $confirm from '../composables/useConfirmModal.js'
@@ -222,6 +246,27 @@ const itemTypeLabel = (type) => {
   return labels[type] || '装饰'
 }
 
+const searchKeyword = ref('')
+const categoryFilter = ref('all')
+
+const filteredItems = computed(() => {
+  let list = items.value
+  if (categoryFilter.value !== 'all') {
+    list = list.filter(i => (i.itemType || 'decoration') === categoryFilter.value)
+  }
+  const kw = searchKeyword.value.trim().toLowerCase()
+  if (kw) {
+    list = list.filter(i => (i.name || '').toLowerCase().includes(kw) ||
+                             (i.description || '').toLowerCase().includes(kw))
+  }
+  return list
+})
+
+const clearFilters = () => {
+  searchKeyword.value = ''
+  categoryFilter.value = 'all'
+}
+
 watch(activeTab, (tab) => {
   if (tab === 'items') fetchItems()
   else if (tab === 'records') fetchRecords()
@@ -237,6 +282,72 @@ onMounted(() => {
   min-height: 100vh;
   padding: 20px;
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+
+.filter-bar {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.1);
+}
+.search-input {
+  width: 100%;
+  padding: 8px 14px;
+  border: 2px solid #fbbf24;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+.search-input:focus {
+  border-color: #ea580c;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+}
+.category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cat-tab {
+  padding: 5px 12px;
+  border: 1px solid #fbbf24;
+  background: white;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #92400e;
+  transition: all 0.15s;
+}
+.cat-tab:hover {
+  background: #fef3c7;
+}
+.cat-tab.active {
+  background: linear-gradient(135deg, #f59e0b, #ea580c);
+  color: white;
+  border-color: #ea580c;
+  font-weight: 600;
+}
+.filter-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #92400e;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed #fde68a;
+}
+.match-count { font-weight: 600; }
+.clear-filter {
+  background: none;
+  border: none;
+  color: #b45309;
+  cursor: pointer;
+  font-size: 12px;
+  text-decoration: underline;
+  padding: 0;
+}
 }
 
 .header-bar {

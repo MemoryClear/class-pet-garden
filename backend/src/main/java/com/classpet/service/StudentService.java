@@ -1182,8 +1182,13 @@ public class StudentService {
                 .filter(o -> {
                     String cond = o.getCondition();
                     if (cond == null) return false;
-                    // condition 格式如 "使用水之石" 或 "使用火之石" 或 "连接交换 ；使用联系绳"
-                    return cond.contains(itemKey);
+                    // 1) condition 包含道具名（标准匹配）："使用水之石"、"连接交换 ；使用联系绳"
+                    if (cond.contains(itemKey)) return true;
+                    // 2) 亲密度进化石 特殊匹配：所有 condition 含"亲密度"/"友好"/"高亲密度" 的规则
+                    if ("亲密度进化石".equals(itemKey) && (cond.contains("亲密度") || cond.contains("友好"))) {
+                        return true;
+                    }
+                    return false;
                 })
                 .toList();
         

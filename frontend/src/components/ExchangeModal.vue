@@ -23,6 +23,27 @@
         <button :class="{ active: viewTab === 'mine' }" @click="viewTab = 'mine'">🎒 我的道具</button>
       </div>
 
+      <!-- 搜索 + 分类筛选 (仅全部商品时显示) -->
+      <div v-if="step === 'select' && viewTab === 'all'" class="filter-bar">
+        <input
+          v-model="searchKeyword"
+          type="text"
+          class="search-input"
+          placeholder="🔍 搜索道具名称..."
+        />
+        <div class="category-tabs">
+          <button :class="['cat-tab', { active: categoryFilter === 'all' }]" @click="categoryFilter = 'all'">全部</button>
+          <button :class="['cat-tab', { active: categoryFilter === 'decoration' }]" @click="categoryFilter = 'decoration'">🎀 装饰</button>
+          <button :class="['cat-tab', { active: categoryFilter === 'evolution_item' }]" @click="categoryFilter = 'evolution_item'">✨ 进化石</button>
+          <button :class="['cat-tab', { active: categoryFilter === 'pet_change_card' }]" @click="categoryFilter = 'pet_change_card'">🔄 其他</button>
+          <button :class="['cat-tab', { active: categoryFilter === 'affordable' }]" @click="categoryFilter = 'affordable'">💰 买得起</button>
+        </div>
+        <div class="filter-summary" v-if="searchKeyword || categoryFilter !== 'all'">
+          <span class="match-count">匹配 {{ filteredItems.length }} / {{ items.length }} 件</span>
+          <button class="clear-filter" @click="clearFilters">✕ 清空筛选</button>
+        </div>
+      </div>
+
       <!-- 商品选择 -->
       <div v-if="step === 'select'">
         <!-- 错误提示 -->
@@ -78,10 +99,15 @@
             <p>商品列表为空</p>
             <p class="sub">去设置页添加商品吧~</p>
           </div>
+          <div v-else-if="filteredItems.length === 0" class="empty-inventory">
+            <div class="empty-icon">🔍</div>
+            <p>没有匹配的商品</p>
+            <p class="sub">试试别的搜索词或筛选条件</p>
+          </div>
           <div v-else class="items-container">
             <div class="items-grid">
             <div
-              v-for="item in items"
+              v-for="item in filteredItems"
               :key="item.id"
               :class="['item-card', { selected: selected?.id === item.id, disabled: student.food < item.price || item.stock <= 0 }]"
               @click="selectItem(item)"
@@ -181,6 +207,27 @@ const step = ref('select') // select | equip | done
 const equippedDone = ref(false)
 
 const viewTab = ref('all') // all | mine
+const searchKeyword = ref('')
+const categoryFilter = ref('all') // all | decoration | evolution_item | pet_change_card | affordable
+
+const filteredItems = computed(() => {
+  let list = items.value
+  if (categoryFilter.value === 'affordable') {
+    list = list.filter(i => props.student.food >= i.price)
+  } else if (categoryFilter.value !== 'all') {
+    list = list.filter(i => (i.itemType || 'decoration') === categoryFilter.value)
+  }
+  const kw = searchKeyword.value.trim().toLowerCase()
+  if (kw) {
+    list = list.filter(i => (i.name || '').toLowerCase().includes(kw))
+  }
+  return list
+})
+
+const clearFilters = () => {
+  searchKeyword.value = ''
+  categoryFilter.value = 'all'
+}
 const equippingId = ref(null)
 
 // 赠送相关
@@ -382,6 +429,80 @@ onMounted(async () => {
 }
 .tab-bar button.active {
   background: #f59e0b; color: white; font-weight: bold;
+}
+
+/* 搜索 + 分类筛选 */
+.filter-bar {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: #fffbeb;
+  border-radius: 10px;
+  border: 1px solid #fde68a;
+}
+.search-input {
+  width: 100%;
+  padding: 7px 12px;
+  border: 1px solid #f59e0b;
+  border-radius: 18px;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+  background: white;
+  margin-bottom: 8px;
+}
+.search-input:focus {
+  border-color: #d97706;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+.category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.cat-tab {
+  padding: 4px 10px;
+  border: 1px solid #fbbf24;
+  background: white;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #92400e;
+  transition: all 0.15s;
+}
+.cat-tab:hover {
+  background: #fef3c7;
+}
+.cat-tab.active {
+  background: linear-gradient(135deg, #f59e0b, #ea580c);
+  color: white;
+  border-color: #ea580c;
+  font-weight: 600;
+}
+.filter-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #92400e;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed #fde68a;
+}
+.match-count {
+  font-weight: 600;
+}
+.clear-filter {
+  background: none;
+  border: none;
+  color: #b45309;
+  cursor: pointer;
+  font-size: 11px;
+  text-decoration: underline;
+  padding: 0;
+}
+.clear-filter:hover {
+  color: #92400e;
 }
 
 .owned-badge {
