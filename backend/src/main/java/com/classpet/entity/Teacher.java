@@ -31,6 +31,9 @@ public class Teacher {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    /** 是否将本班加入到公开看板（无需登录可见的排行榜页） */
+    private boolean showOnBoard = false;
+
     public Teacher() {}
     public Teacher(String username, String password) {
         this.username = username;
@@ -55,4 +58,6 @@ public class Teacher {
     public void setActivateCode(String activateCode) { this.activateCode = activateCode; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public boolean isShowOnBoard() { return showOnBoard; }
+    public void setShowOnBoard(boolean showOnBoard) { this.showOnBoard = showOnBoard; }
 }

@@ -168,7 +168,7 @@ public class StudentController {
             @AuthenticationPrincipal AuthenticatedUser principal,
             @RequestBody StudentDto.ScoreRequest req) {
         try {
-            return ResponseEntity.ok(studentService.applyScore(id, principal.teacherId(), req.scoreItemId));
+            return ResponseEntity.ok(studentService.applyScore(id, principal.teacherId(), req.scoreItemId, req.multiplier));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }

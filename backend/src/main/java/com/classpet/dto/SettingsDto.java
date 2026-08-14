@@ -5,5 +5,6 @@ public class SettingsDto {
         public String systemName;
         public String className;
         public String theme;
+        public Boolean showOnBoard;
     }
 }

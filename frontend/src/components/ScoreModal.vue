@@ -92,13 +92,11 @@ async function applyScore(item) {
   try {
     const mult = effectiveMultiplier.value
     const totalPoint = item.point * mult
-    // 调用多次（后端每次加 item.point）
-    for (let i = 0; i < mult; i++) {
-      await appStore.applyScore(props.student.id, item.id)
-    }
+    // 后端一次调用（point = item.point × mult），仅插一条聚合记录
+    await appStore.applyScore(props.student.id, item.id, mult)
     // 显示成功提示
     const action = item.point > 0 ? '加分' : '减分'
-    successMsg.value = `${item.name} ${action} ${Math.abs(totalPoint)} 分`
+    successMsg.value = `${item.name}${mult >= 2 ? '×' + mult : ''} ${action} ${Math.abs(totalPoint)} 分`
     setTimeout(() => { successMsg.value = null }, 2000)
   } catch (e) {
     console.error('评分失败', e)

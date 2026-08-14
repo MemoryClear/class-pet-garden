@@ -375,19 +375,27 @@ public class StudentService {
     }
 
     @Transactional
-    public Student applyScore(String studentId, String teacherId, String scoreItemId) {
+    public Student applyScore(String studentId, String teacherId, String scoreItemId, Integer multiplier) {
         Student stu = findByIdAndTeacherId(studentId, teacherId);
         Optional<ScoreItem> item = scoreItemRepository.findById(scoreItemId);
-        int delta = item.map(ScoreItem::getPoint).orElse(1);
-        stu.setFood(Math.max(0, stu.getFood() + delta));
+        int basePoint = item.map(ScoreItem::getPoint).orElse(1);
+        // 倍数：默认 1，上限 100。倍数>=2 时记录名后缀"×N"，point 为聚合总分
+        int mult = (multiplier == null || multiplier < 1) ? 1 : Math.min(multiplier, 100);
+        int totalPoint = basePoint * mult;
+        stu.setFood(Math.max(0, stu.getFood() + totalPoint));
         studentRepository.save(stu);
 
-        // 写入历史记录
+        String itemName = item.map(ScoreItem::getName).orElse("手动加分");
+        String itemIcon = item.map(ScoreItem::getIcon).orElse("✏️");
+        if (mult >= 2) {
+            itemName = itemName + "×" + mult;
+        }
+
+        // 写入历史记录（一条聚合记录）
         ScoreHistory history = new ScoreHistory(
             stu.getId(), stu.getName(),
-            item.map(ScoreItem::getName).orElse("手动加分"),
-            item.map(ScoreItem::getIcon).orElse("✏️"),
-            delta, teacherId
+            itemName, itemIcon,
+            totalPoint, teacherId
         );
         scoreHistoryRepository.save(history);
 

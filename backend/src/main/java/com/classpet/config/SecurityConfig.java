@@ -25,7 +25,7 @@ public class SecurityConfig {
     private static final String[] SPA_ROUTES = {
         "/", "/home", "/activate", "/history",
         "/exchange-history", "/leaderboard", "/shop", "/settings",
-        "/student-home", "/classroom", "/pokemon-pool"
+        "/student-home", "/classroom", "/pokemon-pool", "/board"
     };
 
     @Autowired
@@ -59,6 +59,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/student/classroom-config").permitAll()
                 .requestMatchers("/api/tts").permitAll()
                 .requestMatchers("/api/features").permitAll()
+                // 公开看板（无需登录）：教师班级维度
+                .requestMatchers("/api/board/teachers", "/api/board/teachers/*",
+                        "/api/board/teachers/*/leaderboard",
+                        "/api/board/teachers/*/students/*/records").permitAll()
                 .requestMatchers("/error").permitAll()
                 // All other API endpoints require authentication
                 .anyRequest().authenticated()

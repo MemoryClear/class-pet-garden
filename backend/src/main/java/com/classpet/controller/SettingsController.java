@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -22,7 +23,6 @@ public class SettingsController {
     @GetMapping
     public ResponseEntity<?> getSettings(@AuthenticationPrincipal AuthenticatedUser principal) {
         if (principal == null) {
-            // Return a minimal public config for unauthenticated requests (login page)
             return ResponseEntity.ok(Map.of(
                     "systemName", "课堂宠物乐园",
                     "className", "",
@@ -31,12 +31,7 @@ public class SettingsController {
             ));
         }
         return authService.findById(principal.teacherId())
-                .map(t -> ResponseEntity.ok(Map.of(
-                        "systemName", t.getSystemName(),
-                        "className", t.getClassName(),
-                        "theme", t.getTheme(),
-                        "activated", t.isActivated()
-                )))
+                .map(t -> ResponseEntity.ok(toMap(t)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -52,13 +47,20 @@ public class SettingsController {
                     if (req.systemName != null && !req.systemName.isBlank()) t.setSystemName(req.systemName);
                     if (req.className != null && !req.className.isBlank()) t.setClassName(req.className);
                     if (req.theme != null && !req.theme.isBlank()) t.setTheme(req.theme);
+                    if (req.showOnBoard != null) t.setShowOnBoard(req.showOnBoard);
                     Teacher saved = authService.save(t);
-                    return ResponseEntity.ok(Map.of(
-                            "systemName", saved.getSystemName(),
-                            "className", saved.getClassName(),
-                            "theme", saved.getTheme()
-                    ));
+                    return ResponseEntity.ok(toMap(saved));
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    private Map<String, Object> toMap(Teacher t) {
+        Map<String, Object> m = new LinkedHashMap<>();
+        m.put("systemName", t.getSystemName());
+        m.put("className", t.getClassName());
+        m.put("theme", t.getTheme());
+        m.put("activated", t.isActivated());
+        m.put("showOnBoard", t.isShowOnBoard());
+        return m;
     }
 }

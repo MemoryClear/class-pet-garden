@@ -45,6 +45,8 @@ public class StudentDto {
     }
     public static class ScoreRequest {
         public String scoreItemId;
+        // 倍数（可选，默认 1）。>1 时记为一条聚合记录，名称后缀"×N"，point = item.point × N
+        public Integer multiplier;
     }
     // 装备商品请求
     public static class EquipRequest {

@@ -1,6 +1,9 @@
 <template>
   <div class="auth-page">
-    <div class="logo">🐱</div>
+    <router-link to="/board" class="logo-link" aria-label="查看公开看板">
+      <div class="logo">🐱</div>
+      <span class="logo-bubble">看板请点我!</span>
+    </router-link>
     <h1 class="title">{{ systemName }}</h1>
     <p class="subtitle">让学习变得更有趣</p>
     <div class="auth-card">
@@ -172,7 +175,12 @@ async function handleStudentLogin() {
 
 <style scoped>
 .auth-page { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; }
-.logo { width:60px; height:60px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px; font-size:32px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+.logo-link { position:relative; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; margin-bottom:16px; cursor:pointer; }
+.logo-link .logo { width:60px; height:60px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:32px; box-shadow:0 2px 8px rgba(0,0,0,0.05); transition: transform 0.2s; }
+.logo-link:hover .logo { transform: scale(1.08); box-shadow:0 4px 12px rgba(255,107,157,0.3); }
+.logo-bubble { position:absolute; top:-8px; right:-58px; background:#ff6b9d; color:#fff; font-size:12px; padding:6px 12px; border-radius:14px; white-space:nowrap; box-shadow:0 2px 6px rgba(255,107,157,0.4); animation: bubble-bounce 1.6s ease-in-out infinite; }
+.logo-bubble::before { content:""; position:absolute; left:-6px; bottom:6px; width:10px; height:10px; background:#ff6b9d; transform:rotate(45deg); border-radius:2px; }
+@keyframes bubble-bounce { 0%, 100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
 .title { font-size:24px; font-weight:600; color:#2d3748; margin-bottom:8px; }
 .subtitle { color:#666; margin-bottom:30px; font-size:14px; }
 .auth-card { background:white; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,0.1); width:100%; max-width:400px; overflow:hidden; }

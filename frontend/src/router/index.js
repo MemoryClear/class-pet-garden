@@ -74,6 +74,12 @@ const routes = [
     name: 'ChangePassword',
     component: () => import('../views/ChangePasswordView.vue'),
     meta: { requiresAuth: true, forceChangePassword: true }
+  },
+  {
+    path: '/board',
+    name: 'Board',
+    component: () => import('../views/BoardView.vue'),
+    meta: { guest: true }
   }
 ]
 

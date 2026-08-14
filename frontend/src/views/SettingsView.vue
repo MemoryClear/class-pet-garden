@@ -16,6 +16,21 @@
           <label class="form-label">班级名称</label>
           <input type="text" class="form-input" v-model="form.className" @change="save" placeholder="如：初一(3)班">
         </div>
+        <div class="form-group">
+          <label class="form-label">公开看板</label>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <label class="switch">
+              <input type="checkbox" v-model="form.showOnBoard" @change="save">
+              <span class="slider"></span>
+            </label>
+            <span style="font-size:13px; color:#718096;">
+              开启后，本班会出现在无需登录的公开看板中
+            </span>
+            <router-link v-if="form.showOnBoard" to="/board" target="_blank" style="color:#ff6b9d; font-size:13px; margin-left:auto;">
+              预览 →
+            </router-link>
+          </div>
+        </div>
       </div>
 
       <!-- 主题选择 -->
@@ -122,7 +137,7 @@ const appStore = useAppStore()
 const authStore = useAuthStore()
 const router = useRouter()
 
-const form = reactive({ systemName: '', className: '', theme: 'pink' })
+const form = reactive({ systemName: '', className: '', theme: 'pink', showOnBoard: false })
 const newName = ref('')
 const newPassword = ref('')
 const batchNames = ref('')
@@ -258,6 +273,8 @@ function handleLogout() {
   router.push('/')
 }
 
+
+
 onMounted(async () => {
   await appStore.fetchStudents()
   await appStore.fetchScoreItems()
@@ -265,7 +282,8 @@ onMounted(async () => {
   Object.assign(form, {
     systemName: appStore.settings.systemName || '',
     className: appStore.settings.className || '',
-    theme: appStore.settings.theme || 'pink'
+    theme: appStore.settings.theme || 'pink',
+    showOnBoard: !!appStore.settings.showOnBoard
   })
 })
 </script>
@@ -293,6 +311,20 @@ h2 { font-size:18px; font-weight:600; color:#2d3748; }
 .theme-item.selected { border-color:#ff4d79; }
 .theme-emoji { font-size:24px; }
 .student-list { margin-top:12px; display:flex; flex-direction:column; gap:8px; }
+.board-list { display:flex; flex-direction:column; gap:8px; }
+.board-item { display:flex; align-items:center; gap:12px; padding:10px 12px; background:#fafafa; border-radius:10px; }
+.board-info { flex:1; display:flex; align-items:center; gap:8px; }
+.board-type { background:#fef3c7; color:#92400e; font-size:11px; padding:2px 8px; border-radius:6px; }
+.board-name { font-weight:500; color:#333; }
+.board-status { font-size:12px; }
+.board-status.on { color:#16a34a; }
+.board-status.off { color:#a8a29e; }
+.switch { position:relative; display:inline-block; width:44px; height:24px; flex-shrink:0; }
+.switch input { opacity:0; width:0; height:0; }
+.slider { position:absolute; cursor:pointer; inset:0; background:#ccc; transition:0.3s; border-radius:24px; }
+.slider::before { position:absolute; content:""; height:18px; width:18px; left:3px; bottom:3px; background:white; transition:0.3s; border-radius:50%; }
+.switch input:checked + .slider { background:#ff6b9d; }
+.switch input:checked + .slider::before { transform:translateX(20px); }
 .list-toolbar { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 0; }
 .checkbox-label { display:flex; align-items:center; gap:6px; font-size:13px; color:#4a5568; cursor:pointer; }
 .student-item { background:#f7f3f0; border-radius:8px; padding:8px 12px; display:flex; align-items:center; gap:8px; font-size:14px; }

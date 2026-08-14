@@ -52,8 +52,10 @@ export const useAppStore = defineStore('app', {
       const { data } = await api.post('/students/assign-pets')
       this.students = data
     },
-    async applyScore(studentId, scoreItemId) {
-      const { data } = await api.post(`/students/${studentId}/score`, { scoreItemId })
+    async applyScore(studentId, scoreItemId, multiplier) {
+      const body = { scoreItemId }
+      if (multiplier && multiplier > 1) body.multiplier = multiplier
+      const { data } = await api.post(`/students/${studentId}/score`, body)
       await this.fetchStudents()
       return data
     },
