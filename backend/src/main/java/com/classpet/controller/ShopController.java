@@ -60,11 +60,14 @@ public class ShopController {
         return ResponseEntity.ok(shopService.exchange(req, principal.teacherId()));
     }
 
-    // 获取兑换记录
+    // 获取兑换记录（游标分页）
     @GetMapping("/records")
-    public ResponseEntity<List<ExchangeRecordResponse>> getRecords(
-            @AuthenticationPrincipal AuthenticatedUser principal) {
-        return ResponseEntity.ok(shopService.getRecords(principal.teacherId()));
+    public ResponseEntity<?> getRecords(
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestParam(required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME) java.time.LocalDateTime cursorTime,
+            @RequestParam(required = false) String cursorId,
+            @RequestParam(required = false, defaultValue = "20") int limit) {
+        return ResponseEntity.ok(shopService.getRecordsPage(principal.teacherId(), cursorTime, cursorId, limit));
     }
 
     // 赠送道具

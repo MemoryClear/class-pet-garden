@@ -12,9 +12,13 @@ import com.classpet.repository.ExchangeRecordRepository;
 import com.classpet.repository.StudentRepository;
 import com.classpet.entity.ShopItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 import java.util.*;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -152,24 +156,64 @@ public class StudentApiController {
         }
     }
 
-    // 积分明细
+    // 积分明细（游标分页）
     @GetMapping("/score-history")
-    public ResponseEntity<?> getScoreHistory(@AuthenticationPrincipal AuthenticatedUser principal) {
+    public ResponseEntity<?> getScoreHistory(
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime cursorTime,
+            @RequestParam(required = false) String cursorId,
+            @RequestParam(required = false, defaultValue = "20") int limit) {
         if (!principal.isStudent()) {
             return ResponseEntity.status(403).body(Map.of("error", "仅限学生使用"));
         }
-        List<ScoreHistory> history = scoreHistoryRepository.findByStudentIdOrderByCreatedAtDesc(principal.studentId());
-        return ResponseEntity.ok(history);
+        int safeLimit = Math.max(1, Math.min(100, limit));
+        List<ScoreHistory> rows = scoreHistoryRepository.findStudentPage(principal.studentId(),
+                cursorTime, cursorId, PageRequest.of(0, safeLimit + 1));
+        boolean hasMore = rows.size() > safeLimit;
+        if (hasMore) rows = rows.subList(0, safeLimit);
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("items", rows);
+        resp.put("hasMore", hasMore);
+        if (hasMore && !rows.isEmpty()) {
+            ScoreHistory tail = rows.get(rows.size() - 1);
+            Map<String, Object> cursor = new HashMap<>();
+            cursor.put("createdAt", tail.getCreatedAt());
+            cursor.put("id", tail.getId());
+            resp.put("nextCursor", cursor);
+        } else {
+            resp.put("nextCursor", null);
+        }
+        return ResponseEntity.ok(resp);
     }
 
-    // 道具明细（含赠送记录）
+    // 道具明细（含赠送记录，游标分页）
     @GetMapping("/exchange-history")
-    public ResponseEntity<?> getExchangeHistory(@AuthenticationPrincipal AuthenticatedUser principal) {
+    public ResponseEntity<?> getExchangeHistory(
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime cursorTime,
+            @RequestParam(required = false) String cursorId,
+            @RequestParam(required = false, defaultValue = "20") int limit) {
         if (!principal.isStudent()) {
             return ResponseEntity.status(403).body(Map.of("error", "仅限学生使用"));
         }
-        List<ExchangeRecord> history = exchangeRecordRepository.findByStudentIdOrderByCreatedAtDesc(principal.studentId());
-        return ResponseEntity.ok(history);
+        int safeLimit = Math.max(1, Math.min(100, limit));
+        List<ExchangeRecord> rows = exchangeRecordRepository.findStudentPage(principal.studentId(),
+                cursorTime, cursorId, PageRequest.of(0, safeLimit + 1));
+        boolean hasMore = rows.size() > safeLimit;
+        if (hasMore) rows = rows.subList(0, safeLimit);
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("items", rows);
+        resp.put("hasMore", hasMore);
+        if (hasMore && !rows.isEmpty()) {
+            ExchangeRecord tail = rows.get(rows.size() - 1);
+            Map<String, Object> cursor = new HashMap<>();
+            cursor.put("createdAt", tail.getCreatedAt());
+            cursor.put("id", tail.getId());
+            resp.put("nextCursor", cursor);
+        } else {
+            resp.put("nextCursor", null);
+        }
+        return ResponseEntity.ok(resp);
     }
 
     // 学生设置代表宝可梦

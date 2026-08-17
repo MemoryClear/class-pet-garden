@@ -13,6 +13,8 @@ import com.classpet.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -142,6 +144,35 @@ public class ShopService {
     public List<ExchangeRecordResponse> getRecords(String teacherId) {
         return exchangeRecordRepo.findByTeacherIdOrderByCreatedAtDesc(teacherId)
                     .stream().map(ExchangeRecordResponse::from).collect(Collectors.toList());
+    }
+
+    /**
+     * 兑换记录游标分页：响应 {items, hasMore, nextCursor}
+     */
+    public Map<String, Object> getRecordsPage(String teacherId,
+                                               java.time.LocalDateTime cursorTime, String cursorId, int limit) {
+        int safeLimit = Math.max(1, Math.min(100, limit));
+        java.util.List<ExchangeRecord> rows = exchangeRecordRepo.findTeacherPage(
+                teacherId, cursorTime, cursorId,
+                org.springframework.data.domain.PageRequest.of(0, safeLimit + 1));
+        boolean hasMore = rows.size() > safeLimit;
+        if (hasMore) rows = rows.subList(0, safeLimit);
+
+        java.util.List<ExchangeRecordResponse> items = rows.stream()
+                .map(ExchangeRecordResponse::from).collect(Collectors.toList());
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("items", items);
+        resp.put("hasMore", hasMore);
+        if (hasMore && !rows.isEmpty()) {
+            ExchangeRecord tail = rows.get(rows.size() - 1);
+            Map<String, Object> cursor = new HashMap<>();
+            cursor.put("createdAt", tail.getCreatedAt());
+            cursor.put("id", tail.getId());
+            resp.put("nextCursor", cursor);
+        } else {
+            resp.put("nextCursor", null);
+        }
+        return resp;
     }
 
     // ============== 道具赠送 ==============

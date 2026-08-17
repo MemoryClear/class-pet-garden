@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -20,12 +21,16 @@ public class HistoryController {
     @Autowired private HistoryService historyService;
 
     @GetMapping
-    public ResponseEntity<List<ScoreHistory>> getHistory(
+    public ResponseEntity<Map<String, Object>> getHistory(
             @AuthenticationPrincipal AuthenticatedUser principal,
             @RequestParam(required = false) String studentId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
-        return ResponseEntity.ok(historyService.getHistory(principal.teacherId(), studentId, from, to));
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime cursorTime,
+            @RequestParam(required = false) String cursorId,
+            @RequestParam(required = false, defaultValue = "20") int limit) {
+        return ResponseEntity.ok(historyService.getHistoryPage(principal.teacherId(), studentId, from, to,
+                cursorTime, cursorId, limit));
     }
 
     @PostMapping("/{id}/revoke")

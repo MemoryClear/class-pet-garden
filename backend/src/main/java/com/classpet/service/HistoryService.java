@@ -5,12 +5,15 @@ import com.classpet.entity.Student;
 import com.classpet.repository.ScoreHistoryRepository;
 import com.classpet.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class HistoryService {
@@ -18,18 +21,47 @@ public class HistoryService {
     @Autowired private ScoreHistoryRepository historyRepo;
     @Autowired private StudentRepository studentRepo;
 
-    public List<ScoreHistory> getHistory(String teacherId, String studentId,
-                                   LocalDate from, LocalDate to) {
-        if (studentId != null) {
-            return historyRepo.findByTeacherIdAndStudentIdOrderByCreatedAtDesc(teacherId, studentId);
+    /**
+     * 游标分页：响应包含 items / hasMore / nextCursor
+     * - teacherId 必填
+     * - studentId/from/to 可选过滤（兼容旧版全量接口）
+     * - cursorTime + cursorId 决定从哪条之后继续（首次为 null）
+     * - limit 上限 100
+     */
+    public Map<String, Object> getHistoryPage(String teacherId,
+                                              String studentId,
+                                              LocalDate from, LocalDate to,
+                                              LocalDateTime cursorTime, String cursorId,
+                                              int limit) {
+        int safeLimit = Math.max(1, Math.min(100, limit));
+        // 多取1条用于判断 hasMore
+        PageRequest pageReq = PageRequest.of(0, safeLimit + 1);
+        List<ScoreHistory> rows;
+        if (studentId != null && !studentId.isEmpty()) {
+            rows = historyRepo.findTeacherStudentPage(teacherId, studentId, cursorTime, cursorId, pageReq);
+        } else if (from != null && to != null) {
+            LocalDateTime fromDt = from.atStartOfDay();
+            LocalDateTime toDt = to.plusDays(1).atStartOfDay();
+            rows = historyRepo.findTeacherBetweenPage(teacherId, fromDt, toDt, cursorTime, cursorId, pageReq);
+        } else {
+            rows = historyRepo.findTeacherPage(teacherId, cursorTime, cursorId, pageReq);
         }
-        if (from != null && to != null) {
-            return historyRepo.findByTeacherIdAndCreatedAtBetweenOrderByCreatedAtDesc(
-                    teacherId,
-                    from.atStartOfDay(),
-                    to.plusDays(1).atStartOfDay());
+        boolean hasMore = rows.size() > safeLimit;
+        if (hasMore) rows = rows.subList(0, safeLimit);
+
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("items", rows);
+        resp.put("hasMore", hasMore);
+        if (hasMore && !rows.isEmpty()) {
+            ScoreHistory tail = rows.get(rows.size() - 1);
+            Map<String, Object> cursor = new HashMap<>();
+            cursor.put("createdAt", tail.getCreatedAt());
+            cursor.put("id", tail.getId());
+            resp.put("nextCursor", cursor);
+        } else {
+            resp.put("nextCursor", null);
         }
-        return historyRepo.findByTeacherIdOrderByCreatedAtDesc(teacherId);
+        return resp;
     }
 
     @Transactional
