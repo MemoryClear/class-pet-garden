@@ -7,9 +7,15 @@ export const useAppStore = defineStore('app', {
     scoreItems: [],
     petLibrary: [],
     history: [],
+    historyHasMore: false,
+    historyNextCursor: null,
+    historyLoading: false,
     leaderboard: [],
     shopItems: [],
     exchangeRecords: [],
+    exchangeRecordsHasMore: false,
+    exchangeRecordsNextCursor: null,
+    exchangeRecordsLoading: false,
     settings: { systemName: '班级宠物园', className: '默认班级', theme: 'pink' },
     loading: false,
   }),
@@ -102,18 +108,35 @@ export const useAppStore = defineStore('app', {
     async exchangeItem(studentId, itemId) {
       const { data } = await api.post('/shop/exchange', { studentId, itemId })
       await this.fetchStudents()
-      await this.fetchExchangeRecords()
+      await this.fetchExchangeRecords({ reset: true })
       return data
     },
-    async fetchExchangeRecords() {
-      const { data } = await api.get('/shop/records')
-      this.exchangeRecords = data
+    async fetchExchangeRecords(opts = {}) {
+      const { reset = true, limit = 20 } = opts
+      this.exchangeRecordsLoading = true
+      try {
+        const params = { limit }
+        if (!reset && this.exchangeRecordsNextCursor) {
+          params.cursorTime = this.exchangeRecordsNextCursor.createdAt
+          params.cursorId = this.exchangeRecordsNextCursor.id
+        }
+        const { data } = await api.get('/shop/records', { params })
+        if (reset) {
+          this.exchangeRecords = data.items || []
+        } else {
+          this.exchangeRecords = [...this.exchangeRecords, ...(data.items || [])]
+        }
+        this.exchangeRecordsHasMore = !!data.hasMore
+        this.exchangeRecordsNextCursor = data.nextCursor || null
+      } finally {
+        this.exchangeRecordsLoading = false
+      }
     },
     // Gift item to another student
     async giftItem(fromStudentId, toStudentId, recordId) {
       const { data } = await api.post('/shop/gift', { fromStudentId, toStudentId, recordId })
       await this.fetchStudents()
-      await this.fetchExchangeRecords()
+      await this.fetchExchangeRecords({ reset: true })
       return data
     },
     // Score Items
@@ -135,13 +158,29 @@ export const useAppStore = defineStore('app', {
       this.petLibrary = data
     },
     // History
-    async fetchHistory(studentId, from, to) {
-      const params = {}
-      if (studentId) params.studentId = studentId
-      if (from) params.from = from
-      if (to) params.to = to
-      const { data } = await api.get('/history', { params })
-      this.history = data
+    async fetchHistory(studentId, from, to, opts = {}) {
+      const { reset = true, limit = 20 } = opts
+      this.historyLoading = true
+      try {
+        const params = { limit }
+        if (studentId) params.studentId = studentId
+        if (from) params.from = from
+        if (to) params.to = to
+        if (!reset && this.historyNextCursor) {
+          params.cursorTime = this.historyNextCursor.createdAt
+          params.cursorId = this.historyNextCursor.id
+        }
+        const { data } = await api.get('/history', { params })
+        if (reset) {
+          this.history = data.items || []
+        } else {
+          this.history = [...this.history, ...(data.items || [])]
+        }
+        this.historyHasMore = !!data.hasMore
+        this.historyNextCursor = data.nextCursor || null
+      } finally {
+        this.historyLoading = false
+      }
     },
     async revokeScore(historyId) {
       const { data } = await api.post(`/history/${historyId}/revoke`)

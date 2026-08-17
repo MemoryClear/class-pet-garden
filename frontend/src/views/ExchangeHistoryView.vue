@@ -71,6 +71,13 @@
           <span class="stat-value">{{ giftCount }}</span>
         </div>
       </div>
+      <!-- 加载更多 -->
+      <div v-if="appStore.exchangeRecordsHasMore || appStore.exchangeRecordsLoading" class="load-more">
+        <button v-if="appStore.exchangeRecordsHasMore" class="load-more-btn" :disabled="appStore.exchangeRecordsLoading" @click="loadMore">
+          {{ appStore.exchangeRecordsLoading ? '加载中…' : '加载更多' }}
+        </button>
+        <span v-else class="load-more-end">— 已加载全部 —</span>
+      </div>
     </div>
   </div>
 </template>
@@ -112,7 +119,7 @@ function formatTime(ts) {
 
 // 筛选记录
 const filteredRecords = computed(() => {
-  let records = appStore.exchangeRecords
+  let records = appStore.exchangeRecords.items || []
 
   // 按类型筛选
   if (viewTab.value === 'exchange') {
@@ -144,7 +151,7 @@ onMounted(async () => {
   try {
     if (appStore.students.length === 0) await appStore.fetchStudents()
     await appStore.fetchShopItems()
-    await appStore.fetchExchangeRecords()
+    await appStore.fetchExchangeRecords({ reset: true })
     // 从 URL 参数读取学生筛选
     if (route.query.studentId) {
       filterStudentId.value = route.query.studentId
@@ -153,6 +160,11 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+async function loadMore() {
+  if (!appStore.exchangeRecordsHasMore || appStore.exchangeRecordsLoading) return
+  await appStore.fetchExchangeRecords({ reset: false })
+}
 </script>
 
 <style scoped>
@@ -346,4 +358,10 @@ h2 { font-size: 18px; font-weight: 600; color: #2d3748; }
   font-weight: 700;
   color: #2d3748;
 }
+
+.load-more { text-align: center; margin-top: 16px; }
+.load-more-btn { background:#fff; border:1px solid #fdb2a4; color:#f97316; padding:8px 24px; border-radius:8px; font-size:14px; cursor:pointer; transition:all 0.2s; }
+.load-more-btn:hover:not(:disabled) { background:#fff5f1; }
+.load-more-btn:disabled { opacity:0.6; cursor:not-allowed; }
+.load-more-end { color:#999; font-size:12px; }
 </style>

@@ -351,6 +351,10 @@
             </div>
           </div>
           <div v-if="scoreHistory.length === 0" class="empty">暂无积分记录</div>
+          <div v-if="scoreHistoryHasMore || scoreHistoryLoading" class="load-more-inline">
+            <button v-if="scoreHistoryHasMore" :disabled="scoreHistoryLoading" @click="loadMoreRecords('score')">{{ scoreHistoryLoading ? '加载中…' : '加载更多' }}</button>
+            <span v-else class="end">— 已加载全部 —</span>
+          </div>
         </div>
         <div v-if="recordTab === 'exchange'" class="records-list">
           <div v-for="r in exchangeHistory" :key="r.id" class="record-item">
@@ -368,6 +372,10 @@
             </div>
           </div>
           <div v-if="exchangeHistory.length === 0" class="empty">暂无道具记录</div>
+          <div v-if="exchangeHistoryHasMore || exchangeHistoryLoading" class="load-more-inline">
+            <button v-if="exchangeHistoryHasMore" :disabled="exchangeHistoryLoading" @click="loadMoreRecords('exchange')">{{ exchangeHistoryLoading ? '加载中…' : '加载更多' }}</button>
+            <span v-else class="end">— 已加载全部 —</span>
+          </div>
         </div>
       </div>
     </div>
@@ -591,7 +599,13 @@ const clearShopFilters = () => {
 }
 const recordTab = ref('score')
 const scoreHistory = ref([])
+const scoreHistoryHasMore = ref(false)
+const scoreHistoryNextCursor = ref(null)
+const scoreHistoryLoading = ref(false)
 const exchangeHistory = ref([])
+const exchangeHistoryHasMore = ref(false)
+const exchangeHistoryNextCursor = ref(null)
+const exchangeHistoryLoading = ref(false)
 
 // 宝可梦相关
 const pokemonList = ref([])
@@ -854,13 +868,53 @@ function formatTime(t) {
 async function fetchRecords() {
   try {
     const [r1, r2] = await Promise.all([
-      api.get('/student/score-history'),
-      api.get('/student/exchange-history')
+      api.get('/student/score-history', { params: { limit: 20 } }),
+      api.get('/student/exchange-history', { params: { limit: 20 } })
     ])
-    scoreHistory.value = r1.data || []
-    exchangeHistory.value = r2.data || []
+    scoreHistory.value = r1.data.items || []
+    scoreHistoryHasMore.value = !!r1.data.hasMore
+    scoreHistoryNextCursor.value = r1.data.nextCursor || null
+    exchangeHistory.value = r2.data.items || []
+    exchangeHistoryHasMore.value = !!r2.data.hasMore
+    exchangeHistoryNextCursor.value = r2.data.nextCursor || null
   } catch (e) {
     console.error('fetchRecords error', e)
+  }
+}
+
+async function loadMoreRecords(kind) {
+  if (kind === 'score') {
+    if (!scoreHistoryHasMore.value || scoreHistoryLoading.value) return
+    scoreHistoryLoading.value = true
+    try {
+      const params = { limit: 20 }
+      if (scoreHistoryNextCursor.value) {
+        params.cursorTime = scoreHistoryNextCursor.value.createdAt
+        params.cursorId = scoreHistoryNextCursor.value.id
+      }
+      const { data } = await api.get('/student/score-history', { params })
+      scoreHistory.value = [...scoreHistory.value, ...(data.items || [])]
+      scoreHistoryHasMore.value = !!data.hasMore
+      scoreHistoryNextCursor.value = data.nextCursor || null
+    } finally {
+      scoreHistoryLoading.value = false
+    }
+  } else {
+    if (!exchangeHistoryHasMore.value || exchangeHistoryLoading.value) return
+    exchangeHistoryLoading.value = true
+    try {
+      const params = { limit: 20 }
+      if (exchangeHistoryNextCursor.value) {
+        params.cursorTime = exchangeHistoryNextCursor.value.createdAt
+        params.cursorId = exchangeHistoryNextCursor.value.id
+      }
+      const { data } = await api.get('/student/exchange-history', { params })
+      exchangeHistory.value = [...exchangeHistory.value, ...(data.items || [])]
+      exchangeHistoryHasMore.value = !!data.hasMore
+      exchangeHistoryNextCursor.value = data.nextCursor || null
+    } finally {
+      exchangeHistoryLoading.value = false
+    }
   }
 }
 
@@ -1236,6 +1290,10 @@ onMounted(async () => {
 .revoked-tag { color: #999; font-size: 0.8rem; text-decoration: line-through; }
 .gift-tag { color: #8b5cf6; font-size: 0.85rem; }
 .empty { text-align: center; padding: 20px; color: #888; }
+.load-more-inline { text-align: center; padding: 12px; }
+.load-more-inline button { background: #fff; border: 1px solid #fdb2a4; color: #f97316; padding: 6px 18px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+.load-more-inline button:disabled { opacity: 0.6; cursor: not-allowed; }
+.load-more-inline .end { color: #999; font-size: 12px; }
 
 /* 精灵球样式 */
 .pokemon-balls { background: #e0f2fe; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; color: #0369a1; font-weight: 600; }
