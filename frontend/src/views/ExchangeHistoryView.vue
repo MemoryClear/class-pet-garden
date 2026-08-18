@@ -119,7 +119,7 @@ function formatTime(ts) {
 
 // 筛选记录
 const filteredRecords = computed(() => {
-  let records = appStore.exchangeRecords.items || []
+  let records = Array.isArray(appStore.exchangeRecords) ? appStore.exchangeRecords : (appStore.exchangeRecords.items || [])
 
   // 按类型筛选
   if (viewTab.value === 'exchange') {
