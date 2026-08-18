@@ -58,6 +58,12 @@ const routes = [
     meta: { requiresAuth: true, activated: true, teacherOnly: true }
   },
   {
+    path: '/support',
+    name: 'Support',
+    component: () => import('../views/SupportView.vue'),
+    meta: { requiresAuth: true, activated: true, teacherOnly: true }
+  },
+  {
     path: '/classroom',
     name: 'Classroom',
     component: () => import('../views/ClassroomView.vue'),

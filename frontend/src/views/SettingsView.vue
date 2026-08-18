@@ -26,9 +26,6 @@
             <span style="font-size:13px; color:#718096;">
               开启后，本班会出现在无需登录的公开看板中
             </span>
-            <router-link v-if="form.showOnBoard" to="/board" target="_blank" style="color:#ff6b9d; font-size:13px; margin-left:auto;">
-              预览 →
-            </router-link>
           </div>
         </div>
       </div>

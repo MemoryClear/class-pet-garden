@@ -18,6 +18,7 @@
           <button v-if="classroomEnabled" class="nav-btn" @click="router.push('/classroom')">📚 课堂</button>
           <button class="nav-btn" @click="router.push('/pokemon-pool')">🎮 宝可梦池</button>
           <button class="nav-btn" @click="router.push('/settings')">⚙️ 设置</button>
+          <button class="nav-btn" @click="router.push('/support')">💖 赞赏支持</button>
         </div>
       </div>
 

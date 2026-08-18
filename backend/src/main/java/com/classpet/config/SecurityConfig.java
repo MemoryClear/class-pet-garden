@@ -25,7 +25,7 @@ public class SecurityConfig {
     private static final String[] SPA_ROUTES = {
         "/", "/home", "/activate", "/history",
         "/exchange-history", "/leaderboard", "/shop", "/settings",
-        "/student-home", "/classroom", "/pokemon-pool", "/board"
+        "/student-home", "/classroom", "/pokemon-pool", "/board",
     };
 
     @Autowired
