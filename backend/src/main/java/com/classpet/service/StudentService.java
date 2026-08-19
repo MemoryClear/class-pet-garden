@@ -335,7 +335,14 @@ public class StudentService {
     public Student updateStudent(String id, String teacherId, String name, String studentNo) {
         Student stu = findByIdAndTeacherId(id, teacherId);
         if (name != null) stu.setName(name.trim());
-        if (studentNo != null) stu.setStudentNo(studentNo.trim());
+        if (studentNo != null) {
+            String trimmedNo = studentNo.trim();
+            // 学号唯一性预检：同 teacher 下不能重复
+            studentRepository.findByTeacherIdAndStudentNo(teacherId, trimmedNo)
+                .filter(other -> !other.getId().equals(id))
+                .ifPresent(other -> { throw new IllegalArgumentException("学号「" + trimmedNo + "」已被「" + other.getName() + "」占用"); });
+            stu.setStudentNo(trimmedNo);
+        }
         return studentRepository.save(stu);
     }
 

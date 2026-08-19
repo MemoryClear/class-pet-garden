@@ -6,6 +6,7 @@ import com.classpet.security.JwtAuthenticationFilter.AuthenticatedUser;
 import com.classpet.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -102,6 +103,9 @@ public class StudentController {
             return ResponseEntity.ok(studentService.updateStudent(id, principal.teacherId(), req.name, req.studentNo));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (DataIntegrityViolationException e) {
+            // 预检漏掉的并发/异常情况，统一返回友好提示
+            return ResponseEntity.badRequest().body(Map.of("error", "学号已被其他学生占用，请换一个"));
         }
     }
 

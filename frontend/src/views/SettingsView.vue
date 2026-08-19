@@ -120,6 +120,13 @@
       </div>
     </div>
   </div>
+
+  <StudentEditModal
+    v-if="editingStudent"
+    :student="editingStudent"
+    @close="editingStudent = null"
+    @updated="onStudentUpdated"
+  />
 </template>
 
 <script setup>
@@ -128,6 +135,7 @@ import { useAppStore } from '../stores/app.js'
 import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
 import $confirm from '../composables/useConfirmModal.js'
+import StudentEditModal from '../components/StudentEditModal.vue'
 
 
 const appStore = useAppStore()
@@ -142,6 +150,7 @@ const batchPassword = ref('')
 const selectedIds = ref([])
 const selectAll = ref(false)
 const manageError = ref('')
+const editingStudent = ref(null)
 const scoreForm = reactive({ icon: '', name: '', point: null })
 
 const themes = [
@@ -247,10 +256,13 @@ async function deleteStudent(id) {
 }
 
 function promptEdit(stu) {
-  const name = prompt('修改学生姓名', stu.name)
-  if (name && name.trim() && name !== stu.name) {
-    appStore.updateStudent(stu.id, name.trim()).catch(e => { manageError.value = e.message })
-  }
+  editingStudent.value = stu
+}
+
+async function onStudentUpdated(updated) {
+  editingStudent.value = null
+  // store.fetchStudents 后台刷新，不影响 UI
+  try { await appStore.fetchStudents() } catch (e) { /* ignore */ }
 }
 
 async function deleteScoreItem(id) {
