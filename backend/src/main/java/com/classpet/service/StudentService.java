@@ -494,6 +494,10 @@ public class StudentService {
         }
     }
 
+    private void updateEvolutionItemJson(Student student, String itemKey, int delta) {
+        com.classpet.util.EvolutionItemUtil.adjust(student, itemKey, delta);
+    }
+
     public List<Map<String, Object>> getPetLibrary() {
         return List.of(
             Map.of("id", 1, "icon", "🐱", "name", "小橘猫"),
@@ -1493,11 +1497,15 @@ public class StudentService {
         if (target.getId().equals(studentId)) {
             throw new IllegalArgumentException("不能赠送给自己");
         }
-        // 找到赠送者拥有且可赠送的记录（giftFrom为null，即自己买的或已接收的）
+        // 找到赠送者拥有且可赠送的记录：PURCHASE 或 GIFT_IN（未赠出的）
         List<ExchangeRecord> records = exchangeRecordRepository.findByStudentIdOrderByCreatedAtDesc(studentId);
         ExchangeRecord giftRecord = records.stream()
                 .filter(r -> r.getItemId().equals(itemId))
-                .filter(r -> r.getGiftFrom() == null)
+                .filter(r -> {
+                    String at = r.getActionType();
+                    return at == null || ExchangeRecord.ActionType.PURCHASE.name().equals(at)
+                            || ExchangeRecord.ActionType.GIFT_IN.name().equals(at);
+                })
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("你没有可赠送的该道具"));
         // 装备中的道具不能赠送，需先卸下
@@ -1505,13 +1513,15 @@ public class StudentService {
         if (giverEquipped.contains(itemId)) {
             throw new IllegalArgumentException("该道具正在装备中，请先卸下再赠送");
         }
-        // 标记原记录为已赠送
-        giftRecord.setGiftFrom(target.getId());
-        giftRecord.setGiftFromName(target.getName());
+        // 标记原记录为已赠送（GIFT_OUT）
         giftRecord.setGiftTo(target.getId());
         giftRecord.setGiftToName(target.getName());
+        // 关键修复：清除原 giftFrom（如果之前是 GIFT_IN 接收记录）
+        giftRecord.setGiftFrom(null);
+        giftRecord.setGiftFromName(null);
+        giftRecord.setActionType(ExchangeRecord.ActionType.GIFT_OUT.name());
         exchangeRecordRepository.save(giftRecord);
-        // 为接收者创建新记录
+        // 为接收者创建新记录（GIFT_IN）
         ExchangeRecord newRecord = new ExchangeRecord();
         newRecord.setStudentId(target.getId());
         newRecord.setStudentName(target.getName());
@@ -1522,7 +1532,20 @@ public class StudentService {
         newRecord.setTeacherId(giver.getTeacherId());
         newRecord.setGiftFrom(studentId);
         newRecord.setGiftFromName(giver.getName());
+        newRecord.setActionType(ExchangeRecord.ActionType.GIFT_IN.name());
         exchangeRecordRepository.save(newRecord);
+
+        // 进化道具：赠出方 -1，接收方 +1
+        ShopItem giftItem = shopItemRepository.findById(itemId).orElse(null);
+        if (giftItem != null && "evolution_item".equals(giftItem.getItemType())) {
+            String itemKey = giftItem.getEvolutionItemKey() != null && !giftItem.getEvolutionItemKey().isEmpty()
+                    ? giftItem.getEvolutionItemKey() : giftItem.getName();
+            updateEvolutionItemJson(giver, itemKey, -1);
+            studentRepository.save(giver);
+            updateEvolutionItemJson(target, itemKey, 1);
+            studentRepository.save(target);
+        }
+
         return Map.of("success", true, "message", "已赠送给" + target.getName());
     }
 

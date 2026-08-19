@@ -154,18 +154,21 @@ function getScoreIcon(rec) {
 }
 
 // ============== 道具数据 ==============
-// 持有的道具（当前学生是owner的且未转出）
+// 持有的道具（当前学生是owner的且未转出：PURCHASE / GIFT_IN）
 const myItems = computed(() => {
   return appStore.exchangeRecords
-    .filter(r => r.studentId === props.student.id && !r.giftFrom)
+    .filter(r => {
+      if (r.studentId !== props.student.id) return false
+      const at = r.actionType || 'PURCHASE'
+      return at === 'PURCHASE' || at === 'GIFT_IN'
+    })
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 })
 
-// 我 转给别人的记录（通过gift功能转出）
+// 我 转给别人的记录（actionType === GIFT_OUT）
 async function getGiftedOutRecords() {
-  // 需要查所有记录，找giftFrom=当前学生ID的
-  return appStore.exchangeRecords.filter(r => 
-    r.giftFrom === props.student.id
+  return appStore.exchangeRecords.filter(r =>
+    r.studentId === props.student.id && (r.actionType || '') === 'GIFT_OUT'
   )
 }
 
@@ -173,15 +176,12 @@ async function getGiftedOutRecords() {
 const filteredItems = computed(() => {
   let records = myItems.value
   if (itemFilter.value === 'exchange') {
-    // 自己兑换的（无giftFrom）
-    records = records.filter(r => !r.giftFrom)
+    records = records.filter(r => (r.actionType || 'PURCHASE') === 'PURCHASE')
   } else if (itemFilter.value === 'received') {
-    // 收到的（有giftFrom）
-    records = records.filter(r => r.giftFrom)
+    records = records.filter(r => r.actionType === 'GIFT_IN')
   } else if (itemFilter.value === 'gifted') {
-    // 转给别人的（giftFrom=当前学生ID）
     records = appStore.exchangeRecords
-      .filter(r => r.giftFrom === props.student.id)
+      .filter(r => r.studentId === props.student.id && r.actionType === 'GIFT_OUT')
   }
   return records
 })
@@ -197,19 +197,19 @@ const equippedCount = computed(() => {
 
 // 已转出数
 const giftedCount = computed(() => {
-  return appStore.exchangeRecords.filter(r => r.giftFrom === props.student.id).length
+  return appStore.exchangeRecords.filter(r => r.studentId === props.student.id && r.actionType === 'GIFT_OUT').length
 })
 
-// 判断某条记录是否已转出
+// 判断某条记录是否已转出（学生自己的 GIFT_OUT record）
 function isGiftedOut(recordId) {
   const record = appStore.exchangeRecords.find(r => r.id === recordId)
-  return record?.giftFrom === props.student.id
+  return record?.studentId === props.student.id && record?.actionType === 'GIFT_OUT'
 }
 
-// 获取转给谁
+// 获取转给谁（从 GIFT_OUT record 的 giftToName 读）
 function getGiftedToName(recordId) {
   const record = appStore.exchangeRecords.find(r => r.id === recordId)
-  return record?.studentName || ''
+  return record?.giftToName || ''
 }
 
 // 解析已装备商品ID

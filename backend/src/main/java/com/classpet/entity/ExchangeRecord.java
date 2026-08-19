@@ -47,6 +47,16 @@ public class ExchangeRecord {
     @Column(name = "gift_to_name")
     private String giftToName;
 
+    @Column(name = "action_type")
+    private String actionType = ActionType.PURCHASE.name();
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    public enum ActionType {
+        PURCHASE,    // 兑换（学生自己买/教师帮买，foodSpent > 0）
+        GIFT_OUT,    // 赠出（studentId=赠出方，giftTo=接收方，foodSpent=0）
+        GIFT_IN,     // 收到（studentId=接收方，giftFrom=赠出方，foodSpent=0）
+        REVOKED      // 撤销（保留原字段+标识）
+    }
 }

@@ -239,10 +239,16 @@ const giftError = ref(null)
 
 // 我已兑换的商品（通过历史记录或 equippedItems 判断）
 // 简化处理：从 exchangeRecords 中找该学生的兑换记录对应的商品
+// 持有 = studentId=自己 且 actionType ∈ (PURCHASE, GIFT_IN)
+// GIFT_OUT 表示已赠出，不能再装备/赠送
 const myItems = computed(() => {
   if (!appStore.exchangeRecords.length) return []
   return appStore.exchangeRecords
-    .filter(r => r.studentId === props.student.id && !r.giftFrom)
+    .filter(r => {
+      if (r.studentId !== props.student.id) return false
+      const at = r.actionType || 'PURCHASE'
+      return at === 'PURCHASE' || at === 'GIFT_IN'
+    })
     .map(r => {
       const item = appStore.shopItems.find(i => i.id === r.itemId)
       return item ? { ...item, exchangeTime: r.exchangeTime } : null

@@ -134,12 +134,12 @@
 
     <!-- 兑换记录 -->
     <div v-if="activeTab === 'records'" class="records-content">
-      <div v-if="records.length === 0" class="empty-tip">
+      <div v-if="filteredRecords.length === 0 && !recordsLoading" class="empty-tip">
         暂无兑换记录
       </div>
-      
+
       <div v-else class="records-list">
-        <div v-for="record in records" :key="record.id" class="record-item">
+        <div v-for="record in filteredRecords" :key="record.id" class="record-item">
           <div class="record-icon">{{ record.itemIcon }}</div>
           <div class="record-info">
             <div class="record-student">{{ record.studentName }}</div>
@@ -147,8 +147,14 @@
           </div>
           <div class="record-food">-{{ record.foodSpent }} 粮食</div>
           <div class="record-time">{{ formatTime(record.createdAt) }}</div>
+          <button class="revoke-btn" @click="revokeRecord(record)">撤销</button>
         </div>
       </div>
+
+      <div v-if="recordsHasMore" class="load-more">
+        <button :disabled="recordsLoading" @click="loadMoreRecords">{{ recordsLoading ? '加载中…' : '加载更多' }}</button>
+      </div>
+      <div v-else-if="filteredRecords.length > 0" class="end-marker">— 已加载全部 —</div>
     </div>
   </div>
 </template>
@@ -187,12 +193,41 @@ const fetchItems = async () => {
 
 const fetchRecords = async () => {
   try {
-    const res = await api.get('/shop/records')
-    records.value = res.data
+    recordsLoading.value = true
+    // 小卖部兑换记录只需要 PURCHASE（教师兑换道具的记录），不含赠送
+    const res = await api.get('/shop/records', { params: { limit: 500 } })
+    const data = res.data || {}
+    const items = Array.isArray(data) ? data : (data.items || [])
+    records.value = items
+    recordsHasMore.value = !!(data.hasMore && items.length >= 500)
   } catch (e) {
     console.error(e)
+  } finally {
+    recordsLoading.value = false
   }
 }
+
+const revokeRecord = async (record) => {
+  if (!record.studentName || !record.itemName) return
+  if (!await $confirm.confirm(`确定撤销「${record.studentName}」兑换的「${record.itemName}」吗？将退还 ${record.foodSpent} 粮食。`)) return
+  try {
+    await api.post(`/shop/records/${record.id}/revoke`)
+    $confirm.success('已撤销')
+    await fetchRecords()
+    await appStore.fetchStudents()
+  } catch (e) {
+    $confirm.error('撤销失败: ' + (e.response?.data?.error || e.message))
+  }
+}
+
+const loadMoreRecords = async () => { /* 不需 loadMore，小卖部记录一次性加载 */ }
+const recordsLoading = ref(false)
+const recordsHasMore = ref(false)
+const recordsNextCursor = ref(null)
+const filteredRecords = computed(() => {
+  // 只显示 PURCHASE（教师兑换道具的记录），过滤掉赠送 (GIFT_OUT / GIFT_IN)
+  return records.value.filter(r => (r.actionType || 'PURCHASE') === 'PURCHASE')
+})
 
 const saveItem = async () => {
   try {
@@ -580,6 +615,74 @@ onMounted(() => {
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
+.records-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.rec-tab {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 2px solid #e0e0e0;
+  background: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.rec-tab.active {
+  background: #ff8c42;
+  color: white;
+  border-color: #ff8c42;
+}
+
+.action-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: normal;
+}
+.action-badge.gift-out { background: #dbeafe; color: #1e40af; }
+.action-badge.gift-in  { background: #f3e8ff; color: #6b21a8; }
+.action-badge.purchase { background: #d1fae5; color: #065f46; }
+.action-badge.revoked  { background: #e5e7eb; color: #374151; }
+
+.direction {
+  margin-left: 8px;
+  font-size: 0.85rem;
+  color: #888;
+  font-weight: normal;
+}
+
+.record-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.gift-out-label {
+  color: #1e40af;
+  font-weight: bold;
+}
+
+.load-more, .end-marker {
+  text-align: center;
+  padding: 16px;
+  color: #999;
+}
+.load-more button {
+  padding: 8px 24px;
+  border-radius: 20px;
+  border: 2px solid #ff8c42;
+  background: white;
+  color: #ff8c42;
+  cursor: pointer;
+}
+.load-more button:disabled { opacity: 0.5; cursor: not-allowed; }
+
 .record-icon {
   font-size: 2rem;
   margin-right: 15px;
@@ -607,5 +710,22 @@ onMounted(() => {
 .record-time {
   color: #999;
   font-size: 0.85rem;
+}
+
+.revoke-btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  border: 1px solid #fca5a5;
+  background: white;
+  color: #dc2626;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-left: 8px;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.revoke-btn:hover {
+  background: #dc2626;
+  color: white;
 }
 </style>

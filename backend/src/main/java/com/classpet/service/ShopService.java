@@ -96,11 +96,11 @@ public class ShopService {
         student.setFood(student.getFood() - spent);
         studentRepo.save(student);
 
-        // 写入积分历史记录（reason显示商品名称）
+        // 写入积分历史记录（reason显示商品名称，不重复 emoji 因为 scoreItemIcon 已有）
         ScoreHistory history = new ScoreHistory();
         history.setStudentId(student.getId());
         history.setStudentName(student.getName());
-        history.setScoreItemName(item.getIcon() + " 购买「" + item.getName() + "」");
+        history.setScoreItemName("购买「" + item.getName() + "」");
         history.setScoreItemIcon(item.getIcon());
         history.setPoint(-spent);
         history.setTeacherId(teacherId);
@@ -137,7 +137,18 @@ public class ShopService {
         record.setItemIcon(item.getIcon());
         record.setFoodSpent(item.getPrice());
         record.setTeacherId(teacherId);
-        return ExchangeRecordResponse.from(exchangeRecordRepo.save(record));
+        record.setActionType(ExchangeRecord.ActionType.PURCHASE.name());
+        ExchangeRecord saved = exchangeRecordRepo.save(record);
+
+        // 进化道具：+1 到学生库存（以 evolutionItemKey 为 key，没有则用 name）
+        if ("evolution_item".equals(item.getItemType())) {
+            String itemKey = item.getEvolutionItemKey() != null && !item.getEvolutionItemKey().isEmpty()
+                    ? item.getEvolutionItemKey() : item.getName();
+            addEvolutionItem(student, itemKey, 1);
+            studentRepo.save(student);
+        }
+
+        return ExchangeRecordResponse.from(saved);
     }
 
     // ============== 兑换记录 ==============
@@ -199,6 +210,11 @@ public class ShopService {
         if (!record.getStudentId().equals(req.getFromStudentId())) {
             throw new RuntimeException("该道具不属于你");
         }
+        // 关键防护：已赠出的 record 不能重复赠送
+        String at = record.getActionType();
+        if (at != null && ExchangeRecord.ActionType.GIFT_OUT.name().equals(at)) {
+            throw new RuntimeException("该道具已赠出，不能重复赠送");
+        }
 
         // 检查是否已装备
         String equippedJson = fromStudent.getEquippedItems();
@@ -216,12 +232,39 @@ public class ShopService {
             }
         }
 
-        // 转移道具：修改兑换记录的归属
-        record.setStudentId(toStudent.getId());
-        record.setStudentName(toStudent.getName());
-        record.setGiftFrom(fromStudent.getId());
-        record.setGiftFromName(fromStudent.getName());
+        // 保留原 record 为 GIFT_OUT 赠出侧（studentId=赠出方不变）
+        record.setGiftTo(toStudent.getId());
+        record.setGiftToName(toStudent.getName());
+        // 关键修复：清除原 giftFrom（如果之前是 GIFT_IN 接收记录）
+        record.setGiftFrom(null);
+        record.setGiftFromName(null);
+        record.setActionType(ExchangeRecord.ActionType.GIFT_OUT.name());
         exchangeRecordRepo.save(record);
+
+        // 为接收方新建一条 GIFT_IN 记录
+        ExchangeRecord inRecord = new ExchangeRecord();
+        inRecord.setStudentId(toStudent.getId());
+        inRecord.setStudentName(toStudent.getName());
+        inRecord.setItemId(record.getItemId());
+        inRecord.setItemName(record.getItemName());
+        inRecord.setItemIcon(record.getItemIcon());
+        inRecord.setFoodSpent(0);
+        inRecord.setTeacherId(teacherId);
+        inRecord.setGiftFrom(fromStudent.getId());
+        inRecord.setGiftFromName(fromStudent.getName());
+        inRecord.setActionType(ExchangeRecord.ActionType.GIFT_IN.name());
+        ExchangeRecord savedIn = exchangeRecordRepo.save(inRecord);
+
+        // 进化道具：赠出方 -1，接收方 +1
+        ShopItem item = shopItemRepo.findById(record.getItemId()).orElse(null);
+        if (item != null && "evolution_item".equals(item.getItemType())) {
+            String itemKey = item.getEvolutionItemKey() != null && !item.getEvolutionItemKey().isEmpty()
+                    ? item.getEvolutionItemKey() : item.getName();
+            addEvolutionItem(fromStudent, itemKey, -1);
+            studentRepo.save(fromStudent);
+            addEvolutionItem(toStudent, itemKey, 1);
+            studentRepo.save(toStudent);
+        }
 
         return ExchangeRecordResponse.from(record);
     }
@@ -377,5 +420,65 @@ public class ShopService {
 
         // 始终检查：补充缺失的进化道具（兼容旧账号及新添加的道具）
         migrateEvolutionItems(teacherId);
+    }
+
+    /**
+     * 调整学生 evolutionItems 库存（delta 可为 -1 / +1）
+     * 委托给 util 实现，避免重复代码。
+     */
+    private void addEvolutionItem(Student student, String itemKey, int delta) {
+        com.classpet.util.EvolutionItemUtil.adjust(student, itemKey, delta);
+    }
+
+    /**
+     * 撤销兑换（教师权限）
+     * - 仅可撤销 actionType=PURCHASE 的 record
+     * - 回退 foodSpent 粮食给学生
+     * - 如果是 evolution_item 类型，扣除该学生 1 个 evolutionItems 库存
+     * - 标记 record.actionType=REVOKED（保留原字段便于查看）
+     */
+    @Transactional
+    public ExchangeRecordResponse revokeExchange(String recordId, String teacherId) {
+        ExchangeRecord record = exchangeRecordRepo.findById(recordId)
+                .orElseThrow(() -> new IllegalArgumentException("兑换记录不存在"));
+        if (!record.getTeacherId().equals(teacherId)) {
+            throw new IllegalArgumentException("无权操作该记录");
+        }
+        String currentAction = record.getActionType();
+        if (currentAction == null || "PURCHASE".equals(currentAction)) {
+            // OK 可以撤销
+        } else if ("REVOKED".equals(currentAction)) {
+            throw new IllegalArgumentException("该记录已被撤销");
+        } else {
+            throw new IllegalArgumentException("只能撤销兑换记录（GIFT_OUT/GIFT_IN 不能撤销）");
+        }
+
+        // 退还 foodSpent 粮食给学生
+        Student student = studentRepo.findById(record.getStudentId())
+                .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
+        int refund = record.getFoodSpent() == null ? 0 : record.getFoodSpent();
+        student.setFood((student.getFood() == null ? 0 : student.getFood()) + refund);
+        studentRepo.save(student);
+
+        // 进化道具：扣 1 个库存
+        ShopItem item = shopItemRepo.findById(record.getItemId()).orElse(null);
+        if (item != null && "evolution_item".equals(item.getItemType())) {
+            String itemKey = item.getEvolutionItemKey() != null && !item.getEvolutionItemKey().isEmpty()
+                    ? item.getEvolutionItemKey() : item.getName();
+            addEvolutionItem(student, itemKey, -1);
+            studentRepo.save(student);
+        }
+
+        // 退还商品库存（学生购买时 -1，撤销 +1）
+        if (item != null && item.getStock() != null) {
+            item.setStock(item.getStock() + 1);
+            shopItemRepo.save(item);
+        }
+
+        // 标记为 REVOKED
+        record.setActionType(ExchangeRecord.ActionType.REVOKED.name());
+        exchangeRecordRepo.save(record);
+
+        return ExchangeRecordResponse.from(record);
     }
 }

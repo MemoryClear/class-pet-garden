@@ -90,8 +90,11 @@ public class ShopDto {
         private String itemName;
         private String itemIcon;
         private Integer foodSpent;
-        private String giftFrom;      // 赠送者ID
-        private String giftFromName;  // 赠送者名字
+        private String giftFrom;      // GIFT_IN: 赠出方ID（record.studentId=接收方）
+        private String giftFromName;  // GIFT_IN: 赠出方名字
+        private String giftTo;        // GIFT_OUT: 接收方ID（record.studentId=赠出方）
+        private String giftToName;    // GIFT_OUT: 接收方名字
+        private String actionType;    // PURCHASE/GIFT_OUT/GIFT_IN/REVOKED
         private LocalDateTime createdAt;
 
         public static ExchangeRecordResponse from(ExchangeRecord record) {
@@ -105,6 +108,9 @@ public class ShopDto {
             res.setFoodSpent(record.getFoodSpent());
             res.setGiftFrom(record.getGiftFrom());
             res.setGiftFromName(record.getGiftFromName());
+            res.setGiftTo(record.getGiftTo());
+            res.setGiftToName(record.getGiftToName());
+            res.setActionType(record.getActionType());
             res.setCreatedAt(record.getCreatedAt());
             return res;
         }

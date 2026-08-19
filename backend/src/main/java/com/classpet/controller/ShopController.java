@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/shop")
@@ -76,5 +77,17 @@ public class ShopController {
             @AuthenticationPrincipal AuthenticatedUser principal,
             @Valid @RequestBody GiftRequest req) {
         return ResponseEntity.ok(shopService.giftItem(req, principal.teacherId()));
+    }
+
+    // 撤销兑换
+    @PostMapping("/records/{id}/revoke")
+    public ResponseEntity<?> revokeRecord(
+            @PathVariable String id,
+            @AuthenticationPrincipal AuthenticatedUser principal) {
+        try {
+            return ResponseEntity.ok(shopService.revokeExchange(id, principal.teacherId()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 }

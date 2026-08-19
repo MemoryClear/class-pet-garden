@@ -367,7 +367,9 @@
               </div>
             </div>
             <div class="record-right">
-              <span class="record-points negative">-{{ r.foodSpent }}</span>
+              <!-- GIFT_OUT：显示 “赠出” 标签；其他：显示消耗积分 -->
+              <span v-if="(r.actionType || '') === 'GIFT_OUT'" class="gift-out-label">🔄 赠出</span>
+              <span v-else class="record-points negative">-{{ r.foodSpent }}</span>
               <span class="record-time">{{ formatTime(r.createdAt) }}</span>
             </div>
           </div>
@@ -517,7 +519,11 @@ function getEvoIcon(name) { return evoIconMap[name] || '💎' }
 
 const decorationItems = computed(() => {
   if (!exchangeHistory.value) return []
-  const owned = exchangeHistory.value.filter(r => !r.giftFrom)
+  // 持有 = PURCHASE 或 GIFT_IN（未赠出的）
+  const owned = exchangeHistory.value.filter(r => {
+    const at = r.actionType || 'PURCHASE'
+    return at === 'PURCHASE' || at === 'GIFT_IN'
+  })
   const map = new Map()
   for (const r of owned) {
     const key = r.itemId || r.itemName
@@ -1286,6 +1292,7 @@ onMounted(async () => {
 .record-points { font-weight: 700; font-size: 1.1rem; }
 .record-points.positive { color: #059669; }
 .record-points.negative { color: #dc2626; }
+.gift-out-label { font-size: 0.85rem; color: #2563eb; background: #dbeafe; padding: 2px 8px; border-radius: 8px; font-weight: 600; }
 .record-time { font-size: 0.75rem; color: #999; }
 .revoked-tag { color: #999; font-size: 0.8rem; text-decoration: line-through; }
 .gift-tag { color: #8b5cf6; font-size: 0.85rem; }
