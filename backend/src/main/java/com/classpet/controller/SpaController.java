@@ -18,6 +18,7 @@ public class SpaController {
         "/", "/home", "/activate", "/history",
         "/exchange-history", "/leaderboard", "/shop", "/settings",
         "/student-home", "/classroom", "/pokemon-pool",
+        "/support",
     })
     public String forwardToIndex() {
         return "forward:/index.html";

@@ -26,6 +26,7 @@ public class SecurityConfig {
         "/", "/home", "/activate", "/history",
         "/exchange-history", "/leaderboard", "/shop", "/settings",
         "/student-home", "/classroom", "/pokemon-pool", "/board",
+        "/support",
     };
 
     @Autowired
@@ -48,6 +49,7 @@ public class SecurityConfig {
                 .requestMatchers(SPA_ROUTES).permitAll()
                 // Static resources from Vite build
                 .requestMatchers("/assets/**", "/static/**", "/pokemon/**",
+                    "/support/**",
                     "/*.html", "/*.js", "/*.css", "/*.ico",
                     "/*.png", "/*.jpg", "/*.svg").permitAll()
                 // Public APIs (no auth needed)
