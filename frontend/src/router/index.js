@@ -94,22 +94,46 @@ const router = createRouter({
   routes
 })
 
+// 死循环防护：在同一次导航链中，对同一 token 只 validate 一次。
+// 防止 401 触发 router.push 后 beforeEach 再次调 /api/auth/validate 造成死循环。
+let _validatedTokenInNav = null
+
 router.beforeEach(async (to, from) => {
   const auth = useAuthStore()
-  if (auth.token) {
-    const checkResult = await auth.checkAuth()
-    if (checkResult === false) {
-      // 验证失败：token 已被清除。避免重复跳转调 /auth/validate 造成死循环，直接放行让后续 guard 重定向。
-      if (to.name === 'Login') return true
-      return { name: 'Login' }
+
+  // 以 localStorage 为唯一权威同步 Pinia 状态（避免 Pinia 与 localStorage 不一致）
+  const lsToken = localStorage.getItem('token')
+  if (auth.token && !lsToken) {
+    auth.clearAuth()
+  } else if (!auth.token && lsToken) {
+    auth.token = lsToken
+    try {
+      auth.user = JSON.parse(localStorage.getItem('user') || 'null')
+    } catch (_) {
+      auth.user = null
     }
+  }
+
+  if (auth.token) {
+    // 死循环防护：同一次导航链中同一 token 只 validate 一次
+    if (_validatedTokenInNav !== auth.token) {
+      const checkResult = await auth.checkAuth()
+      _validatedTokenInNav = auth.token
+      if (checkResult === false) {
+        if (to.name === 'Login') return true
+        return { name: 'Login' }
+      }
+      // 验证通过后再判断教师激活状态
+      if (!auth.isStudent && !auth.isActivated && to.name !== 'Activate') {
+        return { name: 'Activate' }
+      }
+    }
+
     // 学生角色路由守卫
     if (auth.isStudent) {
-      // 强制改密拦截：除改密页外，强制跳到改密页
       if (auth.mustChangePassword && to.name !== 'ChangePassword') {
         return { name: 'ChangePassword' }
       }
-      // 学生访问非学生页面 → 学生首页
       if (to.name !== 'ChangePassword') {
         if (to.name === 'StudentHome') return true
         if (to.meta.studentOnly) return true
@@ -120,11 +144,8 @@ router.beforeEach(async (to, from) => {
         return true
       }
     }
-    // 教师角色路由守卫
-    if (!auth.isStudent && checkResult?.needActivate && to.name !== 'Activate') {
-      return { name: 'Activate' }
-    }
   }
+
   // 学生专属页面，非学生不能进
   if (to.meta.studentOnly && !auth.isStudent) {
     return { name: 'Login' }
@@ -146,14 +167,17 @@ router.beforeEach(async (to, from) => {
   if (to.meta.teacherOnly && auth.isStudent) {
     return { name: 'StudentHome' }
   }
-  // 改密页强制：改完后才能离开
   if (to.meta.forceChangePassword && auth.isLoggedIn && !auth.mustChangePassword) {
     return auth.isStudent ? { name: 'StudentHome' } : { name: 'Home' }
   }
-  // 课堂功能禁用时：访问 /classroom 一律重定向到首页
   if (to.meta.classroomFeature && !CLASSROOM_ENABLED) {
     return auth.isStudent ? { name: 'StudentHome' } : { name: 'Home' }
   }
+})
+
+// 导航结束后重置循环防护标记（让下次跳转重新走 validate 流程）
+router.afterEach(() => {
+  _validatedTokenInNav = null
 })
 
 export default router
