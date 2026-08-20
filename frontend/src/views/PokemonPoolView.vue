@@ -51,8 +51,16 @@
           :class="['pokemon-card', { selected: getEntry(pokemon.pokedexId) }]"
           @click="togglePokemon(pokemon)"
         >
-          <div class="pokemon-image">
-            <img :src="pokemon.image" :alt="pokemon.name" @error="handleImageError">
+          <div class="pokemon-image" :data-pokedex-id="pokemon.pokedexId" :ref="el => registerCard(el, pokemon.pokedexId)">
+            <img
+              :src="isVisible(pokemon.pokedexId) ? pokemon.image : placeholderSrc"
+              :alt="pokemon.name"
+              :data-pokedex-id="pokemon.pokedexId"
+              :class="['pokemon-sprite', { 'pokemon-sprite--loaded': isVisible(pokemon.pokedexId) }]"
+              loading="lazy"
+              decoding="async"
+              @error="handleImageError"
+            >
           </div>
           <div class="pokemon-info">
             <span class="pokedex-number">#{{ pokemon.pokedexId }}</span>
@@ -92,13 +100,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth.js'
+import { useAppStore } from '../stores/app.js'
 import { petApi, pokemonApi } from '../api/index.js'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const appStore = useAppStore()
 
 const allPokemon = ref([])
 const selectedEntries = ref([]) // [{pokedexId, weight}]
@@ -112,13 +122,95 @@ const distSuccess = ref(false)
 const distError = ref(false)
 const batchWeight = ref(3)
 
-onMounted(async () => { await loadData() })
+// —— 图片懒加载 + 数据缓存 ——
+const placeholderSrc =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><rect width="80" height="80" fill="#f1f5f9"/></svg>'
+  )
+const visiblePokedexIds = ref(new Set())
+const cardRefs = new Map()
+let cardObserver = null
+let scrollContainer = null
+let scrollHandler = null
+
+function isVisible(pokedexId) {
+  return visiblePokedexIds.value.has(pokedexId)
+}
+
+function registerCard(el, pokedexId) {
+  if (!el) {
+    cardRefs.delete(pokedexId)
+    return
+  }
+  cardRefs.set(pokedexId, el)
+  if (cardObserver) {
+    cardObserver.observe(el)
+  }
+}
+
+function setupIntersectionObserver() {
+  if (typeof IntersectionObserver === 'undefined') {
+    // 兜底：全部可见
+    allPokemon.value.forEach(p => visiblePokedexIds.value.add(p.pokedexId))
+    return
+  }
+  // 视口 + 上下各 200px 缓冲区，提前加载接近屏幕的图片
+  cardObserver = new IntersectionObserver(
+    entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          const id = Number(entry.target.dataset.pokedexId)
+          if (!isNaN(id)) visiblePokedexIds.value.add(id)
+        }
+      }
+    },
+    { rootMargin: '200px 0px', threshold: 0.01 }
+  )
+  cardRefs.forEach(el => cardObserver.observe(el))
+}
+
+function scrollToTop() {
+  // 离开页面时滚回顶部，避免下次进入时残留滚动位置
+  if (scrollContainer) scrollContainer.scrollTop = 0
+  window.scrollTo(0, 0)
+}
+
+onMounted(async () => {
+  await loadData()
+  // 数据加载完后，DOM 也已经渲染，再挂 IntersectionObserver
+  await nextTick()
+  scrollContainer = document.querySelector('.pokemon-grid')?.parentElement || null
+  if (scrollContainer) {
+    scrollHandler = () => { /* 触发 IntersectionObserver 重计算 */ }
+    scrollContainer.addEventListener('scroll', scrollHandler, { passive: true })
+  }
+  setupIntersectionObserver()
+})
+
+onBeforeUnmount(() => {
+  if (cardObserver) {
+    cardObserver.disconnect()
+    cardObserver = null
+  }
+  if (scrollContainer && scrollHandler) {
+    scrollContainer.removeEventListener('scroll', scrollHandler)
+  }
+  scrollToTop()
+})
 
 async function loadData() {
   loading.value = true
   try {
-    const pokemonRes = await petApi.getPokemon()
-    allPokemon.value = pokemonRes.data
+    // 优先使用 Pinia 中已缓存的宝可梦库（避免重复请求 + 重复拉图片 URL 列表）
+    if (appStore.pokemonLibrary && appStore.pokemonLibrary.length) {
+      allPokemon.value = appStore.pokemonLibrary
+    } else {
+      const pokemonRes = await petApi.getPokemon()
+      allPokemon.value = pokemonRes.data || []
+      appStore.pokemonLibrary = allPokemon.value
+      appStore.pokemonLibraryLoadedAt = Date.now()
+    }
 
     const teacherId = authStore.teacherId
     if (teacherId) {
@@ -471,6 +563,15 @@ function handleImageError(e) {
   width: 80px;
   height: 80px;
   object-fit: contain;
+  transition: opacity 0.2s ease;
+}
+
+.pokemon-sprite {
+  opacity: 0;
+}
+
+.pokemon-sprite--loaded {
+  opacity: 1;
 }
 
 .pokemon-info { text-align: center; }

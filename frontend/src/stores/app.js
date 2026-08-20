@@ -6,6 +6,8 @@ export const useAppStore = defineStore('app', {
     students: [],
     scoreItems: [],
     petLibrary: [],
+    pokemonLibrary: [],
+    pokemonLibraryLoadedAt: 0,
     history: [],
     historyHasMore: false,
     historyNextCursor: null,
