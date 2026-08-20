@@ -453,6 +453,11 @@ public class ShopService {
             throw new IllegalArgumentException("只能撤销兑换记录（GIFT_OUT/GIFT_IN 不能撤销）");
         }
 
+        // 关键防护：该道具一旦赠送出去过，不能撤销（接收方仍持有，兑分会不一致）
+        if (record.getGiftTo() != null || record.getGiftToName() != null) {
+            throw new IllegalArgumentException("该道具已赠送给「" + record.getGiftToName() + "」，无法撤销（请先联系接收方归还后再撤销）");
+        }
+
         // 退还 foodSpent 粮食给学生
         Student student = studentRepo.findById(record.getStudentId())
                 .orElseThrow(() -> new IllegalArgumentException("学生不存在"));

@@ -36,8 +36,9 @@
             <button
               v-if="!item.revoked"
               class="revoke-btn"
+              :disabled="item.giftedOut"
+              :title="item.giftedOut ? '该道具已赠送，无法撤销' : '撤销此操作'"
               @click="handleRevoke(item)"
-              title="撤销此操作"
             >↩ 撤销</button>
             <div v-else class="revoked-time">撤销于 {{ formatTime(item.revokedAt) }}</div>
           </div>
@@ -103,6 +104,12 @@ function handleRevoke(item) {
 
 async function confirmRevoke() {
   if (!revokeTarget.value) return
+  // 二次拦截：如果已赠送，提示但不进入 API 调用
+  if (revokeTarget.value.giftedOut) {
+    $confirm.error('该道具已赠送，无法撤销')
+    revokeTarget.value = null
+    return
+  }
   revoking.value = true
   try {
     await api.post(`/history/${revokeTarget.value.id}/revoke`)
@@ -154,6 +161,8 @@ h2 { font-size:18px; font-weight:600; color:#2d3748; }
 .history-time { font-size:12px; color:#999; }
 .revoke-btn { margin-top:4px; background:none; border:1px solid #d9d9d9; padding:3px 8px; border-radius:4px; font-size:11px; color:#666; cursor:pointer; transition:all 0.2s; }
 .revoke-btn:hover { border-color:#ff4d4f; color:#ff4d4f; background:#fff1f0; }
+.revoke-btn:disabled { border-color:#d9d9d9; color:#bbb; background:#f5f5f5; cursor:not-allowed; }
+.revoke-btn:disabled:hover { border-color:#d9d9d9; color:#bbb; background:#f5f5f5; }
 .revoked-time { font-size:11px; color:#bbb; margin-top:2px; }
 .load-more { text-align:center; margin-top:16px; }
 .load-more-btn { background:#fff; border:1px solid #fdb2a4; color:#f97316; padding:8px 24px; border-radius:8px; font-size:14px; cursor:pointer; transition:all 0.2s; }

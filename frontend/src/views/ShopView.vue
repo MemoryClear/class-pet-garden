@@ -139,15 +139,27 @@
       </div>
 
       <div v-else class="records-list">
-        <div v-for="record in filteredRecords" :key="record.id" class="record-item">
+        <div v-for="record in filteredRecords" :key="record.id" class="record-item" :class="{ gifted: isGiftedOut(record) }">
           <div class="record-icon">{{ record.itemIcon }}</div>
           <div class="record-info">
-            <div class="record-student">{{ record.studentName }}</div>
-            <div class="record-item-name">兑换了 {{ record.itemName }}</div>
+            <div class="record-student">
+              {{ record.studentName }}
+              <span v-if="isGiftedOut(record)" class="gifted-tag" :title="'已赠送给 ' + record.giftToName">已送出</span>
+            </div>
+            <div class="record-item-name">
+              <span v-if="isGiftedOut(record)">兑换了 {{ record.itemName }}</span>
+              <span v-else>兑换了 {{ record.itemName }}</span>
+            </div>
           </div>
           <div class="record-food">-{{ record.foodSpent }} 粮食</div>
           <div class="record-time">{{ formatTime(record.createdAt) }}</div>
-          <button class="revoke-btn" @click="revokeRecord(record)">撤销</button>
+          <button
+            class="revoke-btn"
+            :disabled="isGiftedOut(record)"
+            :title="isGiftedOut(record) ? '该道具已赠送给「' + record.giftToName + '」，无法撤销' : ''"
+            @click="revokeRecord(record)">
+            撤销
+          </button>
         </div>
       </div>
 
@@ -225,9 +237,17 @@ const recordsLoading = ref(false)
 const recordsHasMore = ref(false)
 const recordsNextCursor = ref(null)
 const filteredRecords = computed(() => {
-  // 只显示 PURCHASE（教师兑换道具的记录），过滤掉赠送 (GIFT_OUT / GIFT_IN)
-  return records.value.filter(r => (r.actionType || 'PURCHASE') === 'PURCHASE')
+  // 显示所有 PURCHASE / GIFT_OUT 记录（教师兑换 + 已转手的兑换）
+  // GIFT_IN 不在这里显示（那是接收方的视角）
+  return records.value.filter(r => {
+    const at = r.actionType || 'PURCHASE'
+    return at === 'PURCHASE' || at === 'GIFT_OUT'
+  })
 })
+
+const isGiftedOut = (record) => {
+  return record.actionType === 'GIFT_OUT' && !!record.giftToName
+}
 
 const saveItem = async () => {
   try {
@@ -724,8 +744,33 @@ onMounted(() => {
   white-space: nowrap;
   transition: all 0.15s;
 }
-.revoke-btn:hover {
+.revoke-btn:hover:not(:disabled) {
   background: #dc2626;
   color: white;
+}
+.revoke-btn:disabled {
+  background: #f5f5f5;
+  color: #b0b0b0;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+/* 已赠送的兑换记录：灰色调 + 不透明度降低 */
+.record-item.gifted {
+  opacity: 0.65;
+  background: #fafafa;
+}
+.record-item.gifted .record-student {
+  color: #888;
+}
+.gifted-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  font-size: 10px;
+  background: #e5e7eb;
+  color: #6b7280;
+  border-radius: 8px;
+  font-weight: normal;
 }
 </style>

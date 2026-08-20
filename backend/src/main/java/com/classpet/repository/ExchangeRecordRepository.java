@@ -31,4 +31,8 @@ public interface ExchangeRecordRepository extends JpaRepository<ExchangeRecord, 
                                          @Param("cursorTime") LocalDateTime cursorTime,
                                          @Param("cursorId") String cursorId,
                                          Pageable page);
+
+    // 历史防赠送护佑：查找教师 + 学生 + 道具名 + 时间窗内的兑换记录
+    List<ExchangeRecord> findByTeacherIdAndStudentIdAndItemNameAndCreatedAtBetweenOrderByCreatedAtDesc(
+            String teacherId, String studentId, String itemName, LocalDateTime from, LocalDateTime to);
 }

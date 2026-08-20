@@ -58,7 +58,7 @@
       <div v-else class="timeline">
         <div v-for="group in groupedByDate" :key="group.date" class="day-group">
           <div class="day-header">{{ group.date }}</div>
-          <div v-for="record in group.records" :key="record.id" class="record-item">
+          <div v-for="record in group.records" :key="record.id" class="record-item" :class="{ gifted: isGiftedOut(record) }">
             <div class="record-icon">{{ getItemIcon(record.itemId) }}</div>
             <div class="record-info">
               <div class="record-name">
@@ -67,6 +67,7 @@
                 <span v-else-if="record.actionType === 'GIFT_IN' && record.giftFromName" class="badge gift-in">📥 来自 {{ record.giftFromName }}</span>
                 <span v-else-if="record.actionType === 'PURCHASE'" class="badge purchase">🛒 兑换</span>
                 <span v-else-if="record.actionType === 'REVOKED'" class="badge revoked">🚫 已撤销</span>
+                <span v-if="isGiftedOut(record)" class="not-owned-tag" :title="'已赠送给 ' + record.giftToName + '，非本人持有'">非本人持有</span>
               </div>
               <div class="record-item-name">{{ getItemName(record.itemId) }}</div>
             </div>
@@ -77,7 +78,14 @@
               <span v-else>—</span>
             </div>
             <div class="record-time">{{ formatTime(record.exchangeTime || record.createdAt) }}</div>
-            <button v-if="record.actionType === 'PURCHASE'" class="revoke-btn" @click="revokeRecord(record)">撤销</button>
+            <button
+              v-if="record.actionType === 'PURCHASE' || record.actionType === 'GIFT_OUT'"
+              class="revoke-btn"
+              :disabled="isGiftedOut(record)"
+              :title="isGiftedOut(record) ? '该道具已赠送给「' + record.giftToName + '」，无法撤销' : ''"
+              @click="revokeRecord(record)">
+              撤销
+            </button>
           </div>
         </div>
       </div>
@@ -130,6 +138,11 @@ async function revokeRecord(record) {
 function getItemIcon(itemId) {
   const item = appStore.shopItems.find(i => i.id === itemId)
   return item?.icon || '❓'
+}
+
+// 是否已送出（非本人持有）
+function isGiftedOut(record) {
+  return record.actionType === 'GIFT_OUT' && !!record.giftToName
 }
 
 // 格式化
@@ -380,9 +393,35 @@ h2 { font-size: 18px; font-weight: 600; color: #2d3748; }
   transition: all 0.15s;
   white-space: nowrap;
 }
-.revoke-btn:hover {
+.revoke-btn:hover:not(:disabled) {
   background: #dc2626;
   color: white;
+}
+.revoke-btn:disabled {
+  background: #f5f5f5;
+  color: #b0b0b0;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+/* 已赠送的兑换记录：灰色 + 不透明度 */
+.record-item.gifted {
+  opacity: 0.7;
+  background: #fafafa;
+}
+.record-item.gifted .record-name {
+  color: #6b7280;
+}
+.not-owned-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  font-size: 10px;
+  background: #e5e7eb;
+  color: #6b7280;
+  border-radius: 8px;
+  font-weight: normal;
+  white-space: nowrap;
 }
 
 /* 加载/空状态 */
