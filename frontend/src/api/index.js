@@ -30,8 +30,15 @@ api.interceptors.response.use(
   },
   err => {
     if (err.response?.status === 401 || err.response?.status === 403) {
-      localStorage.clear()
-      router.push('/')
+      // 只清状态、不手动调 router.push。
+      // 让 axios 抛出给原调用方（auth.validateToken 的 catch），
+      // 它会调 auth.clearAuth() 同步清 Pinia 与 localStorage，
+      // 然后 checkAuth 返回 false，由 router.beforeEach 自己跳走。
+      // 避免 Pinia 中 token 仍为旧值时触发死循环。
+      try {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+      } catch (_) {}
     }
     return Promise.reject(err)
   }

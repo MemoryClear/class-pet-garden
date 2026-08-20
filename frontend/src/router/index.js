@@ -99,6 +99,8 @@ router.beforeEach(async (to, from) => {
   if (auth.token) {
     const checkResult = await auth.checkAuth()
     if (checkResult === false) {
+      // 验证失败：token 已被清除。避免重复跳转调 /auth/validate 造成死循环，直接放行让后续 guard 重定向。
+      if (to.name === 'Login') return true
       return { name: 'Login' }
     }
     // 学生角色路由守卫

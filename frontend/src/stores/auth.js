@@ -76,6 +76,7 @@ export const useAuthStore = defineStore('auth', {
         }
         return true
       } catch (e) {
+        // 401/403 已由 api interceptor 局部处理；这里只重置状态。
         this.clearAuth()
         return false
       }
