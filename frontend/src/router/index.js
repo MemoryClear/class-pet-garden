@@ -115,7 +115,8 @@ router.beforeEach(async (to, from) => {
   }
 
   if (auth.token) {
-    // 死循环防护：同一次导航链中同一 token 只 validate 一次
+    // 死循环防护：同一次导航链中同一 token 只 validate 一次（避免并发 await race）
+    // checkAuth 内部 validateToken 已有 5 分钟缓存，所以即使跨导航也只发一次网络请求
     if (_validatedTokenInNav !== auth.token) {
       const checkResult = await auth.checkAuth()
       _validatedTokenInNav = auth.token
@@ -175,9 +176,7 @@ router.beforeEach(async (to, from) => {
   }
 })
 
-// 导航结束后重置循环防护标记（让下次跳转重新走 validate 流程）
-router.afterEach(() => {
-  _validatedTokenInNav = null
-})
+// validateToken 已有 5 分钟缓存，重复调 checkAuth 也会命中缓存不发起网络请求
+// 因此不再需要在 afterEach 重置防护标记（保留纯粹防并发 race）
 
 export default router
