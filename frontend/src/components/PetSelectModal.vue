@@ -58,7 +58,7 @@
              :class="{ selected: selected?.id === pokemon.id && selected?.type === 'pokemon' }"
              @click="selectPet(pokemon, 'pokemon')">
           <div class="pet-icon pokemon-icon">
-            <img :src="pokemon.image" :alt="pokemon.name" v-if="pokemon.image" class="pokemon-img" />
+            <img v-if="pokemon.image" :src="isVisible(pokemon.pokedexId || pokemon.id) ? pokemon.image : placeholderSrc" :alt="pokemon.name" class="pokemon-img" :class="{ 'pokemon-img--loaded': isVisible(pokemon.pokedexId || pokemon.id) }" loading="lazy" decoding="async" :ref="el => registerImage(el, pokemon.pokedexId || pokemon.id)" />
             <span v-else>{{ pokemon.icon }}</span>
           </div>
           <div class="pet-name">{{ pokemon.name }}</div>
@@ -87,6 +87,10 @@ import { ref, onMounted } from 'vue'
 import { useAppStore } from '../stores/app.js'
 import { petApi } from '../api/index.js'
 import $confirm from '../composables/useConfirmModal.js'
+import { useLazyImages } from '../composables/useLazyImages.js'
+
+
+const { isVisible, registerImage, placeholderSrc } = useLazyImages()
 
 const props = defineProps({ student: { type: Object, required: true } })
 const emit = defineEmits(['close'])
@@ -219,6 +223,9 @@ async function confirm() {
 .pet-icon { font-size: 40px; margin-bottom: 4px; }
 .pokemon-icon { font-size: 36px; display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; }
 .pokemon-img { width: 100%; height: 100%; object-fit: contain; }
+.pokemon-img { transition: opacity 0.2s ease; opacity: 0; }
+.pokemon-img--loaded { opacity: 1; }
+
 .pet-name { font-size: 13px; color: #2d3748; font-weight: 500; }
 
 /* 宝可梦属性标签 */

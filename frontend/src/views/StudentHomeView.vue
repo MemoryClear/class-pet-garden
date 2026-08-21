@@ -80,7 +80,16 @@
                 @click="setMyRepresent(poke)"
               >
                 <div class="mylist-img-wrap">
-                  <img :src="poke.image" :alt="poke.name" class="mylist-img" />
+                  <img
+                    :src="isVisible(poke.id) && poke.image ? poke.image : placeholderSrc"
+                    :alt="poke.name"
+                    class="mylist-img"
+                    :class="{ 'mylist-img--loaded': isVisible(poke.id) }"
+                    loading="lazy"
+                    decoding="async"
+                    :ref="el => registerImage(el, poke.id)"
+                    @error="onImgError"
+                  >
                   <div v-if="myInfo.representPokemonId === poke.id" class="mylist-crown">⭐</div>
                 </div>
                 <div class="mylist-name">{{ poke.name }}</div>
@@ -180,7 +189,17 @@
         <div class="pokemon-team">
           <div v-for="poke in pokemonList" :key="poke.id" class="pokemon-card" :class="{ 'can-evolve': poke.canEvolve }">
             <div class="pokemon-avatar">
-              <img v-if="poke.image" :src="poke.image" :alt="poke.name" class="pokemon-img" />
+              <img
+                v-if="poke.image"
+                :src="isVisible(poke.id) ? poke.image : placeholderSrc"
+                :alt="poke.name"
+                class="pokemon-img"
+                :class="{ 'pokemon-img--loaded': isVisible(poke.id) }"
+                loading="lazy"
+                decoding="async"
+                :ref="el => registerImage(el, poke.id)"
+                @error="onImgError"
+              />
               <span v-else class="pokemon-icon-fallback">❓</span>
               <div v-if="poke.canEvolve" class="evolve-badge">✨可进化</div>
             </div>
@@ -394,7 +413,17 @@
                class="pokemon-option" 
                :class="{ selected: selectedPokemon && selectedPokemon.pokedexId === poke.pokedexId }"
                @click="selectedPokemon = poke">
-            <img v-if="poke.image" :src="poke.image" :alt="poke.name" class="pokemon-img-modal" />
+            <img
+                  v-if="poke.image"
+                  :src="isVisible(poke.pokedexId || poke.id) ? poke.image : placeholderSrc"
+                  :alt="poke.name"
+                  class="pokemon-img-modal"
+                  :class="{ 'pokemon-img-modal--loaded': isVisible(poke.pokedexId || poke.id) }"
+                  loading="lazy"
+                  decoding="async"
+                  :ref="el => registerImage(el, poke.pokedexId || poke.id)"
+                  @error="onImgError"
+                />
             <div class="pokemon-name-modal">{{ poke.name }}</div>
             <div class="pokemon-types-modal">
               <span v-for="t in parseTypes(poke.types)" :key="t" :class="'type-tag type-' + getTypeClass(t)">{{ t }}</span>
@@ -422,7 +451,17 @@
           <div class="pokemon-feed-list">
             <div v-for="poke in feedablePokemon" :key="poke.id" class="pokemon-feed-item">
               <div class="poke-info">
-                <img v-if="poke.image" :src="poke.image" :alt="poke.name" class="poke-thumb" />
+                <img
+                    v-if="poke.image"
+                    :src="isVisible(poke.id) ? poke.image : placeholderSrc"
+                    :alt="poke.name"
+                    class="poke-thumb"
+                    :class="{ 'poke-thumb--loaded': isVisible(poke.id) }"
+                    loading="lazy"
+                    decoding="async"
+                    :ref="el => registerImage(el, poke.id)"
+                    @error="onImgError"
+                  />
                 <span class="poke-name">{{ poke.name }}</span>
                 <span class="poke-level">Lv.{{ poke.level }}</span>
               </div>
@@ -468,7 +507,17 @@
         <div v-else class="ball-content pokemon-reveal">
           <p class="congrats">🎉 恭喜获得新宝可梦！</p>
           <div class="reveal-animation">
-            <img v-if="obtainedPokemon.image" :src="obtainedPokemon.image" :alt="obtainedPokemon.name" class="revealed-pokemon-img" />
+            <img
+                  v-if="obtainedPokemon.image"
+                  :src="isVisible(obtainedPokemon.id || 'reveal') ? obtainedPokemon.image : placeholderSrc"
+                  :alt="obtainedPokemon.name"
+                  class="revealed-pokemon-img"
+                  :class="{ 'revealed-pokemon-img--loaded': isVisible(obtainedPokemon.id || 'reveal') }"
+                  loading="lazy"
+                  decoding="async"
+                  :ref="el => registerImage(el, obtainedPokemon.id || 'reveal')"
+                  @error="onImgError"
+                />
             <span v-else class="revealed-pokemon-icon">❓</span>
           </div>
           <h2>{{ obtainedPokemon.name }}</h2>
@@ -496,7 +545,17 @@ import ClassroomView from './ClassroomView.vue'
 import { CLASSROOM_ENABLED as classroomEnabled } from '../config/features.js'
 import $confirm from '../composables/useConfirmModal.js'
 import PetIcon from '../components/PetIcon.vue'
+import { useLazyImages } from '../composables/useLazyImages.js'
 
+
+const { isVisible, registerImage, placeholderSrc } = useLazyImages()
+
+function onImgError(e) {
+  if (!e.target.dataset.fallback) {
+    e.target.dataset.fallback = '1'
+    e.target.src = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><rect width="80" height="80" fill="#e2e8f0"/><text x="50%" y="50%" font-size="14" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle">无图</text></svg>')
+  }
+}
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -1066,7 +1125,8 @@ onMounted(async () => {
 .pokemon-mylist-item:hover { border-color: #667eea; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 .pokemon-mylist-item.is-represent { border-color: #f59e0b; background: #fffbeb; }
 .mylist-img-wrap { position: relative; width: 70px; height: 70px; margin: 0 auto 4px; }
-.mylist-img { width: 100%; height: 100%; object-fit: contain; }
+.mylist-img { width: 100%; height: 100%; object-fit: contain; transition: opacity 0.2s ease; opacity: 0; }
+.mylist-img--loaded { opacity: 1; }
 .mylist-crown { position: absolute; top: -4px; right: -4px; font-size: 16px; background: #fbbf24; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 .mylist-name { font-size: 12px; font-weight: 600; color: #1e293b; }
 .mylist-level { font-size: 11px; color: #667eea; }
@@ -1095,7 +1155,8 @@ onMounted(async () => {
 @keyframes glow { from { box-shadow: 0 0 5px rgba(255,215,0,0.3); } to { box-shadow: 0 0 15px rgba(255,215,0,0.6); } }
 
 .pokemon-avatar { position: relative; text-align: center; margin-bottom: 12px; }
-.pokemon-img { width: 80px; height: 80px; object-fit: contain; }
+.pokemon-img { width: 80px; height: 80px; object-fit: contain; transition: opacity 0.2s ease; opacity: 0; }
+.pokemon-img--loaded { opacity: 1; }
 .pokemon-icon-fallback { font-size: 60px; }
 .evolve-badge { position: absolute; top: -5px; right: calc(50% - 50px); background: #ffd700; color: #b8860b; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: bold; animation: pulse 1s infinite; }
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
@@ -1170,7 +1231,8 @@ onMounted(async () => {
 .pokemon-option { padding: 10px; border-radius: 10px; border: 2px solid #eee; text-align: center; cursor: pointer; transition: all 0.2s; }
 .pokemon-option:hover { border-color: #3b82f6; background: #f0f9ff; }
 .pokemon-option.selected { border-color: #3b82f6; background: #dbeafe; }
-.pokemon-img-modal { width: 56px; height: 56px; object-fit: contain; margin-bottom: 4px; }
+.pokemon-img-modal { width: 56px; height: 56px; object-fit: contain; margin-bottom: 4px; transition: opacity 0.2s ease; opacity: 0; }
+.pokemon-img-modal--loaded { opacity: 1; }
 .pokemon-name-modal { font-size: 0.85rem; font-weight: 500; margin-bottom: 4px; }
 .pokemon-types-modal { display: flex; justify-content: center; gap: 2px; flex-wrap: wrap; }
 
@@ -1184,7 +1246,8 @@ onMounted(async () => {
 .pokemon-feed-list { max-height: 300px; overflow-y: auto; }
 .pokemon-feed-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-radius: 8px; background: #f9fafb; margin-bottom: 8px; }
 .poke-info { display: flex; align-items: center; gap: 10px; }
-.poke-thumb { width: 40px; height: 40px; object-fit: contain; }
+.poke-thumb { width: 40px; height: 40px; object-fit: contain; transition: opacity 0.2s ease; opacity: 0; }
+.poke-thumb--loaded { opacity: 1; }
 .poke-name { font-weight: 500; }
 .poke-level { color: #888; font-size: 0.85rem; }
 .feed-controls { display: flex; align-items: center; gap: 4px; }
@@ -1324,7 +1387,8 @@ onMounted(async () => {
 .pokemon-reveal { }
 .reveal-animation { animation: revealBounce 0.6s ease-out; }
 @keyframes revealBounce { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
-.revealed-pokemon-img { width: 150px; height: 150px; object-fit: contain; margin-bottom: 10px; animation: float 2s ease-in-out infinite; }
+.revealed-pokemon-img { width: 150px; height: 150px; object-fit: contain; margin-bottom: 10px; animation: float 2s ease-in-out infinite; transition: opacity 0.2s ease; opacity: 0; }
+.revealed-pokemon-img--loaded { opacity: 1; }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 .pokemon-reveal h2 { margin: 10px 0; font-size: 1.8rem; color: #1f2937; }
 .pokemon-reveal .pokemon-types { display: flex; justify-content: center; gap: 6px; margin-bottom: 16px; }

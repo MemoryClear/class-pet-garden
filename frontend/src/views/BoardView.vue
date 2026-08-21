@@ -42,7 +42,7 @@
           @click="openStudent(s)"
         >
           <span :class="['rank-medal', `rank-${idx + 1}`]">{{idx + 1}}</span>
-          <img v-if="s.petIcon" :src="s.petIcon" class="pet-icon" :alt="s.petName" @error="onPetIconError" />
+          <img v-if="s.petIcon" :src="isVisible(s.id || s.name) ? s.petIcon : placeholderSrc" class="pet-icon" :class="{ 'pet-icon--loaded': isVisible(s.id || s.name) }" :alt="s.petName" loading="lazy" decoding="async" :ref="el => registerImage(el, s.id || s.name)" @error="onPetIconError" />
           <span v-else class="pet-icon-placeholder">❓</span>
           <div class="rank-info">
             <div class="rank-name">{{s.name}}</div>
@@ -62,7 +62,7 @@
         <div class="drawer">
           <button class="close-btn" @click="closeStudent">×</button>
           <div class="student-title">
-            <img v-if="selectedStudent.pet?.icon" :src="selectedStudent.pet.icon" class="pet-big" :alt="selectedStudent.pet.name" />
+            <img v-if="selectedStudent.pet?.icon" :src="isVisible(selectedStudent.id) ? selectedStudent.pet.icon : placeholderSrc" class="pet-big" :class="{ 'pet-big--loaded': isVisible(selectedStudent.id) }" :alt="selectedStudent.pet.name" loading="lazy" decoding="async" :ref="el => registerImage(el, selectedStudent.id)" />
             <span v-else class="pet-big-placeholder">❓</span>
             <div class="title-info">
               <h2>{{selectedStudent.name}}</h2>
@@ -118,6 +118,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { useLazyImages } from '../composables/useLazyImages.js'
+
+const { isVisible, registerImage, placeholderSrc } = useLazyImages()
 
 const teachers = ref([])
 const selectedId = ref(null)
@@ -361,6 +364,11 @@ onMounted(() => {
   object-fit: contain;
   background: #fff7ed;
   flex-shrink: 0;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+.pet-icon--loaded {
+  opacity: 1;
 }
 
 .pet-icon-placeholder {

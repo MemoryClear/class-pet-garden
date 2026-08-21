@@ -25,7 +25,16 @@
               @click="handleSelect(poke)"
             >
               <div class="poke-img-wrap">
-                <img :src="poke.image || '/pokemon/default.png'" :alt="poke.name" class="poke-img" />
+                <img
+                  :src="isVisible(poke.id) && poke.image ? poke.image : placeholderSrc"
+                  :alt="poke.name"
+                  class="poke-img"
+                  :class="{ 'poke-img--loaded': isVisible(poke.id) }"
+                  loading="lazy"
+                  decoding="async"
+                  :ref="el => registerImage(el, poke.id)"
+                  @error="onImgError"
+                >
                 <div v-if="poke.id === representPokemonId" class="crown">⭐</div>
               </div>
               <div class="poke-info">
@@ -50,6 +59,16 @@
 import { ref, computed, onMounted } from 'vue'
 import { studentApi } from '../api/index.js'
 import $confirm from '../composables/useConfirmModal.js'
+import { useLazyImages } from '../composables/useLazyImages.js'
+
+const { isVisible, registerImage, placeholderSrc } = useLazyImages()
+
+function onImgError(e) {
+  if (!e.target.dataset.fallback) {
+    e.target.dataset.fallback = '1'
+    e.target.src = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><rect width="80" height="80" fill="#e2e8f0"/><text x="50%" y="50%" font-size="14" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle">无图</text></svg>')
+  }
+}
 
 const props = defineProps({
   student: { type: Object, required: false, default: null }
@@ -155,7 +174,8 @@ onMounted(() => { if (props.student) loadData() })
 .pokemon-item:hover { border-color: #667eea; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 .pokemon-item.is-represent { border-color: #f59e0b; background: #fffbeb; }
 .poke-img-wrap { position: relative; width: 80px; height: 80px; margin: 0 auto 6px; }
-.poke-img { width: 100%; height: 100%; object-fit: contain; }
+.poke-img { width: 100%; height: 100%; object-fit: contain; transition: opacity 0.2s ease; opacity: 0; }
+.poke-img--loaded { opacity: 1; }
 .crown {
   position: absolute; top: -6px; right: -6px; font-size: 18px;
   background: #fbbf24; width: 24px; height: 24px; border-radius: 50%;

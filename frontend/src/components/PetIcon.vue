@@ -1,10 +1,16 @@
 <template>
-  <img v-if="isPath" :src="icon" :alt="alt" class="pet-icon-img" :style="imgStyle" @error="onError" />
+  <img v-if="isPath" :src="isVisible(uid) ? icon : placeholderSrc" :alt="alt" class="pet-icon-img" :class="{ 'pet-icon-img--loaded': isVisible(uid) }" :style="imgStyle" loading="lazy" decoding="async" :ref="el => registerImage(el, uid)" @error="onError" />
   <span v-else :style="spanStyle">{{ icon || fallback }}</span>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { useLazyImages } from '../composables/useLazyImages.js'
+
+const { isVisible, registerImage, placeholderSrc } = useLazyImages()
+
+// 每个实例唯一 uid（用于 IntersectionObserver 跟踪）
+const uid = Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10)
 
 const props = defineProps({
   icon: { type: String, default: '' },
@@ -50,5 +56,10 @@ function onError(e) {
   display: inline-block;
   vertical-align: middle;
   image-rendering: auto;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+.pet-icon-img--loaded {
+  opacity: 1;
 }
 </style>
