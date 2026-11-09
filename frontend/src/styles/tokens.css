@@ -21,6 +21,7 @@
 
   --bg: #FBF8F7;
   --surface: #FFFFFF;
+  --surface-2: #FFFFFF;
   --line: #EFE9E7;
   --line-soft: #F6F1EF;
 
@@ -28,6 +29,10 @@
   --good: #10B981;
   --bad: #EF4444;
   --warn: #F59E0B;
+
+  /* 选中态胶囊/标签：亮色下用深底白字，深色下反过来 */
+  --pill-active-bg: #22242F;
+  --pill-active-fg: #FFFFFF;
 
   /* 圆角 & 阴影 */
   --r-lg: 18px;
@@ -83,6 +88,40 @@
 [data-theme="red"] {
   --brand: #EF4444; --brand-2: #F97316; --brand-deep: #DC2626;
   --brand-soft: rgba(239, 68, 68, .10); --brand-soft-2: rgba(239, 68, 68, .18);
+}
+
+/* ---------- 深色外观 ----------
+ * 只切换中性色与阴影，主色仍由 [data-theme] 决定，
+ * 因此 10 套主题色在深色下同样可用。
+ * 组件级补丁集中在 styles/dark.css。
+ */
+[data-mode="dark"] {
+  --ink: #E9ECF3;
+  --ink-2: #AAB1C0;
+  --ink-3: #7E8698;
+  --ink-4: #5C6474;
+
+  --bg: #0F1115;
+  --surface: #171A21;
+  --surface-2: #1E222B;
+  --line: #272B35;
+  --line-soft: #20242D;
+
+  --good: #34D399;
+  --bad: #F87171;
+  --warn: #FBBF24;
+
+  --shadow-s: 0 1px 2px rgba(0, 0, 0, .5), 0 4px 12px rgba(0, 0, 0, .38);
+  --shadow-m: 0 10px 30px rgba(0, 0, 0, .55);
+
+  /* 深色下浅色蒙版不够明显，提高主色透明度 */
+  --brand-soft: color-mix(in srgb, var(--brand) 18%, transparent);
+  --brand-soft-2: color-mix(in srgb, var(--brand) 32%, transparent);
+
+  --pill-active-bg: color-mix(in srgb, var(--brand) 22%, transparent);
+  --pill-active-fg: var(--brand-deep);
+
+  color-scheme: dark;
 }
 
 /* ---------- 基础样式 ---------- */

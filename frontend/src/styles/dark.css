@@ -1,0 +1,539 @@
+/* ============================================================
+ * 深色外观补丁层（dark mode patch layer）
+ * ------------------------------------------------------------
+ * 说明：早期组件大量使用写死的浅色（#fff / #f5f5f5 / #2d3748…），
+ * tokens.css 只能覆盖使用 CSS 变量的部分。这里用
+ * `html[data-mode="dark"] .xxx` 的方式统一兜底：
+ *   - 多出 1 个元素选择器，天然压过组件内 scoped 的 `.xxx[data-v-*]`
+ *   - 新增组件请优先使用 tokens 变量，不必再往这里加规则
+ * ============================================================ */
+
+/* ---------- 基础 ---------- */
+html[data-mode="dark"] body {
+  background: var(--bg);
+  color: var(--ink);
+}
+html[data-mode="dark"] ::placeholder {
+  color: var(--ink-4);
+}
+html[data-mode="dark"] input,
+html[data-mode="dark"] select,
+html[data-mode="dark"] textarea {
+  color: var(--ink);
+  background-color: var(--surface-2);
+  border-color: var(--line);
+}
+
+/* ---------- 通用面板 / 卡片 ---------- */
+html[data-mode="dark"] .guide-card,
+html[data-mode="dark"] .filter-bar,
+html[data-mode="dark"] .item-card,
+html[data-mode="dark"] .section-card,
+html[data-mode="dark"] .history-list,
+html[data-mode="dark"] .day-group,
+html[data-mode="dark"] .rank-list,
+html[data-mode="dark"] .stat-card,
+html[data-mode="dark"] .container,
+html[data-mode="dark"] .quote-card,
+html[data-mode="dark"] .qr-card,
+html[data-mode="dark"] .pet-card,
+html[data-mode="dark"] .state,
+html[data-mode="dark"] .empty-state {
+  background: var(--surface);
+  border-color: var(--line);
+}
+html[data-mode="dark"] .empty-state,
+html[data-mode="dark"] .state {
+  background: transparent;
+}
+html[data-mode="dark"] .empty-icon,
+html[data-mode="dark"] .state-icon {
+  background: var(--line-soft);
+}
+
+/* ---------- 弹窗内部 ---------- */
+html[data-mode="dark"] .modal-overlay {
+  background: rgba(0, 0, 0, .62);
+}
+html[data-mode="dark"] .modal-card {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, .6);
+}
+html[data-mode="dark"] .modal-body,
+html[data-mode="dark"] .modal-message {
+  color: var(--ink);
+}
+html[data-mode="dark"] .modal-icon {
+  background: rgba(255, 255, 255, .06);
+}
+
+html[data-mode="dark"] .modal-header,
+html[data-mode="dark"] .modal-footer,
+html[data-mode="dark"] .guide-header {
+  border-color: var(--line);
+}
+html[data-mode="dark"] .modal-title,
+html[data-mode="dark"] .guide-title,
+html[data-mode="dark"] .modal-message,
+html[data-mode="dark"] .modal-desc,
+html[data-mode="dark"] .field-row label {
+  color: var(--ink);
+}
+html[data-mode="dark"] .modal-close,
+html[data-mode="dark"] .guide-close {
+  background: var(--line-soft);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .modal-input,
+html[data-mode="dark"] .field-row input,
+html[data-mode="dark"] .custom-input {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--ink);
+}
+html[data-mode="dark"] .multiplier-bar {
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+html[data-mode="dark"] .mult-btn {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .btn-cancel {
+  background: var(--line-soft);
+  color: var(--ink-2);
+  border-color: var(--line);
+}
+html[data-mode="dark"] .btn-cancel:hover {
+  background: var(--line);
+}
+
+/* 评分项 / 宠物选项 */
+html[data-mode="dark"] .score-btn,
+html[data-mode="dark"] .pet-option {
+  background: var(--surface-2);
+  border-color: transparent;
+}
+html[data-mode="dark"] .score-btn.positive {
+  background: rgba(52, 211, 153, .12);
+}
+html[data-mode="dark"] .score-btn.negative {
+  background: rgba(248, 113, 113, .12);
+}
+html[data-mode="dark"] .score-name,
+html[data-mode="dark"] .pet-name-label {
+  color: var(--ink);
+}
+html[data-mode="dark"] .score-btn.positive .score-pt {
+  color: #34D399;
+}
+html[data-mode="dark"] .score-btn.negative .score-pt {
+  color: #F87171;
+}
+html[data-mode="dark"] .pet-option:hover {
+  background: var(--line-soft);
+}
+html[data-mode="dark"] .pet-option.selected {
+  background: var(--brand-soft);
+}
+html[data-mode="dark"] .pet-tabs .tab-btn {
+  background: var(--line-soft);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .pet-tabs .tab-btn.active {
+  background: var(--brand-soft);
+  border-color: var(--brand-soft-2);
+  color: var(--brand-deep);
+}
+
+/* ---------- 宠物卡片 ---------- */
+html[data-mode="dark"] .pet-card.level-1,
+html[data-mode="dark"] .pet-card.level-2,
+html[data-mode="dark"] .pet-card.level-3 {
+  background: linear-gradient(160deg, var(--surface) 0%, var(--surface-2) 100%);
+}
+html[data-mode="dark"] .pet-card.level-4 {
+  background: linear-gradient(160deg, #1B2333 0%, #16202E 100%);
+  border-color: rgba(96, 165, 250, .32);
+}
+html[data-mode="dark"] .pet-card.level-5 {
+  background: linear-gradient(160deg, #2A1D14 0%, #24170F 100%);
+  border-color: rgba(249, 115, 22, .34);
+}
+html[data-mode="dark"] .pet-card.level-6 {
+  background: linear-gradient(160deg, #2A2312 0%, #241D0E 100%);
+  border-color: rgba(255, 215, 0, .34);
+}
+html[data-mode="dark"] .pet-card.no-pet {
+  background: linear-gradient(160deg, var(--surface) 0%, var(--surface-2) 100%);
+  border-color: #3A3038;
+}
+html[data-mode="dark"] .corner-name {
+  color: var(--ink);
+}
+html[data-mode="dark"] .corner-no {
+  color: var(--ink-3);
+}
+html[data-mode="dark"] .pet-name {
+  color: var(--ink);
+}
+html[data-mode="dark"] .pet-card.level-4 .pet-name { color: #93C5FD; }
+html[data-mode="dark"] .pet-card.level-5 .pet-name { color: #FDBA74; }
+html[data-mode="dark"] .pet-card.level-6 .pet-name { color: #FCD34D; }
+html[data-mode="dark"] .food-bar {
+  background: var(--line);
+}
+html[data-mode="dark"] .food-val {
+  color: #F0C08A;
+}
+html[data-mode="dark"] .equipped-bar {
+  background: var(--surface-2);
+}
+html[data-mode="dark"] .equipped-hint {
+  color: #A88E4A;
+}
+html[data-mode="dark"] .action-btn {
+  background: var(--line-soft);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .action-btn:hover {
+  background: var(--line);
+}
+html[data-mode="dark"] .popconfirm-content {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+html[data-mode="dark"] .popconfirm-text {
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .popconfirm-btn.cancel {
+  background: var(--line);
+  color: var(--ink-3);
+}
+html[data-mode="dark"] .pet-card-badge {
+  background: rgba(56, 189, 248, .16);
+  color: #7DD3FC;
+}
+
+/* ---------- 成长指南 ---------- */
+html[data-mode="dark"] .guide-desc,
+html[data-mode="dark"] .level-desc {
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .level-name {
+  color: var(--ink);
+}
+html[data-mode="dark"] .level-range {
+  color: var(--ink-3);
+}
+html[data-mode="dark"] .level-item.level-1 { background: linear-gradient(135deg, #16241C, #1A2A20); }
+html[data-mode="dark"] .level-item.level-2 { background: linear-gradient(135deg, #151F2C, #16202E); }
+html[data-mode="dark"] .level-item.level-3 { background: linear-gradient(135deg, #1F182C, #1C1630); }
+html[data-mode="dark"] .level-item.level-4 { background: linear-gradient(135deg, #151F2C, #182338); }
+html[data-mode="dark"] .level-item.level-5 { background: linear-gradient(135deg, #2A1D14, #2B1A12); }
+html[data-mode="dark"] .level-item.level-6 { background: linear-gradient(135deg, #2A2312, #2B200E); }
+html[data-mode="dark"] .guide-tip {
+  background: var(--surface-2);
+  color: #FBBF24;
+}
+
+/* ---------- 登录页 ---------- */
+html[data-mode="dark"] .auth-page {
+  background: var(--bg);
+}
+html[data-mode="dark"] .seg {
+  background: var(--line-soft);
+}
+html[data-mode="dark"] .seg button.on {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+html[data-mode="dark"] .field input {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--ink);
+}
+html[data-mode="dark"] .field label {
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .auth-tip {
+  background: var(--brand-soft);
+  border-color: var(--brand-soft-2);
+}
+html[data-mode="dark"] .auth-hr {
+  color: var(--ink-4);
+}
+html[data-mode="dark"] .auth-hr::before,
+html[data-mode="dark"] .auth-hr::after {
+  background: var(--line);
+}
+html[data-mode="dark"] .auth-art {
+  background: linear-gradient(158deg,
+      color-mix(in srgb, var(--brand) 22%, #12141A) 0%,
+      color-mix(in srgb, var(--brand-2) 16%, #12141A) 46%,
+      #12141A 100%);
+}
+html[data-mode="dark"] .art-copy h1 {
+  color: #F2F4F8;
+}
+html[data-mode="dark"] .art-copy p {
+  color: #A9A3B4;
+}
+html[data-mode="dark"] .feat {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(255, 255, 255, .08);
+}
+html[data-mode="dark"] .feat b {
+  color: #E8E4F0;
+}
+html[data-mode="dark"] .feat span,
+html[data-mode="dark"] .art-logo span,
+html[data-mode="dark"] .art-foot {
+  color: #9B94A8;
+}
+html[data-mode="dark"] .pet-bub {
+  background: rgba(255, 255, 255, .08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .4), inset 0 0 0 1px rgba(255, 255, 255, .08);
+}
+
+/* ---------- 等级说明入口（顶栏胶囊） ---------- */
+html[data-mode="dark"] .level-guide {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .level-guide:hover {
+  background: var(--line-soft);
+  box-shadow: none;
+}
+
+/* ---------- 主页概览 / 工具条 ---------- */
+html[data-mode="dark"] .stat.accent {
+  background: linear-gradient(140deg, var(--brand-soft), rgba(255, 255, 255, .02));
+}
+html[data-mode="dark"] .sort,
+html[data-mode="dark"] .chip {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .sort button.on {
+  background: var(--line);
+  color: var(--ink);
+}
+html[data-mode="dark"] .chip.on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #14161B;
+}
+html[data-mode="dark"] .search input {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+/* ---------- 历史 / 兑换明细 ---------- */
+html[data-mode="dark"] .history-item,
+html[data-mode="dark"] .record-item {
+  border-color: var(--line-soft);
+}
+html[data-mode="dark"] .history-item.revoked {
+  background: var(--surface-2);
+}
+html[data-mode="dark"] .history-name,
+html[data-mode="dark"] .record-name {
+  color: var(--ink);
+}
+html[data-mode="dark"] .history-action,
+html[data-mode="dark"] .record-item-name,
+html[data-mode="dark"] .history-time {
+  color: var(--ink-3);
+}
+html[data-mode="dark"] .revoke-btn {
+  border-color: var(--line);
+  color: var(--ink-2);
+  background: transparent;
+}
+html[data-mode="dark"] .load-more-btn {
+  background: var(--surface);
+  border-color: var(--brand-soft-2);
+  color: var(--brand-deep);
+}
+html[data-mode="dark"] .stat-card.cost {
+  background: linear-gradient(140deg, #241E10, #2A2212);
+  border-color: #3A2F16;
+}
+html[data-mode="dark"] .stat-card.gift-out {
+  background: linear-gradient(140deg, #131C2B, #16202E);
+  border-color: #22304A;
+}
+html[data-mode="dark"] .stat-card.gift-in {
+  background: linear-gradient(140deg, #241722, #2A1A27);
+  border-color: #3C2335;
+}
+html[data-mode="dark"] .stat-num {
+  color: var(--ink);
+}
+
+/* ---------- 光荣榜 ---------- */
+html[data-mode="dark"] .podium-item.gold {
+  background: linear-gradient(170deg, #241E10, #2A2212);
+  border-color: #4A3A16;
+}
+html[data-mode="dark"] .podium-item.silver {
+  background: linear-gradient(170deg, var(--surface), var(--surface-2));
+  border-color: var(--line);
+}
+html[data-mode="dark"] .podium-item.bronze {
+  background: linear-gradient(170deg, var(--surface), #221A16);
+  border-color: #3A2C22;
+}
+html[data-mode="dark"] .podium-avatar.champion {
+  background: linear-gradient(160deg, #3A2E12, #2E2410);
+}
+html[data-mode="dark"] .podium-item.gold .podium-score {
+  color: #FBBF24;
+}
+html[data-mode="dark"] .podium-stand {
+  background: var(--line-soft);
+  color: var(--ink-3);
+}
+html[data-mode="dark"] .podium-item.gold .podium-stand {
+  background: rgba(245, 158, 11, .18);
+  color: #FBBF24;
+}
+html[data-mode="dark"] .rank-item:hover {
+  background: var(--surface-2);
+}
+html[data-mode="dark"] .rank-name,
+html[data-mode="dark"] .rank-score {
+  color: var(--ink);
+}
+html[data-mode="dark"] .rank-bar {
+  background: var(--line);
+}
+
+/* ---------- 小卖部 ---------- */
+html[data-mode="dark"] .item-name {
+  color: var(--ink);
+}
+html[data-mode="dark"] .item-desc {
+  color: var(--ink-3);
+}
+html[data-mode="dark"] .cat-tab,
+html[data-mode="dark"] .tab-btn {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .cat-tab.active {
+  background: var(--brand-soft);
+  border-color: var(--brand-soft-2);
+  color: var(--brand-deep);
+}
+html[data-mode="dark"] .record-food {
+  color: #FBBF24;
+}
+
+/* ---------- 设置 ---------- */
+html[data-mode="dark"] .form-input,
+html[data-mode="dark"] .form-textarea,
+html[data-mode="dark"] .filter-select {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--ink);
+}
+html[data-mode="dark"] .form-label,
+html[data-mode="dark"] .form-hint {
+  color: var(--ink-3);
+}
+html[data-mode="dark"] .student-item {
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+html[data-mode="dark"] .student-name {
+  color: var(--ink);
+}
+html[data-mode="dark"] .score-item {
+  background: var(--surface-2);
+}
+html[data-mode="dark"] .score-name {
+  color: var(--ink);
+}
+html[data-mode="dark"] .theme-item {
+  filter: brightness(.62) saturate(.85);
+  opacity: .9;
+}
+html[data-mode="dark"] .theme-item.selected {
+  filter: none;
+  opacity: 1;
+}
+html[data-mode="dark"] .switch .slider {
+  background-color: var(--line);
+}
+
+/* ---------- 赞赏支持 ---------- */
+html[data-mode="dark"] .quote-card {
+  background: linear-gradient(140deg, #241E10, #2A2212);
+  border-color: #3A2F16;
+}
+html[data-mode="dark"] .intro h3,
+html[data-mode="dark"] .qr-title {
+  color: var(--ink);
+}
+html[data-mode="dark"] .quote-text {
+  color: var(--ink);
+}
+html[data-mode="dark"] .quote-sub,
+html[data-mode="dark"] .qr-hint,
+html[data-mode="dark"] .system-name {
+  color: var(--ink-3);
+}
+html[data-mode="dark"] .tag {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(255, 255, 255, .08);
+  color: var(--ink-2);
+}
+
+/* ---------- 宝可梦池 ---------- */
+html[data-mode="dark"] .info-banner {
+  background: rgba(255, 255, 255, .05);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .pokemon-card {
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+html[data-mode="dark"] .pokemon-name {
+  color: var(--ink);
+}
+html[data-mode="dark"] .batch-weight-bar {
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+
+/* ---------- 课堂：保持浅色"白板"岛屿 ----------
+ * 课堂是投屏用的教学内容，浅底深字对比最好；
+ * 深色模式下给它一块独立的浅色面板，而不是硬套深色。
+ */
+html[data-mode="dark"] .classroom-body {
+  background: #FFFBF2;
+  color: #3F3A33;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+}
+html[data-mode="dark"] .classroom-body .tabs {
+  background: rgba(146, 64, 14, .08);
+}
+html[data-mode="dark"] .classroom-body .tab-btn {
+  color: #92400E;
+  background: transparent;
+  border-color: transparent;
+}
+html[data-mode="dark"] .classroom-body .tab-btn.active {
+  background: #fff;
+  color: #3F3A33;
+}

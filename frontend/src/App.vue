@@ -18,6 +18,14 @@ const authStore = useAuthStore()
 const theme = computed(() => appStore.settings?.theme || 'pink')
 watch(theme, (t) => document.documentElement.setAttribute('data-theme', t), { immediate: true })
 
+// 外观模式：light / dark，默认亮色（存在 teachers.theme_mode）
+const mode = computed(() => (appStore.settings?.themeMode === 'dark' ? 'dark' : 'light'))
+watch(mode, (m) => {
+  document.documentElement.setAttribute('data-mode', m)
+  const meta = document.querySelector('meta[name="theme-color"]')
+  if (meta) meta.setAttribute('content', m === 'dark' ? '#0F1115' : '#FFFFFF')
+}, { immediate: true })
+
 onMounted(async () => {
   if (confirmModal.value) {
     setConfirmModal(confirmModal.value)

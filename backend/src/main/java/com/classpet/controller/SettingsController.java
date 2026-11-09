@@ -27,6 +27,7 @@ public class SettingsController {
                     "systemName", "课堂宠物乐园",
                     "className", "",
                     "theme", "pink",
+                    "themeMode", "light",
                     "publicOnly", true
             ));
         }
@@ -47,6 +48,7 @@ public class SettingsController {
                     if (req.systemName != null && !req.systemName.isBlank()) t.setSystemName(req.systemName);
                     if (req.className != null && !req.className.isBlank()) t.setClassName(req.className);
                     if (req.theme != null && !req.theme.isBlank()) t.setTheme(req.theme);
+                    if ("dark".equals(req.themeMode) || "light".equals(req.themeMode)) t.setThemeMode(req.themeMode);
                     if (req.showOnBoard != null) t.setShowOnBoard(req.showOnBoard);
                     Teacher saved = authService.save(t);
                     return ResponseEntity.ok(toMap(saved));
@@ -59,6 +61,7 @@ public class SettingsController {
         m.put("systemName", t.getSystemName());
         m.put("className", t.getClassName());
         m.put("theme", t.getTheme());
+        m.put("themeMode", t.getThemeMode() == null ? "light" : t.getThemeMode());
         m.put("activated", t.isActivated());
         m.put("showOnBoard", t.isShowOnBoard());
         return m;

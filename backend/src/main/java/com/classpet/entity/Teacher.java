@@ -25,6 +25,10 @@ public class Teacher {
     @Column(length = 30)
     private String theme = "pink";
 
+    /** 外观模式：light / dark，默认亮色 */
+    @Column(length = 10)
+    private String themeMode = "light";
+
     private boolean activated = false;
 
     private String activateCode;
@@ -52,6 +56,8 @@ public class Teacher {
     public void setClassName(String className) { this.className = className; }
     public String getTheme() { return theme; }
     public void setTheme(String theme) { this.theme = theme; }
+    public String getThemeMode() { return themeMode; }
+    public void setThemeMode(String themeMode) { this.themeMode = themeMode; }
     public boolean isActivated() { return activated; }
     public void setActivated(boolean activated) { this.activated = activated; }
     public String getActivateCode() { return activateCode; }

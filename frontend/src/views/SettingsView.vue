@@ -26,6 +26,22 @@
         </div>
       </div>
 
+      <!-- 外观模式 -->
+      <div class="section-card">
+        <div class="section-title">🌗 外观模式</div>
+        <div class="mode-row">
+          <button class="mode-btn" :class="{ active: form.themeMode === 'light' }" @click="selectMode('light')">
+            <span class="mode-ico">☀️</span>
+            <span class="mode-txt"><b>亮色</b><i>白天 / 投屏更清爽</i></span>
+          </button>
+          <button class="mode-btn" :class="{ active: form.themeMode === 'dark' }" @click="selectMode('dark')">
+            <span class="mode-ico">🌙</span>
+            <span class="mode-txt"><b>深色</b><i>傍晚 / 关灯更护眼</i></span>
+          </button>
+        </div>
+        <div class="form-hint">外观偏好保存在账号里，换设备登录也会保留</div>
+      </div>
+
       <!-- 主题选择 -->
       <div class="section-card">
         <div class="section-title">🎨 主题颜色</div>
@@ -126,7 +142,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, watch, onMounted } from 'vue'
 import { useAppStore } from '../stores/app.js'
 import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
@@ -139,7 +155,7 @@ const appStore = useAppStore()
 const authStore = useAuthStore()
 const router = useRouter()
 
-const form = reactive({ systemName: '', className: '', theme: 'pink', showOnBoard: false })
+const form = reactive({ systemName: '', className: '', theme: 'pink', themeMode: 'light', showOnBoard: false })
 const newName = ref('')
 const newPassword = ref('')
 const batchNames = ref('')
@@ -169,6 +185,12 @@ async function save() {
 
 async function selectTheme(t) {
   form.theme = t
+  await save()
+}
+
+async function selectMode(m) {
+  if (form.themeMode === m) return
+  form.themeMode = m
   await save()
 }
 
@@ -281,6 +303,14 @@ function handleLogout() {
 
 
 
+// 侧栏快捷切换外观后，这里的选中态要跟上
+watch(() => appStore.settings.themeMode, (m) => {
+  form.themeMode = m === 'dark' ? 'dark' : 'light'
+})
+watch(() => appStore.settings.theme, (t) => {
+  if (t) form.theme = t
+})
+
 onMounted(async () => {
   await appStore.fetchStudents()
   await appStore.fetchScoreItems()
@@ -289,6 +319,7 @@ onMounted(async () => {
     systemName: appStore.settings.systemName || '',
     className: appStore.settings.className || '',
     theme: appStore.settings.theme || 'pink',
+    themeMode: appStore.settings.themeMode === 'dark' ? 'dark' : 'light',
     showOnBoard: !!appStore.settings.showOnBoard
   })
 })
@@ -304,6 +335,33 @@ onMounted(async () => {
   padding: 18px 20px;
 }
 .section-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
+
+/* 外观模式 */
+.mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: .16s;
+  touch-action: manipulation;
+}
+.mode-btn:hover { border-color: #E2D8D5; }
+.mode-btn.active {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+.mode-ico { font-size: 20px; line-height: 1; }
+.mode-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mode-txt b { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.mode-txt i { font-style: normal; font-size: 11.5px; color: var(--ink-3); }
+.form-hint { font-size: 11.5px; color: var(--ink-3); margin-top: 4px; }
 .form-group { margin-bottom:12px; }
 .form-label { display:block; font-size:13px; color:#718096; margin-bottom:6px; }
 .form-input { width:100%; padding:10px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px; }

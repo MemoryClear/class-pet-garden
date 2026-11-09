@@ -316,7 +316,7 @@ onMounted(async () => {
 }
 .chip:hover { border-color: #E4DAD7; }
 .chip b { margin-left: 4px; font-weight: 600; opacity: .55; }
-.chip.on { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 600; }
+.chip.on { background: var(--pill-active-bg); border-color: var(--pill-active-bg); color: var(--pill-active-fg); font-weight: 600; }
 .chip.on b { opacity: .7; }
 
 .tool-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }

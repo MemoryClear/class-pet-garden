@@ -1,7 +1,7 @@
 <template>
   <div class="shell">
     <!-- ============ 侧边栏（≥1100px 常驻 / 窄屏抽屉） ============ -->
-    <aside class="side" :class="{ open: drawerOpen }" aria-label="主导航">
+    <aside class="side" :class="{ open: drawerOpen, collapsed }" aria-label="主导航">
       <div class="side-head">
         <div class="side-brand" @click="go('/home')">
           <div class="logo-mark">🐾</div>
@@ -28,6 +28,7 @@
             :to="item.path"
             class="nav-item"
             :class="{ on: isActive(item.path) }"
+            :title="collapsed ? item.label : ''"
           >
             <span class="ico">{{ item.icon }}</span>
             <span class="label">{{ item.label }}</span>
@@ -37,7 +38,7 @@
 
         <div class="nav-group">
           <div class="nav-label">帮助</div>
-          <button class="nav-item as-btn" @click="openGuide">
+          <button class="nav-item as-btn" :title="collapsed ? '等级说明' : ''" @click="openGuide">
             <span class="ico">📊</span>
             <span class="label">等级说明</span>
           </button>
@@ -45,19 +46,31 @@
       </nav>
 
       <div class="side-foot">
-        <router-link to="/settings" class="nav-item" :class="{ on: isActive('/settings') }">
+        <button
+          class="nav-item as-btn"
+          :title="isDark ? '切换到亮色' : '切换到深色'"
+          @click="toggleMode"
+        >
+          <span class="ico">{{ isDark ? '☀️' : '🌙' }}</span>
+          <span class="label">{{ isDark ? '亮色模式' : '深色模式' }}</span>
+        </button>
+        <router-link to="/settings" class="nav-item" :class="{ on: isActive('/settings') }" :title="collapsed ? '系统设置' : ''">
           <span class="ico">⚙️</span><span class="label">系统设置</span>
         </router-link>
-        <router-link to="/support" class="nav-item" :class="{ on: isActive('/support') }">
+        <router-link to="/support" class="nav-item" :class="{ on: isActive('/support') }" :title="collapsed ? '赞赏支持' : ''">
           <span class="ico">💖</span><span class="label">赞赏支持</span>
         </router-link>
-        <button class="user-card" @click="handleLogout" title="退出登录">
+        <button class="user-card" :title="`退出登录（${authStore.user?.username || '老师'}）`" @click="handleLogout">
           <span class="avatar">{{ initial }}</span>
           <span class="u-info">
             <b>{{ authStore.user?.username || '老师' }}</b>
             <span>教师账号</span>
           </span>
-          <span class="out">⏻</span>
+          <svg class="out" viewBox="0 0 24 24" width="16" height="16" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 3v9" />
+            <path d="M6.6 6.6a8 8 0 1 0 10.8 0" />
+          </svg>
         </button>
       </div>
 
@@ -69,7 +82,12 @@
     <!-- ============ 主区域 ============ -->
     <div class="main">
       <header class="topbar">
-        <button class="hamburger" @click="drawerOpen = true" aria-label="打开菜单">
+        <button
+          class="hamburger"
+          :title="isNarrow ? '打开菜单' : (collapsed ? '展开侧栏' : '收起侧栏')"
+          :aria-label="isNarrow ? '打开菜单' : (collapsed ? '展开侧栏' : '收起侧栏')"
+          @click="onMenuClick"
+        >
           <span></span><span></span><span></span>
         </button>
         <div class="heading">
@@ -112,6 +130,7 @@ import { useAppStore } from '../../stores/app.js'
 import { useAuthStore } from '../../stores/auth.js'
 import { CLASSROOM_ENABLED } from '../../config/features.js'
 import LevelGuide from '../LevelGuide.vue'
+import $confirm from '../../composables/useConfirmModal.js'
 
 defineProps({
   title: { type: String, default: '' },
@@ -125,6 +144,27 @@ const authStore = useAuthStore()
 
 const drawerOpen = ref(false)
 const guideRef = ref(null)
+
+// 侧栏折叠：桌面端偏好存在本地，刷新后保持
+const COLLAPSE_KEY = 'cp_sidebar_collapsed'
+const collapsed = ref(localStorage.getItem(COLLAPSE_KEY) === '1')
+
+function toggleCollapse() {
+  collapsed.value = !collapsed.value
+  localStorage.setItem(COLLAPSE_KEY, collapsed.value ? '1' : '0')
+}
+
+// 外观模式：直接写回后端 teachers.theme_mode
+const isDark = computed(() => appStore.settings?.themeMode === 'dark')
+
+async function toggleMode() {
+  const next = isDark.value ? 'light' : 'dark'
+  try {
+    await appStore.updateSettings({ themeMode: next })
+  } catch (e) {
+    $confirm.error('外观切换失败，请稍后再试')
+  }
+}
 
 const navGroups = computed(() => {
   const main = [
@@ -162,6 +202,17 @@ const initial = computed(() => {
   return n.slice(0, 1).toUpperCase()
 })
 
+// 窄屏：汉堡 = 打开抽屉；桌面：汉堡 = 收起/展开侧栏
+const mq = window.matchMedia('(max-width: 1100px)')
+const isNarrow = ref(mq.matches)
+function onMqChange(e) { isNarrow.value = e.matches }
+mq.addEventListener('change', onMqChange)
+
+function onMenuClick() {
+  if (isNarrow.value) drawerOpen.value = true
+  else toggleCollapse()
+}
+
 function isActive(path) {
   return route.path === path
 }
@@ -176,7 +227,16 @@ function openGuide() {
   guideRef.value?.open()
 }
 
-function handleLogout() {
+async function handleLogout() {
+  const ok = await $confirm.confirm('退出后需要重新输入用户名和密码才能进入，确定要退出登录吗？', {
+    title: '退出登录',
+    okText: '退出登录',
+    cancelText: '再想想',
+    icon: '👋',
+    danger: true
+  })
+  if (!ok) return
+  drawerOpen.value = false
   authStore.logout()
   router.push('/')
 }
@@ -196,6 +256,7 @@ function onKeydown(e) {
 onMounted(() => window.addEventListener('keydown', onKeydown))
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
+  mq.removeEventListener('change', onMqChange)
   document.body.style.overflow = ''
 })
 </script>
@@ -430,7 +491,7 @@ onBeforeUnmount(() => {
   z-index: 30;
 }
 .hamburger {
-  display: none;
+  display: flex;
   width: 40px;
   height: 40px;
   flex: 0 0 40px;
@@ -476,6 +537,32 @@ onBeforeUnmount(() => {
 
 .tabbar { display: none; }
 
+/* ---------- 折叠态（仅桌面） ---------- */
+@media (min-width: 1101px) {
+  .side { transition: width .22s ease, flex-basis .22s ease, padding .22s ease; }
+  .side.collapsed { width: 76px; flex: 0 0 76px; padding: 18px 10px 14px; }
+  .side.collapsed .brand-txt,
+  .side.collapsed .cls-name,
+  .side.collapsed .caret,
+  .side.collapsed .nav-item .label,
+  .side.collapsed .nav-item .cnt,
+  .side.collapsed .nav-label,
+  .side.collapsed .u-info,
+  .side.collapsed .out { display: none; }
+
+  .side.collapsed .side-brand { padding: 4px 0 14px; justify-content: center; }
+  .side.collapsed .side-class { justify-content: center; padding: 9px 0; margin: 0 0 12px; }
+  .side.collapsed .nav-item { justify-content: center; padding: 10px 0; gap: 0; }
+  .side.collapsed .nav-item .ico { width: 30px; height: 30px; flex-basis: 30px; font-size: 14px; }
+  .side.collapsed .nav-item.on::before { left: -10px; }
+  .side.collapsed .user-card { justify-content: center; padding: 8px 0; }
+  .side.collapsed .nav-group + .nav-group {
+    border-top: 1px solid var(--line);
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+}
+
 /* ---------- 响应式 ---------- */
 @media (max-width: 1100px) {
   .side {
@@ -490,7 +577,6 @@ onBeforeUnmount(() => {
   }
   .side.open { transform: translateX(0); }
   .drawer-close { display: flex; align-items: center; justify-content: center; }
-  .hamburger { display: flex; }
 }
 
 @media (max-width: 768px) {

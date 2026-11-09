@@ -352,7 +352,7 @@ onMounted(() => {
   transition: .16s;
   touch-action: manipulation;
 }
-.tab-btn.active { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 600; }
+.tab-btn.active { background: var(--pill-active-bg); border-color: var(--pill-active-bg); color: var(--pill-active-fg); font-weight: 600; }
 
 .add-btn { padding: 9px 16px; }
 

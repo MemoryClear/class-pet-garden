@@ -5,6 +5,8 @@ public class SettingsDto {
         public String systemName;
         public String className;
         public String theme;
+        /** light / dark */
+        public String themeMode;
         public Boolean showOnBoard;
     }
 }

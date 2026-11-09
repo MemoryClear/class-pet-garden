@@ -259,9 +259,9 @@ async function loadMore() {
 
 .tab-bar button:hover { border-color: #E4DAD7; }
 .tab-bar button.active {
-  background: var(--ink);
-  color: #fff;
-  border-color: var(--ink);
+  background: var(--pill-active-bg);
+  color: var(--pill-active-fg);
+  border-color: var(--pill-active-bg);
   font-weight: 600;
 }
 
