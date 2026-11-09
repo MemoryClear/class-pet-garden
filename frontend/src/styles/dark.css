@@ -564,3 +564,243 @@ html[data-mode="dark"] .classroom-body .tab-btn.active {
   background: #fff;
   color: #3F3A33;
 }
+
+/* ---------- 学生端（StudentHomeView） ----------
+ * 这个页面是早期写的，颜色几乎全是硬编码的浅色，
+ * 这里按"面 → 卡片 → 文字 → 强调色"四层统一压成深色。
+ */
+
+/* 面：顶栏 / 区块 / 弹窗 / 各类卡片 */
+html[data-mode="dark"] .navbar,
+html[data-mode="dark"] .section,
+html[data-mode="dark"] .shop-filter,
+html[data-mode="dark"] .gift-modal,
+html[data-mode="dark"] .shop-item,
+html[data-mode="dark"] .record-item,
+html[data-mode="dark"] .lb-item,
+html[data-mode="dark"] .item-card,
+html[data-mode="dark"] .pokemon-mylist-item,
+html[data-mode="dark"] .pet-thumb,
+html[data-mode="dark"] .pokemon-feed-item,
+html[data-mode="dark"] .pokemon-option,
+html[data-mode="dark"] .section-tabs button,
+html[data-mode="dark"] .pet-library-tabs button,
+html[data-mode="dark"] .feed-minus,
+html[data-mode="dark"] .feed-plus,
+html[data-mode="dark"] .load-more-inline button,
+html[data-mode="dark"] .shop-cat,
+html[data-mode="dark"] .feed-input {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink);
+  box-shadow: none;
+}
+html[data-mode="dark"] .shop-item,
+html[data-mode="dark"] .record-item,
+html[data-mode="dark"] .pokemon-mylist-item,
+html[data-mode="dark"] .pokemon-feed-item,
+html[data-mode="dark"] .feed-minus,
+html[data-mode="dark"] .feed-plus,
+html[data-mode="dark"] .feed-input {
+  background: var(--surface-2);
+}
+
+/* 悬停态：浅色下统一是 #f5f5f5 / #f1f5f9 */
+html[data-mode="dark"] .nav-btn:hover,
+html[data-mode="dark"] .classmate-item:hover,
+html[data-mode="dark"] .pokemon-option:hover,
+html[data-mode="dark"] .pet-library-tabs button:hover,
+html[data-mode="dark"] .unequip-btn:hover,
+html[data-mode="dark"] .load-more-inline button:hover {
+  background: var(--line-soft);
+}
+html[data-mode="dark"] .nav-btn { color: var(--ink-2); }
+html[data-mode="dark"] .nav-btn.active { color: #fff; background: var(--brand); }
+html[data-mode="dark"] .logout-btn { color: #F87171; }
+
+/* 顶栏小胶囊 */
+html[data-mode="dark"] .student-no {
+  background: var(--line-soft);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .available-food,
+html[data-mode="dark"] .pet-level,
+html[data-mode="dark"] .feed-btn,
+html[data-mode="dark"] .feed-all-btn,
+html[data-mode="dark"] .feed-summary {
+  background: var(--brand-soft);
+  border-color: var(--brand-soft-2);
+  color: var(--brand-deep);
+}
+html[data-mode="dark"] .pokemon-balls {
+  background: rgba(56, 189, 248, .14);
+  color: #7DD3FC;
+}
+html[data-mode="dark"] .evo-items-nav { color: #C4B5FD; }
+
+/* 文字层级 */
+html[data-mode="dark"] .items-title,
+html[data-mode="dark"] .evo-item-name,
+html[data-mode="dark"] .special-name,
+html[data-mode="dark"] .deco-name,
+html[data-mode="dark"] .classmate-name,
+html[data-mode="dark"] .thumb-name,
+html[data-mode="dark"] .mylist-name,
+html[data-mode="dark"] .pet-name,
+html[data-mode="dark"] .record-name,
+html[data-mode="dark"] .poke-name,
+html[data-mode="dark"] .pokemon-name,
+html[data-mode="dark"] .pokemon-reveal h2 {
+  color: var(--ink);
+}
+html[data-mode="dark"] .score-label,
+html[data-mode="dark"] .equipped-row-label,
+html[data-mode="dark"] .poke-level,
+html[data-mode="dark"] .ball-hint,
+html[data-mode="dark"] .ball-count,
+html[data-mode="dark"] .progress-label,
+html[data-mode="dark"] .progress-text,
+html[data-mode="dark"] .food-count,
+html[data-mode="dark"] .pokemon-count,
+html[data-mode="dark"] .record-time,
+html[data-mode="dark"] .revoked-tag,
+html[data-mode="dark"] .classmate-no,
+html[data-mode="dark"] .mylist-food,
+html[data-mode="dark"] .empty,
+html[data-mode="dark"] .empty-pokemon,
+html[data-mode="dark"] .shop-empty,
+html[data-mode="dark"] .shop-filter-summary,
+html[data-mode="dark"] .load-more-inline .end {
+  color: var(--ink-3);
+}
+html[data-mode="dark"] .mylist-level { color: #A5B4FC; }
+html[data-mode="dark"] .gift-tag { color: #C4B5FD; }
+html[data-mode="dark"] .unimplemented-hint {
+  background: rgba(255, 255, 255, .05);
+  color: var(--ink-4);
+}
+
+/* 宠物主卡 */
+html[data-mode="dark"] .pet-card-large {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--brand) 14%, var(--surface)), var(--surface));
+  border-color: var(--brand-soft-2);
+}
+html[data-mode="dark"] .score-value { color: var(--brand-deep); }
+html[data-mode="dark"] .equipped-chip {
+  background: rgba(251, 191, 36, .14);
+  border-color: rgba(251, 191, 36, .32);
+}
+html[data-mode="dark"] .pet-thumb.owned {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+html[data-mode="dark"] .owned-tag { color: var(--brand-deep); }
+html[data-mode="dark"] .adopt-btn { color: #fff; }
+
+/* 道具 / 装饰卡片 */
+html[data-mode="dark"] .deco-card.is-equipped {
+  border-color: #8B5CF6;
+  background: rgba(139, 92, 246, .14);
+}
+html[data-mode="dark"] .equipped-badge {
+  background: rgba(139, 92, 246, .2);
+  color: #C4B5FD;
+}
+html[data-mode="dark"] .unequip-btn {
+  background: var(--line-soft);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .gift-btn {
+  background: rgba(245, 158, 11, .16);
+  color: #FCD34D;
+}
+html[data-mode="dark"] .gift-btn:hover { background: rgba(245, 158, 11, .26); }
+
+/* 宝可梦卡片 */
+html[data-mode="dark"] .pokemon-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, .10), var(--surface));
+  border-color: var(--line);
+}
+html[data-mode="dark"] .pokemon-card.can-evolve {
+  border-color: #F59E0B;
+  background: linear-gradient(135deg, rgba(245, 158, 11, .12), var(--surface));
+}
+html[data-mode="dark"] .pokemon-mylist-item.is-represent {
+  border-color: #F59E0B;
+  background: rgba(245, 158, 11, .12);
+}
+html[data-mode="dark"] .level-badge {
+  background: rgba(59, 130, 246, .2);
+  color: #93C5FD;
+}
+html[data-mode="dark"] .progress-bar { background: var(--line); }
+html[data-mode="dark"] .max-evolution { color: #4ADE80; }
+html[data-mode="dark"] .item-evo-container { background: rgba(139, 92, 246, .12); }
+html[data-mode="dark"] .evolution-item-hint { background: rgba(139, 92, 246, .14); }
+html[data-mode="dark"] .required-item {
+  background: rgba(239, 68, 68, .18);
+  color: #FCA5A5;
+}
+html[data-mode="dark"] .required-item.owned {
+  background: rgba(34, 197, 94, .18);
+  color: #4ADE80;
+}
+
+/* 弹窗 */
+html[data-mode="dark"] .modal-header,
+html[data-mode="dark"] .modal-footer {
+  border-color: var(--line);
+}
+html[data-mode="dark"] .modal-close { color: var(--ink-3); }
+html[data-mode="dark"] .btn-cancel {
+  background: var(--line-soft);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .btn-confirm:disabled {
+  background: var(--line);
+  color: var(--ink-4);
+}
+html[data-mode="dark"] .pokemon-option.selected {
+  border-color: #3B82F6;
+  background: rgba(59, 130, 246, .18);
+}
+html[data-mode="dark"] .feed-summary.over-limit {
+  background: rgba(245, 158, 11, .16);
+  color: #FCD34D;
+  border-color: rgba(245, 158, 11, .46);
+}
+
+/* 光荣榜 / 记录 / 小卖部 */
+html[data-mode="dark"] .lb-item.me {
+  background: color-mix(in srgb, var(--brand) 16%, var(--surface));
+  border-color: var(--brand);
+}
+html[data-mode="dark"] .lb-score { color: var(--brand-deep); }
+html[data-mode="dark"] .record-points.positive { color: #34D399; }
+html[data-mode="dark"] .record-points.negative { color: #F87171; }
+html[data-mode="dark"] .gift-out-label {
+  background: rgba(59, 130, 246, .18);
+  color: #93C5FD;
+}
+html[data-mode="dark"] .shop-search-input {
+  background: var(--surface-2);
+  border-color: rgba(245, 158, 11, .46);
+  color: var(--ink);
+}
+html[data-mode="dark"] .shop-cat {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .shop-cat.active {
+  background: linear-gradient(135deg, #F59E0B, #EA580C);
+  border-color: #EA580C;
+  color: #fff;
+}
+html[data-mode="dark"] .shop-filter-summary { border-top-color: var(--line); }
+html[data-mode="dark"] .shop-clear-filter { color: var(--brand-deep); }
+html[data-mode="dark"] .item-price { color: var(--brand-deep); }
+html[data-mode="dark"] .exchange-btn:disabled {
+  background: var(--line);
+  color: var(--ink-4);
+}

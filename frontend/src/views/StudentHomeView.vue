@@ -17,6 +17,11 @@
           <button class="nav-btn" :class="{ active: activeSection === 'shop' }" @click="activeSection='shop'">🏪 小卖部</button>
           <button v-if="classroomEnabled" class="nav-btn" :class="{ active: activeSection === 'classroom' }" @click="activeSection='classroom'">📚 课堂</button>
           <button class="nav-btn" :class="{ active: activeSection === 'records' }" @click="activeSection='records'">📝 记录</button>
+          <button
+            class="nav-btn mode-btn"
+            :title="isDark ? '切换到亮色' : '切换到深色'"
+            @click="toggleMode"
+          >{{ isDark ? '☀️' : '🌙' }}</button>
           <button class="nav-btn logout-btn" @click="handleLogout">退出</button>
         </div>
       </div>
@@ -546,6 +551,7 @@ import { CLASSROOM_ENABLED as classroomEnabled } from '../config/features.js'
 import $confirm from '../composables/useConfirmModal.js'
 import PetIcon from '../components/PetIcon.vue'
 import { useLazyImages } from '../composables/useLazyImages.js'
+import { currentMode, setStudentMode } from '../composables/useAppearance.js'
 
 
 const { isVisible, registerImage, placeholderSrc } = useLazyImages()
@@ -696,8 +702,15 @@ const showBallModal = ref(false)
 const usingBall = ref(false)
 const obtainedPokemon = ref(null)
 
+// 学生端外观：默认跟老师账号设置，本机可手动覆盖
+const isDark = computed(() => currentMode.value === 'dark')
+function toggleMode() {
+  setStudentMode(isDark.value ? 'light' : 'dark')
+}
+
 const bgStyle = computed(() => ({
-  backgroundColor: 'rgba(255,107,157,0.06)',
+  // 用令牌 + 主题色混出来，深色模式下自动变成近黑底色
+  backgroundColor: 'color-mix(in srgb, var(--brand) 6%, var(--bg))',
   minHeight: '100vh'
 }))
 
@@ -1064,6 +1077,8 @@ onMounted(async () => {
 .navbar-right { display: flex; gap: 6px; flex-wrap: wrap; }
 .nav-btn { background: transparent; border: none; padding: 6px 12px; border-radius: 10px; cursor: pointer; font-size: 0.9rem; }
 .nav-btn:hover { background: #f5f5f5; }
+.mode-btn { border: 1px solid var(--line); background: var(--surface); padding: 5px 9px; line-height: 1; }
+.mode-btn:hover { background: var(--line-soft); }
 .nav-btn.active { background: #ff6b9d; color: #fff; }
 .logout-btn { color: #f44; }
 .section { background: #fff; border-radius: 20px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }

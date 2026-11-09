@@ -117,6 +117,8 @@
   /* 深色下浅色蒙版不够明显，提高主色透明度 */
   --brand-soft: color-mix(in srgb, var(--brand) 18%, transparent);
   --brand-soft-2: color-mix(in srgb, var(--brand) 32%, transparent);
+  /* 深色下 brand-deep 原值是加深色，放到深底上偏暗，反向提亮 */
+  --brand-deep: color-mix(in srgb, var(--brand) 70%, #FFFFFF);
 
   --pill-active-bg: color-mix(in srgb, var(--brand) 22%, transparent);
   --pill-active-fg: var(--brand-deep);
