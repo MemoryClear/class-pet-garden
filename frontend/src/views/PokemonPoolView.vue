@@ -1,27 +1,20 @@
 <template>
-  <div class="pokemon-pool-page">
-    <div class="container">
-      <!-- 导航栏 -->
-      <div class="navbar">
-        <div class="navbar-left">
-          <button class="back-btn" @click="router.push('/home')">← 返回首页</button>
-        </div>
-        <div class="navbar-center">
-          <h1>🎮 宝可梦池管理</h1>
-        </div>
-        <div class="navbar-right">
-          <span class="pool-count">已选择: {{ selectedEntries.length }} 只</span>
-          <button class="clear-btn" :disabled="saving || selectedEntries.length === 0" @click="clearAll">
-            🗑 清空
-          </button>
-          <button class="ball-btn" :disabled="distributing" @click="distributeBalls">
-            {{ distributing ? '发放中...' : '🔮 发放精灵球' }}
-          </button>
-          <button class="save-btn" :disabled="saving || selectedEntries.length === 0" @click="savePool">
-            {{ saving ? '保存中...' : '💾 保存设置' }}
-          </button>
-        </div>
-      </div>
+  <AppShell title="宝可梦池" :subtitle="subtitle">
+    <template #actions>
+      <span class="pool-count">已选 {{ selectedEntries.length }} 只</span>
+      <button class="btn-ghost pool-btn" :disabled="saving || selectedEntries.length === 0" @click="clearAll">
+        🗑<span class="btn-txt"> 清空</span>
+      </button>
+      <button class="btn-ghost pool-btn" :disabled="distributing" @click="distributeBalls">
+        🔮<span class="btn-txt"> {{ distributing ? '发放中…' : '发放精灵球' }}</span>
+      </button>
+      <button class="btn-primary" :disabled="saving || selectedEntries.length === 0" @click="savePool">
+        {{ saving ? '保存中…' : '保存设置' }}
+      </button>
+    </template>
+
+    <div class="page-wrap">
+      <div class="container">
 
       <!-- 说明 -->
       <div class="info-banner">
@@ -95,18 +88,22 @@
       <div v-if="clearSuccess" class="toast success">✅ 已清空宝可梦池！</div>
       <div v-if="distSuccess" class="toast success">✅ 精灵球发放成功！</div>
       <div v-if="distError" class="toast error">❌ 发放失败: {{ distError }}</div>
+      </div>
     </div>
-  </div>
+  </AppShell>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import AppShell from '../components/layout/AppShell.vue'
 import { useAuthStore } from '../stores/auth.js'
 import { useAppStore } from '../stores/app.js'
 import { petApi, pokemonApi } from '../api/index.js'
 
-const router = useRouter()
+const subtitle = computed(() => {
+  const n = selectedEntries.value.length
+  return n ? `已选择 ${n} 只 · 权重越高越容易被抽到` : '点击宝可梦加入抽取池，再点「保存设置」生效'
+})
 const authStore = useAuthStore()
 const appStore = useAppStore()
 
@@ -335,20 +332,22 @@ function handleImageError(e) {
 </script>
 
 <style scoped>
-.pokemon-pool-page {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
-}
+.page-wrap { max-width: 1200px; margin: 0 auto; }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-s);
 }
+
+.pool-count {
+  font-size: 12px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.pool-btn { padding: 8px 10px; }
 
 .navbar {
   display: flex;

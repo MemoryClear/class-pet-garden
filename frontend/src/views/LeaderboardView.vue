@@ -1,166 +1,134 @@
 <template>
-  <div class="leaderboard-page">
-    <div class="container">
-      <!-- 顶部导航 -->
-      <div class="navbar">
-        <button class="nav-btn back" @click="router.push('/home')">← 返回</button>
-        <h2 class="navbar-title">🏆 光荣榜</h2>
-        <button class="nav-btn refresh" @click="loadData" :disabled="loading">🔄</button>
+  <AppShell title="光荣榜" :subtitle="subtitle">
+    <template #actions>
+      <button class="icon-btn" :disabled="loading" title="刷新" @click="loadData">
+        {{ loading ? '⏳' : '🔄' }}
+      </button>
+    </template>
+
+    <div class="page-wrap">
+      <!-- 榜单口径 -->
+      <div class="toolbar">
+        <div class="seg">
+          <button :class="{ on: mode === 'current' }" @click="switchMode('current')">当前积分</button>
+          <button :class="{ on: mode === 'total' }" @click="switchMode('total')">总积分</button>
+        </div>
+        <span class="hint">
+          {{ mode === 'current' ? '💡 当前积分 = 学生现有的口粮数量' : '💡 总积分 = 历史加分 − 扣分（不含道具消耗）' }}
+        </span>
       </div>
 
-      <!-- Tab 切换 -->
-      <div class="tab-bar">
-        <button
-          class="tab-btn"
-          :class="{ active: mode === 'current' }"
-          @click="mode = 'current'; loadData()"
-        >当前积分</button>
-        <button
-          class="tab-btn"
-          :class="{ active: mode === 'total' }"
-          @click="mode = 'total'; loadData()"
-        >总积分</button>
+      <!-- 加载 -->
+      <div v-if="loading" class="state">
+        <div class="state-icon spin">⏳</div>
+        <div class="state-text">加载中…</div>
       </div>
 
-      <!-- 说明 -->
-      <div class="mode-hint">
-        <template v-if="mode === 'current'">
-          💡 当前积分：学生现有的粮食数量
-        </template>
-        <template v-else>
-          💡 总积分：历史所有加分 - 扣分（不含道具消耗）
-        </template>
+      <!-- 空 -->
+      <div v-else-if="displayList.length === 0" class="state">
+        <div class="state-icon">📭</div>
+        <div class="state-text">还没有学生上榜</div>
+        <div class="state-hint">给学生加分后即可查看排名</div>
       </div>
 
-      <!-- 加载状态 -->
-      <div v-if="loading" class="loading-state">
-        <span class="spinner">⏳</span> 加载中...
-      </div>
-
-      <!-- 空状态 -->
-      <div v-else-if="displayList.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
-        <div class="empty-text">还没有学生上榜</div>
-        <div class="empty-hint">给学生加分后即可查看排名</div>
-      </div>
-
-      <!-- 有数据 -->
-      <div v-else>
-        <!-- 🥇🥈🥉 前三名 领奖台 -->
+      <template v-else>
+        <!-- 前三名 -->
         <div class="podium" v-if="displayList.length >= 2">
-          <!-- 第二名 -->
-          <div class="podium-item silver" :class="{ 'no-pet': !displayList[1].petIcon }">
+          <div class="podium-item silver">
             <div class="podium-medal">🥈</div>
             <div class="podium-avatar">
-              <span class="pet-emoji"><PetIcon :icon="displayList[1].petIcon" size="40" /></span>
+              <PetIcon :icon="displayList[1].petIcon" size="40" />
             </div>
             <div class="podium-name">{{ displayList[1].name }}</div>
-            <div class="podium-score">{{ getScore(displayList[1]) }} 分</div>
-            <div class="podium-level" :class="`lv-${getLevel(displayList[1])}`">{{ getLevelTitle(displayList[1]) }}</div>
-            <div class="podium-rank">2</div>
+            <div class="podium-score">{{ getScore(displayList[1]) }}<i>分</i></div>
+            <div class="podium-level">{{ getLevelName(displayList[1]) }}</div>
+            <div class="podium-stand">2</div>
           </div>
-          <!-- 第一名 -->
-          <div class="podium-item gold" :class="{ 'no-pet': !displayList[0].petIcon }">
+
+          <div class="podium-item gold">
+            <div class="crown">👑</div>
             <div class="podium-medal">🥇</div>
-            <div class="crown-float">👑</div>
             <div class="podium-avatar champion">
-              <span class="pet-emoji"><PetIcon :icon="displayList[0].petIcon" size="56" /></span>
+              <PetIcon :icon="displayList[0].petIcon" size="56" />
             </div>
             <div class="podium-name">{{ displayList[0].name }}</div>
-            <div class="podium-score">{{ getScore(displayList[0]) }} 分</div>
-            <div class="podium-level" :class="`lv-${getLevel(displayList[0])}`">{{ getLevelTitle(displayList[0]) }}</div>
-            <div class="podium-rank">1</div>
+            <div class="podium-score">{{ getScore(displayList[0]) }}<i>分</i></div>
+            <div class="podium-level">{{ getLevelName(displayList[0]) }}</div>
+            <div class="podium-stand">1</div>
           </div>
-          <!-- 第三名 -->
-          <div class="podium-item bronze" v-if="displayList.length >= 3" :class="{ 'no-pet': !displayList[2].petIcon }">
+
+          <div class="podium-item bronze" v-if="displayList.length >= 3">
             <div class="podium-medal">🥉</div>
             <div class="podium-avatar">
-              <span class="pet-emoji"><PetIcon :icon="displayList[2].petIcon" size="40" /></span>
+              <PetIcon :icon="displayList[2].petIcon" size="40" />
             </div>
             <div class="podium-name">{{ displayList[2].name }}</div>
-            <div class="podium-score">{{ getScore(displayList[2]) }} 分</div>
-            <div class="podium-level" :class="`lv-${getLevel(displayList[2])}`">{{ getLevelTitle(displayList[2]) }}</div>
-            <div class="podium-rank">3</div>
+            <div class="podium-score">{{ getScore(displayList[2]) }}<i>分</i></div>
+            <div class="podium-level">{{ getLevelName(displayList[2]) }}</div>
+            <div class="podium-stand">3</div>
           </div>
         </div>
 
-        <!-- 只有一人时显示单人冠军 -->
-        <div class="solo-champion" v-if="displayList.length === 1">
-          <div class="crown-float">👑</div>
-          <div class="solo-avatar">
-            <span class="pet-emoji"><PetIcon :icon="displayList[0].petIcon" size="56" /></span>
+        <!-- 单人冠军 -->
+        <div class="solo" v-if="displayList.length === 1">
+          <div class="crown">👑</div>
+          <div class="podium-avatar champion">
+            <PetIcon :icon="displayList[0].petIcon" size="56" />
           </div>
           <div class="solo-name">{{ displayList[0].name }}</div>
-          <div class="solo-score">{{ getScore(displayList[0]) }} 分</div>
-          <div class="podium-level" :class="`lv-${getLevel(displayList[0])}`">{{ getLevelTitle(displayList[0]) }}</div>
+          <div class="podium-score">{{ getScore(displayList[0]) }}<i>分</i></div>
+          <div class="podium-level">{{ getLevelName(displayList[0]) }}</div>
         </div>
 
-        <!-- 第4名以后列表 -->
+        <!-- 第 4 名以后 -->
         <div class="rank-list" v-if="displayList.length > 3">
-          <div
-            class="rank-item"
-            v-for="(stu, idx) in displayList.slice(3)"
-            :key="stu.id"
-            :class="{ 'no-pet': !stu.petIcon }"
-            :style="{ animationDelay: idx * 0.05 + 's' }"
-          >
+          <div class="rank-item" v-for="(stu, idx) in displayList.slice(3)" :key="stu.id">
             <div class="rank-number">{{ idx + 4 }}</div>
             <div class="rank-avatar">
-              <span><PetIcon :icon="stu.petIcon" size="20" /></span>
+              <PetIcon :icon="stu.petIcon" size="22" />
             </div>
             <div class="rank-info">
               <div class="rank-name">{{ stu.name }}</div>
-              <div class="rank-level" :class="`lv-${getLevel(stu)}`">{{ getLevelTitle(stu) }}</div>
+              <div class="rank-level">{{ getLevelName(stu) }}</div>
             </div>
-            <div class="rank-score">
-              <span class="score-val">{{ getScore(stu) }}</span>
-              <span class="score-unit">分</span>
-            </div>
-            <!-- 分数条 -->
+            <div class="rank-score">{{ getScore(stu) }}<i>分</i></div>
             <div class="rank-bar">
               <div class="rank-bar-fill" :style="{ width: getBarWidth(stu) + '%' }"></div>
             </div>
           </div>
         </div>
-      </div>
+      </template>
     </div>
-  </div>
+  </AppShell>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useAppStore } from '../stores/app.js'
-import { useRouter } from 'vue-router'
+import AppShell from '../components/layout/AppShell.vue'
 import PetIcon from '../components/PetIcon.vue'
+import { levelOf, levelInfo } from '../constants/petLevels.js'
 
 const appStore = useAppStore()
-const router = useRouter()
 const loading = ref(false)
 const mode = ref('current') // 'current' | 'total'
 const totalList = ref([])
 
-const displayList = computed(() => {
-  return mode.value === 'current' ? appStore.leaderboard : totalList.value
+const displayList = computed(() => (mode.value === 'current' ? appStore.leaderboard : totalList.value))
+
+const subtitle = computed(() => {
+  const n = displayList.value.length
+  if (loading.value) return '正在统计…'
+  if (!n) return '先给学生加分，榜单才会热闹起来'
+  return `${n} 位同学上榜 · ${mode.value === 'current' ? '按当前口粮排名' : '按历史总分排名'}`
 })
 
 function getScore(stu) {
   return mode.value === 'current' ? (stu.food ?? 0) : (stu.totalScore ?? 0)
 }
 
-function getLevel(stu) {
-  const food = stu.food ?? 0
-  if (food >= 200) return 6
-  if (food >= 100) return 5
-  if (food >= 60) return 4
-  if (food >= 30) return 3
-  if (food >= 10) return 2
-  return 1
-}
-
-function getLevelTitle(stu) {
-  const lv = getLevel(stu)
-  const titles = { 1: '幼崽期', 2: '少年期', 3: '成长期', 4: '精英期', 5: '大师期', 6: '传说期' }
-  return titles[lv]
+function getLevelName(stu) {
+  return levelInfo(levelOf(stu.food)).name
 }
 
 function getBarWidth(stu) {
@@ -168,6 +136,12 @@ function getBarWidth(stu) {
   const maxScore = getScore(displayList.value[0])
   if (maxScore === 0) return 0
   return Math.max(8, (getScore(stu) / maxScore) * 100)
+}
+
+function switchMode(m) {
+  if (mode.value === m) return
+  mode.value = m
+  loadData()
 }
 
 async function loadData() {
@@ -187,100 +161,212 @@ onMounted(() => loadData())
 </script>
 
 <style scoped>
-.leaderboard-page { min-height: 100vh; background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; }
-.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+.page-wrap { max-width: 860px; margin: 0 auto; }
 
-/* 导航栏 */
-.navbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding: 12px 20px; background: rgba(255,255,255,0.08); border-radius: 20px; backdrop-filter: blur(10px); }
-.navbar-title { font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #ffd700, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.nav-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 14px; transition: background 0.2s; }
-.nav-btn:hover { background: rgba(255,255,255,0.2); }
-.nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.seg { display: flex; background: #F4EFEE; padding: 4px; border-radius: 11px; }
+.seg button {
+  border: 0;
+  background: transparent;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #767D8C;
+  cursor: pointer;
+  transition: .16s;
+  touch-action: manipulation;
+}
+.seg button.on { background: var(--surface); color: var(--ink); font-weight: 600; box-shadow: 0 1px 3px rgba(0, 0, 0, .07); }
+.hint { font-size: 12px; color: var(--ink-3); }
 
-/* Tab 栏 */
-.tab-bar { display: flex; gap: 8px; margin-bottom: 12px; }
-.tab-btn { flex: 1; padding: 10px 16px; background: rgba(255,255,255,0.06); border: 2px solid transparent; border-radius: 12px; color: #aaa; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-.tab-btn:hover { background: rgba(255,255,255,0.1); }
-.tab-btn.active { background: rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.4); color: #ffd700; }
-
-/* 模式说明 */
-.mode-hint { font-size: 12px; color: #888; margin-bottom: 20px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; }
-
-/* 加载 & 空状态 */
-.loading-state, .empty-state { text-align: center; padding: 60px 20px; }
-.spinner { font-size: 24px; animation: spin 1s linear infinite; display: inline-block; }
+/* 状态 */
+.state {
+  text-align: center;
+  padding: 56px 20px;
+  background: var(--surface);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-lg);
+}
+.state-icon {
+  width: 72px; height: 72px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--line-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+}
+.state-icon.spin { animation: spin 1.2s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.empty-icon { font-size: 48px; margin-bottom: 16px; }
-.empty-text { font-size: 18px; color: #ccc; margin-bottom: 8px; }
-.empty-hint { font-size: 14px; color: #888; }
+.state-text { font-size: 15px; font-weight: 600; color: var(--ink); }
+.state-hint { font-size: 12.5px; color: var(--ink-3); margin-top: 6px; }
 
-/* ========== 领奖台 ========== */
-.podium { display: flex; align-items: flex-end; justify-content: center; gap: 12px; margin-bottom: 40px; padding-top: 20px; }
-.podium-item { text-align: center; border-radius: 20px; padding: 20px 16px 16px; position: relative; transition: transform 0.3s; animation: podium-in 0.6s ease-out both; }
-.podium-item:hover { transform: translateY(-4px); }
-.podium-item.gold { background: linear-gradient(180deg, rgba(255,215,0,0.2) 0%, rgba(255,140,0,0.1) 100%); border: 2px solid rgba(255,215,0,0.4); min-width: 140px; animation-delay: 0.1s; }
-.podium-item.silver { background: linear-gradient(180deg, rgba(192,192,192,0.15) 0%, rgba(169,169,169,0.08) 100%); border: 2px solid rgba(192,192,192,0.3); min-width: 120px; animation-delay: 0s; }
-.podium-item.bronze { background: linear-gradient(180deg, rgba(205,127,50,0.15) 0%, rgba(184,115,51,0.08) 100%); border: 2px solid rgba(205,127,50,0.3); min-width: 120px; animation-delay: 0.2s; }
-
-@keyframes podium-in {
-  from { opacity: 0; transform: translateY(30px); }
+/* 领奖台 */
+.podium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding-top: 14px;
+}
+.podium-item {
+  position: relative;
+  flex: 1;
+  max-width: 200px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 18px 14px 0;
+  box-shadow: var(--shadow-s);
+  overflow: hidden;
+  animation: rise .5s ease-out both;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: translateY(0); }
 }
+.podium-item.gold {
+  background: linear-gradient(170deg, #FFFCF2, #FFF4D6);
+  border-color: #F8E2AE;
+  box-shadow: 0 10px 26px rgba(245, 158, 11, .16);
+}
+.podium-item.silver { background: linear-gradient(170deg, #FFFFFF, #F6F8FB); border-color: #E3E9F0; }
+.podium-item.bronze { background: linear-gradient(170deg, #FFFFFF, #FDF6F0); border-color: #F2E2D3; }
 
-.podium-medal { font-size: 32px; margin-bottom: 8px; }
-.crown-float { font-size: 28px; text-align: center; animation: crown-float 2s ease-in-out infinite; margin-bottom: -4px; }
-@keyframes crown-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+.crown { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); font-size: 18px; animation: bob 2s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-3px); } }
+
+.podium-medal { font-size: 24px; line-height: 1; margin-bottom: 8px; }
+.podium-avatar {
+  width: 66px;
+  height: 66px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  background: var(--line-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.podium-avatar.champion {
+  width: 82px; height: 82px;
+  background: linear-gradient(160deg, #FFF6DE, #FFE9AE);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, .16);
+}
+.podium-name { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.podium-score { font-size: 20px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.podium-item.gold .podium-score { color: #B45309; }
+.podium-score i { font-style: normal; font-size: 11px; font-weight: 600; color: var(--ink-3); margin-left: 2px; }
+.podium-level { font-size: 11.5px; color: var(--ink-3); margin-top: 3px; padding-bottom: 14px; }
+.podium-stand {
+  height: 26px;
+  line-height: 26px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-3);
+  background: var(--line-soft);
+  margin: 0 -14px;
+}
+.podium-item.gold .podium-stand { background: rgba(245, 158, 11, .16); color: #B45309; }
+
+/* 单人 */
+.solo {
+  max-width: 260px;
+  margin: 0 auto 22px;
+  text-align: center;
+  background: linear-gradient(170deg, #FFFCF2, #FFF4D6);
+  border: 1px solid #F8E2AE;
+  border-radius: var(--r-lg);
+  padding: 26px 20px;
+  position: relative;
+  box-shadow: var(--shadow-s);
+}
+.solo-name { font-size: 16px; font-weight: 700; margin-top: 10px; }
+
+/* 排名列表 */
+.rank-list {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-s);
+}
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  position: relative;
+}
+.rank-item:last-child { border-bottom: none; }
+.rank-item:hover { background: #FCFAF9; }
+.rank-number {
+  width: 22px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+}
+.rank-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--line-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex: 0 0 34px;
+}
+.rank-info { width: 108px; min-width: 0; }
+.rank-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rank-level { font-size: 11px; color: var(--ink-3); }
+.rank-score {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  min-width: 52px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.rank-score i { font-style: normal; font-size: 10.5px; font-weight: 500; color: var(--ink-4); margin-left: 2px; }
+.rank-bar {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line-soft);
+  overflow: hidden;
+  min-width: 60px;
+}
+.rank-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  transition: width .4s ease;
 }
 
-.podium-avatar { margin: 8px auto; }
-.podium-avatar .pet-emoji { font-size: 52px; }
-.podium-avatar.champion .pet-emoji { font-size: 64px; filter: drop-shadow(0 4px 12px rgba(255,215,0,0.5)); }
-.podium-name { font-size: 15px; font-weight: 600; margin: 8px 0 4px; }
-.podium-score { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #ffd700, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.podium-level { font-size: 11px; padding: 2px 8px; border-radius: 8px; display: inline-block; margin-top: 6px; }
-.podium-level.lv-1 { background: rgba(134,239,172,0.2); color: #86efac; }
-.podium-level.lv-2 { background: rgba(147,197,253,0.2); color: #93c5fd; }
-.podium-level.lv-3 { background: rgba(196,181,253,0.2); color: #c4b5fd; }
-.podium-level.lv-4 { background: rgba(96,165,250,0.2); color: #60a5fa; }
-.podium-level.lv-5 { background: rgba(249,115,22,0.2); color: #f97316; }
-.podium-level.lv-6 { background: rgba(255,215,0,0.25); color: #fbbf24; }
-.podium-rank { position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.1); font-size: 11px; padding: 2px 10px; border-radius: 10px; font-weight: 600; }
-
-/* 单人冠军 */
-.solo-champion { text-align: center; padding: 40px 20px; background: linear-gradient(180deg, rgba(255,215,0,0.15) 0%, rgba(255,140,0,0.05) 100%); border-radius: 24px; border: 2px solid rgba(255,215,0,0.3); margin-bottom: 30px; animation: podium-in 0.6s ease-out both; }
-.solo-avatar .pet-emoji { font-size: 64px; }
-.solo-name { font-size: 18px; font-weight: 600; margin-top: 10px; }
-.solo-score { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #ffd700, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 4px 0; }
-
-/* ========== 排名列表 ========== */
-.rank-list { display: flex; flex-direction: column; gap: 8px; }
-.rank-item { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.06); border-radius: 16px; padding: 12px 16px; transition: all 0.2s; animation: slide-in 0.4s ease-out both; position: relative; overflow: hidden; }
-.rank-item:hover { background: rgba(255,255,255,0.1); transform: translateX(4px); }
-
-@keyframes slide-in {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
+@media (max-width: 768px) {
+  .podium { gap: 8px; }
+  .podium-item { padding: 14px 10px 0; border-radius: var(--r-md); }
+  .podium-avatar { width: 52px; height: 52px; }
+  .podium-avatar.champion { width: 64px; height: 64px; }
+  .podium-score { font-size: 16px; }
+  .podium-name { font-size: 12.5px; }
+  .podium-medal { font-size: 20px; }
+  .podium-stand { margin: 0 -10px; }
+  .hint { display: none; }
+  .rank-info { width: 78px; }
+  .rank-bar { min-width: 40px; }
+  .rank-item { gap: 9px; padding: 10px 12px; }
 }
-
-.rank-number { font-size: 16px; font-weight: 700; color: #888; min-width: 28px; text-align: center; }
-.rank-avatar { font-size: 28px; min-width: 36px; text-align: center; }
-.rank-info { flex: 1; }
-.rank-name { font-size: 14px; font-weight: 600; }
-.rank-level { font-size: 11px; padding: 1px 6px; border-radius: 6px; display: inline-block; margin-top: 2px; }
-.rank-level.lv-1 { background: rgba(134,239,172,0.1); color: #86efac; }
-.rank-level.lv-2 { background: rgba(147,197,253,0.15); color: #93c5fd; }
-.rank-level.lv-3 { background: rgba(196,181,253,0.15); color: #c4b5fd; }
-.rank-level.lv-4 { background: rgba(96,165,250,0.15); color: #60a5fa; }
-.rank-level.lv-5 { background: rgba(249,115,22,0.15); color: #f97316; }
-.rank-level.lv-6 { background: rgba(255,215,0,0.2); color: #fbbf24; }
-.rank-score { text-align: right; min-width: 60px; }
-.score-val { font-size: 18px; font-weight: 700; color: #ffd700; }
-.score-unit { font-size: 12px; color: #999; margin-left: 2px; }
-.rank-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.05); }
-.rank-bar-fill { height: 100%; background: linear-gradient(90deg, #ffd700, #ff8c00); border-radius: 0 3px 0 0; transition: width 0.6s ease-out; }
-
-/* 无宠物标记淡化 */
-.no-pet { opacity: 0.7; }
 </style>

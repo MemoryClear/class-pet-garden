@@ -1,10 +1,12 @@
 <template>
-  <div class="shop-page">
-    <div class="header-bar">
-      <button class="back-btn" @click="router.push('/home')">← 返回</button>
-      <h1 class="page-title">🏪 小卖部</h1>
-    </div>
-    
+  <AppShell title="小卖部" :subtitle="subtitle">
+    <template #actions>
+      <button v-if="activeTab === 'items'" class="btn-primary add-btn" @click="showAddModal = true">
+        ＋ 添加商品
+      </button>
+    </template>
+
+    <div class="page-wrap">
     <!-- 切换标签 -->
     <div class="shop-tabs">
       <button 
@@ -23,11 +25,6 @@
 
     <!-- 商品列表 -->
     <div v-if="activeTab === 'items'" class="shop-content">
-      <!-- 添加商品按钮 -->
-      <button class="add-btn" @click="showAddModal = true">
-        ➕ 添加商品
-      </button>
-
       <!-- 搜索 + 分类筛选 -->
     <div v-if="items.length > 0" class="filter-bar">
       <input
@@ -168,19 +165,25 @@
       </div>
       <div v-else-if="filteredRecords.length > 0" class="end-marker">— 已加载全部 —</div>
     </div>
-  </div>
+    </div>
+  </AppShell>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import AppShell from '../components/layout/AppShell.vue'
 import api from '../api/index.js'
 import $confirm from '../composables/useConfirmModal.js'
 
-const router = useRouter()
 const items = ref([])
 const records = ref([])
 const activeTab = ref('items')
+
+const subtitle = computed(() => {
+  if (activeTab.value === 'records') return '每一笔兑换都能追溯，可撤销退还'
+  const n = items.value.length
+  return n ? `共 ${n} 件商品 · 用口粮兑换` : '还没有商品，先添加一个吧'
+})
 const showAddModal = ref(false)
 const editingItem = ref(null)
 
@@ -333,54 +336,71 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.shop-page {
-  min-height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+.page-wrap { max-width: 1040px; margin: 0 auto; }
 
+/* 商品 / 记录 切换 */
+.shop-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.tab-btn {
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink-2);
+  cursor: pointer;
+  font-size: 12.5px;
+  font-family: inherit;
+  transition: .16s;
+  touch-action: manipulation;
+}
+.tab-btn.active { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 600; }
+
+.add-btn { padding: 9px 16px; }
+
+/* 搜索 + 分类筛选 */
 .filter-bar {
   margin-bottom: 16px;
   padding: 12px 14px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.1);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-s);
 }
 .search-input {
   width: 100%;
-  padding: 8px 14px;
-  border: 2px solid #fbbf24;
-  border-radius: 20px;
-  font-size: 14px;
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  font-size: 13.5px;
+  font-family: inherit;
+  color: var(--ink);
   outline: none;
   box-sizing: border-box;
   margin-bottom: 10px;
+  transition: .16s;
 }
-.search-input:focus {
-  border-color: #ea580c;
-  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
-}
-.category-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
+.search-input::placeholder { color: var(--ink-4); }
+.search-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+
+.category-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
 .cat-tab {
-  padding: 5px 12px;
-  border: 1px solid #fbbf24;
-  background: white;
-  border-radius: 16px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 9px;
   cursor: pointer;
-  font-size: 13px;
-  color: #92400e;
-  transition: all 0.15s;
+  font-size: 12.5px;
+  font-family: inherit;
+  color: var(--ink-2);
+  transition: .16s;
+  touch-action: manipulation;
 }
-.cat-tab:hover {
-  background: #fef3c7;
-}
+.cat-tab:hover { border-color: #E4DAD7; }
 .cat-tab.active {
-  background: linear-gradient(135deg, #f59e0b, #ea580c);
-  color: white;
-  border-color: #ea580c;
+  background: var(--brand-soft);
+  border-color: var(--brand-soft-2);
+  color: var(--brand-deep);
   font-weight: 600;
 }
 .filter-summary {
@@ -388,86 +408,22 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   font-size: 12px;
-  color: #92400e;
+  color: var(--ink-3);
   margin-top: 10px;
   padding-top: 8px;
-  border-top: 1px dashed #fde68a;
+  border-top: 1px dashed var(--line);
 }
 .match-count { font-weight: 600; }
 .clear-filter {
   background: none;
   border: none;
-  color: #b45309;
+  color: var(--brand-deep);
   cursor: pointer;
   font-size: 12px;
   text-decoration: underline;
   padding: 0;
+  font-family: inherit;
 }
-}
-
-.header-bar {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.back-btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.6);
-  cursor: pointer;
-  font-size: 1rem;
-  color: #92400e;
-  transition: all 0.2s;
-}
-
-.back-btn:hover {
-  background: rgba(255,255,255,0.9);
-}
-
-.page-title {
-  text-align: center;
-  color: #92400e;
-  font-size: 2rem;
-  flex: 1;
-  margin: 0;
-}
-
-.shop-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.tab-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.5);
-  cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.3s;
-}
-
-.tab-btn.active {
-  background: #d97706;
-  color: white;
-}
-
-.add-btn {
-  display: block;
-  margin: 0 auto 20px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
-  background: #059669;
-  color: white;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
 .items-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

@@ -27,7 +27,7 @@
         <span v-if="student.petIcon" class="pet-icon" :class="`size-${level}`">
           <PetIcon :icon="student.petIcon" :size="petIconSize" />
         </span>
-        <span v-else class="pet-icon">❓</span>
+        <span v-else class="pet-icon no-pet-egg">🥚</span>
         <span v-if="level >= 2" class="deco deco-star2">✨</span>
       </div>
 
@@ -61,7 +61,7 @@
     <div class="pet-info">
       <div class="pet-name">
         {{ student.petName || '未领养' }}
-        <span v-if="level >= 3" class="title-badge">{{ levelTitle }}</span>
+        <span v-if="level >= 3" class="title-badge">{{ titleBadge }}</span>
       </div>
     </div>
 
@@ -92,6 +92,7 @@ import { computed, onMounted, ref } from 'vue'
 import { studentApi } from '../api/index.js'
 import { useAppStore } from '../stores/app.js'
 import PetIcon from './PetIcon.vue'
+import { levelOf, levelProgress, levelTitle } from '../constants/petLevels.js'
 
 const props = defineProps({ student: { type: Object, required: true } })
 const emit = defineEmits(['click', 'adopt', 'exchange', 'history', 'edit', 'pokemon'])
@@ -133,15 +134,7 @@ const rightItems = computed(() =>
   ).slice(1, 2)
 )
 
-const level = computed(() => {
-  const food = props.student.food ?? 0
-  if (food >= 200) return 6
-  if (food >= 100) return 5
-  if (food >= 60) return 4
-  if (food >= 30) return 3
-  if (food >= 10) return 2
-  return 1
-})
+const level = computed(() => levelOf(props.student.food))
 
 const levelClass = computed(() => `level-${level.value}`)
 
@@ -150,22 +143,9 @@ const petIconSize = computed(() => {
   return sizes[level.value] || 72
 })
 
-const levelTitle = computed(() => {
-  const titles = { 1: '', 2: '✦', 3: '★', 4: '★★', 5: '★★★', 6: '★★★★' }
-  return titles[level.value] || ''
-})
+const titleBadge = computed(() => levelTitle(level.value))
 
-const foodPct = computed(() => {
-  const food = props.student.food ?? 0
-  const thresholds = [0, 10, 30, 60, 100, 200]
-  const currentLevel = level.value
-  if (currentLevel >= 6) return 100
-  const currentMin = thresholds[currentLevel - 1]
-  const nextMin = thresholds[currentLevel]
-  const progress = food - currentMin
-  const needed = nextMin - currentMin
-  return Math.min(100, Math.max(0, (progress / needed) * 100))
-})
+const foodPct = computed(() => levelProgress(props.student.food))
 
 // 卸下确认弹窗状态
 const unequipTarget = ref(null)
@@ -198,17 +178,22 @@ onMounted(async () => {
 <style scoped>
 .pet-card {
   background: #fff;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid var(--line, #EFE9E7);
+  border-radius: 18px;
+  padding: 14px 14px 11px;
+  box-shadow: 0 1px 2px rgba(34,36,47,0.04), 0 4px 12px rgba(34,36,47,0.05);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
   position: relative;
   display: flex;
   flex-direction: column;
 }
-.pet-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-.pet-card.no-pet { background: linear-gradient(135deg, #fff 0%, #fff5f7 100%); border: 2px dashed #f0c0d0; }
+.pet-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(34,36,47,0.09);
+  border-color: #F0DFE4;
+}
+.pet-card.no-pet { background: linear-gradient(135deg, #fff 0%, #fffafb 100%); border: 1.5px dashed #EADFDA; box-shadow: none; }
 
 .pet-card.level-2 { background: linear-gradient(135deg, #fff 0%, #f0f9ff 100%); }
 .pet-card.level-3 { background: linear-gradient(135deg, #fff 0%, #faf5ff 100%); }
@@ -354,6 +339,7 @@ onMounted(async () => {
 }
 .pet-card:hover .pet-icon-img { transform: scale(1.1); }
 .pet-card:hover .pet-icon { transform: scale(1.1); }
+.pet-icon.no-pet-egg { opacity: .55; filter: grayscale(.15); }
 .pet-icon.size-2 { font-size: 76px; width: 76px; height: 76px; }
 .pet-icon.size-3 { font-size: 80px; width: 80px; height: 80px; filter: drop-shadow(0 2px 8px rgba(168,85,247,0.4)); }
 .pet-icon.size-4 { font-size: 82px; width: 82px; height: 82px; filter: drop-shadow(0 4px 12px rgba(96,165,250,0.6)); animation: icon-float 2s ease-in-out infinite; }
@@ -483,7 +469,7 @@ onMounted(async () => {
   font-size: 11px;
   color: #c4a000;
   margin-bottom: 4px;
-  opacity: 0.7;
+  opacity: 0.5;
   min-height: 22px;
   display: flex;
   align-items: center;
@@ -531,13 +517,28 @@ onMounted(async () => {
   box-sizing: border-box;
 }
 
-.pet-actions { display: flex; justify-content: center; gap: 8px; margin-top: auto; }
-.action-btn { background: #fff0f3; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 14px; transition: all 0.2s; }
-.action-btn:hover { background: #ffe0e6; transform: scale(1.1); }
-.exchange-btn { background: #fef3c7; }
-.exchange-btn:hover { background: #fde68a; }
-.pokemon-btn { background: #dbeafe; }
-.pokemon-btn:hover { background: #bfdbfe; }
+.pet-actions { display: flex; justify-content: center; gap: 6px; margin-top: auto; padding-top: 4px; }
+.action-btn {
+  background: #FAF6F5;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.72;
+  transition: all 0.18s ease;
+}
+.action-btn:hover { opacity: 1; background: var(--brand-soft, #fff0f3); transform: translateY(-1px); }
+.exchange-btn:hover { background: #FEF3C7; }
+.pokemon-btn:hover { background: #DBEAFE; }
 
 .pokemon-badge { display: none; }
+
+@media (max-width: 768px) {
+  .pet-card { padding: 12px 12px 10px; border-radius: 16px; }
+  .pet-actions { gap: 8px; }
+  .action-btn { width: 36px; height: 36px; font-size: 15px; border-radius: 10px; }
+  .corner-name { font-size: 11.5px; }
+}
 </style>

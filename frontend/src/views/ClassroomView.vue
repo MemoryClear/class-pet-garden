@@ -1,9 +1,6 @@
 <template>
-  <div class="classroom-container">
-    <div class="classroom-header">
-      <h1>📖 课堂</h1>
-      <button class="back-btn" @click="$router.push('/')">← 返回</button>
-    </div>
+  <AppShell title="课堂" subtitle="诗词/拼音、四则运算、英语字母，都能直接投屏">
+    <div class="classroom-body">
     <div class="tabs">
       <button v-for="tab in ['语文', '数学', '英语']" :key="tab" :class="['tab-btn', { active: activeTab === tab }]" @click="activeTab = tab">{{ tab }}</button>
     </div>
@@ -390,11 +387,13 @@
       </div>
     </div>
     <!-- /英语 -->
-  </div>
+    </div>
+  </AppShell>
 </template>
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { classroomApi, studentApi2 } from '../api/index.js'
+import AppShell from '../components/layout/AppShell.vue'
 import { useAuthStore } from '../stores/auth.js'
 import { pinyin as py } from 'pinyin'
 import $confirm from '../composables/useConfirmModal.js'
@@ -1003,14 +1002,10 @@ function submitMultiplyScore() {
 }
 </script>
 <style scoped>
-.classroom-container { padding: 20px; max-width: 800px; margin: 0 auto; min-height: 100vh; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
-.classroom-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.classroom-header h1 { color: #92400e; font-size: 2rem; }
-.back-btn { padding: 8px 16px; background: rgba(255,255,255,0.6); color: #92400e; border: none; border-radius: 20px; cursor: pointer; font-size: 1rem; }
-.back-btn:hover { background: rgba(255,255,255,0.9); }
-.tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-.tab-btn { flex: 1; padding: 12px; background: rgba(255,255,255,0.5); border: none; border-radius: 20px; cursor: pointer; font-size: 1rem; transition: all 0.3s; }
-.tab-btn.active { background: #d97706; color: white; }
+.classroom-body { max-width: 900px; margin: 0 auto; }
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; background: #F4EFEE; padding: 4px; border-radius: 12px; }
+.tab-btn { flex: 1; padding: 10px; background: transparent; border: none; border-radius: 9px; cursor: pointer; font-size: 14px; font-family: inherit; color: #767D8C; transition: .16s; touch-action: manipulation; }
+.tab-btn.active { background: var(--surface); color: var(--ink); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.07); }
 .tab-content { animation: fadeIn 0.3s; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .loading, .empty { text-align: center; padding: 40px; color: #92400e; font-size: 1.1rem; }

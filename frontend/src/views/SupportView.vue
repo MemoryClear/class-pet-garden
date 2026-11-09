@@ -1,10 +1,5 @@
 <template>
-  <div class="support-page">
-    <div class="header-bar">
-      <button class="back-btn" @click="router.back()">← 返回</button>
-      <h2>💖 赞赏支持</h2>
-    </div>
-
+  <AppShell title="赞赏支持" subtitle="这个项目没有广告、会员或强制付费">
     <div class="content">
       <section class="intro">
         <h3>支持项目持续维护与更新</h3>
@@ -67,15 +62,14 @@
       <img :src="qrUrl" alt="微信赞赏码" class="qr-modal-image" />
       <p class="qr-modal-hint">点击任意处关闭</p>
     </div>
-  </div>
+  </AppShell>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAppStore } from '../stores/app.js'
+import AppShell from '../components/layout/AppShell.vue'
 
-const router = useRouter()
 const appStore = useAppStore()
 
 const qrUrl = ref('/support/wechat-qr.png')
@@ -114,28 +108,16 @@ onMounted(async () => {
   z-index: 10;
 }
 
-.back-btn {
-  background: #f0f0f0;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-}
 
-.header-bar h2 {
-  margin: 0;
-  font-size: 18px;
-  color: #333;
-}
+
+
 
 .content {
   max-width: 720px;
   margin: 0 auto;
-  padding: 0 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .intro h3 {

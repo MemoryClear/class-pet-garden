@@ -1,9 +1,5 @@
 <template>
-  <div class="settings-page">
-    <div class="header-bar">
-      <button class="back-btn" @click="router.push('/home')">← 返回</button>
-      <h2>⚙️ 系统设置</h2>
-    </div>
+  <AppShell title="系统设置" subtitle="班级信息、主题、学生与评分项都在这里">
     <div class="container">
       <!-- 班级信息 -->
       <div class="section-card">
@@ -119,14 +115,14 @@
         <button class="btn-logout" @click="handleLogout">↩️ 退出登录</button>
       </div>
     </div>
-  </div>
 
-  <StudentEditModal
-    v-if="editingStudent"
-    :student="editingStudent"
-    @close="editingStudent = null"
-    @updated="onStudentUpdated"
-  />
+    <StudentEditModal
+      v-if="editingStudent"
+      :student="editingStudent"
+      @close="editingStudent = null"
+      @updated="onStudentUpdated"
+    />
+  </AppShell>
 </template>
 
 <script setup>
@@ -136,6 +132,7 @@ import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
 import $confirm from '../composables/useConfirmModal.js'
 import StudentEditModal from '../components/StudentEditModal.vue'
+import AppShell from '../components/layout/AppShell.vue'
 
 
 const appStore = useAppStore()
@@ -298,13 +295,15 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.settings-page { min-height:100vh; }
-.header-bar { background:#fff; padding:16px 20px; display:flex; align-items:center; gap:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06); margin-bottom:20px; }
-.back-btn { background:#f0f0f0; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; font-size:14px; }
-h2 { font-size:18px; font-weight:600; color:#2d3748; }
-.container { max-width:800px; margin:0 auto; padding:0 20px 40px; display:flex; flex-direction:column; gap:16px; }
-.section-card { background:#fff; border-radius:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06); padding:20px; }
-.section-title { font-size:16px; font-weight:600; color:#2d3748; margin-bottom:16px; }
+.container { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.section-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-s);
+  padding: 18px 20px;
+}
+.section-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
 .form-group { margin-bottom:12px; }
 .form-label { display:block; font-size:13px; color:#718096; margin-bottom:6px; }
 .form-input { width:100%; padding:10px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px; }

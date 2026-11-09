@@ -4,24 +4,41 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import ConfirmModal from './components/ConfirmModal.vue'
 import { setConfirmModal } from './composables/useConfirmModal.js'
+import { useAppStore } from './stores/app.js'
+import { useAuthStore } from './stores/auth.js'
 
 const confirmModal = ref(null)
+const appStore = useAppStore()
+const authStore = useAuthStore()
 
-onMounted(() => {
+// 主题：把设置里的 theme 写到 <html data-theme>，驱动全局 CSS 变量
+const theme = computed(() => appStore.settings?.theme || 'pink')
+watch(theme, (t) => document.documentElement.setAttribute('data-theme', t), { immediate: true })
+
+onMounted(async () => {
   if (confirmModal.value) {
     setConfirmModal(confirmModal.value)
+  }
+  // 全局只拉一次设置：主题、系统名、班级名在任何页面都能拿到
+  // （之前只有 HomeView 拉，直接访问 /leaderboard 这类页面会退回默认主题）
+  if (authStore.isLoggedIn) {
+    try {
+      await appStore.fetchSettings()
+    } catch (e) { /* 静默失败，保留默认值 */ }
   }
 })
 </script>
 
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background: linear-gradient(135deg, #fce4ec 0%, #e3f2fd 100%);
+html, body {
+  background: #FBF8F7;
   min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #22242F;
+  -webkit-font-smoothing: antialiased;
 }
 </style>

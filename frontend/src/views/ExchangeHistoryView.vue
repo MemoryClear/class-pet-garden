@@ -1,10 +1,6 @@
 <template>
-  <div class="exchange-history-page">
-    <div class="header-bar">
-      <button class="back-btn" @click="router.push('/home')">← 返回</button>
-      <h2>📦 商品兑换明细</h2>
-    </div>
-    <div class="container">
+  <AppShell title="兑换明细" :subtitle="subtitle">
+    <div class="page-wrap">
       <!-- Tab 切换（按动作类型） -->
       <div class="tab-bar">
         <button :class="{ active: viewTab === 'all' }" @click="viewTab = 'all'">📋 全部</button>
@@ -98,20 +94,26 @@
         <span v-else class="load-more-end">— 已加载全部 —</span>
       </div>
     </div>
-  </div>
+  </AppShell>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useAppStore } from '../stores/app.js'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
+import AppShell from '../components/layout/AppShell.vue'
 import api from '../api/index.js'
 import $confirm from '../composables/useConfirmModal.js'
 
 const appStore = useAppStore()
-const router = useRouter()
 const route = useRoute()
 const loading = ref(true)
+
+const subtitle = computed(() => {
+  const n = readRecords().length
+  if (loading.value) return '正在加载…'
+  return n ? `共 ${n} 条兑换 / 赠送记录` : '学生的每一笔兑换都会记在这里'
+})
 const viewTab = ref('all')
 const filterStudentId = ref('')
 
@@ -230,93 +232,83 @@ async function loadMore() {
 </script>
 
 <style scoped>
-.exchange-history-page { min-height: 100vh; background: #f7f3f0; }
-
-.header-bar {
-  background: #fff;
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  margin-bottom: 20px;
-}
-
-.back-btn {
-  background: #f0f0f0;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-h2 { font-size: 18px; font-weight: 600; color: #2d3748; }
-
-.container { max-width: 800px; margin: 0 auto; padding: 0 20px 40px; }
+.page-wrap { max-width: 860px; margin: 0 auto; }
 
 /* Tab 切换 */
 .tab-bar {
   display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  padding-bottom: 2px;
 }
 
 .tab-bar button {
-  padding: 6px 14px;
-  border: 1px solid #ddd;
-  background: #fff;
-  border-radius: 18px;
-  font-size: 13px;
+  flex: 0 0 auto;
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: var(--r-sm);
+  font-size: 12.5px;
+  font-family: inherit;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: .16s;
+  touch-action: manipulation;
 }
 
+.tab-bar button:hover { border-color: #E4DAD7; }
 .tab-bar button.active {
-  background: #f59e0b;
+  background: var(--ink);
   color: #fff;
-  border-color: #f59e0b;
+  border-color: var(--ink);
   font-weight: 600;
 }
 
 /* 筛选 */
-.filter-bar { margin-bottom: 16px; }
+.filter-bar { margin-bottom: 14px; }
 .filter-select {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
-  min-width: 160px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--ink);
+  min-width: 150px;
 }
+.filter-select:focus { outline: 0; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
 
 /* 4 张统计卡 */
 .stats-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 .stat-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 14px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 13px 12px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-s);
 }
-.stat-card.cost { background: linear-gradient(135deg, #fef3c7, #fde68a); }
-.stat-card.gift-out { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
-.stat-card.gift-in { background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
-.stat-num { font-size: 18px; font-weight: 700; color: #2d3748; }
-.stat-lbl { font-size: 11px; color: #6b7280; margin-top: 2px; }
+.stat-card.cost { background: linear-gradient(140deg, #FFFBEB, #FEF3C7); border-color: #FDE9B8; }
+.stat-card.gift-out { background: linear-gradient(140deg, #F5F9FF, #DBEAFE); border-color: #D7E5FB; }
+.stat-card.gift-in { background: linear-gradient(140deg, #FFF5FA, #FCE7F3); border-color: #F9D9E9; }
+.stat-num { font-size: 18px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stat-lbl { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
 
 /* 时间线 */
-.timeline { display: flex; flex-direction: column; gap: 16px; }
+.timeline { display: flex; flex-direction: column; gap: 12px; }
 .day-group {
-  background: #fff;
-  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
   padding: 12px 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-s);
 }
 .day-header {
   font-size: 13px;
@@ -432,7 +424,7 @@ h2 { font-size: 18px; font-weight: 600; color: #2d3748; }
 .loading-icon, .empty-icon {
   width: 80px;
   height: 80px;
-  background: #fff;
+  background: var(--surface);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -447,4 +439,15 @@ h2 { font-size: 18px; font-weight: 600; color: #2d3748; }
 .load-more-btn:hover:not(:disabled) { background:#fff5f1; }
 .load-more-btn:disabled { opacity:0.6; cursor:not-allowed; }
 .load-more-end { color:#999; font-size:12px; }
+
+@media (max-width: 768px) {
+  .stats-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat-num { font-size: 16px; }
+  .filter-select { min-width: 0; width: 100%; height: 34px; }
+  .record-item { gap: 8px; }
+  .record-icon { font-size: 22px; }
+  .record-price { min-width: 48px; font-size: 12.5px; }
+  .record-time { min-width: 34px; }
+  .day-group { padding: 10px 12px; }
+}
 </style>

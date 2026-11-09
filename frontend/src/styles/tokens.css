@@ -1,0 +1,153 @@
+/* ============================================================
+ * 设计令牌（Design Tokens）
+ * 全局 CSS 变量：颜色 / 圆角 / 阴影 / 字号
+ * 主题色通过 <html data-theme="pink|purple|..."> 切换，
+ * 由 App.vue 根据 appStore.settings.theme 写入。
+ * ============================================================ */
+
+:root {
+  /* 主色（默认樱花粉） */
+  --brand: #FF6B9D;
+  --brand-2: #8B5CF6;
+  --brand-deep: #E9507F;
+  --brand-soft: rgba(255, 107, 157, .10);
+  --brand-soft-2: rgba(255, 107, 157, .18);
+
+  /* 中性色 */
+  --ink: #22242F;
+  --ink-2: #5A6070;
+  --ink-3: #9AA1B0;
+  --ink-4: #B4B9C4;
+
+  --bg: #FBF8F7;
+  --surface: #FFFFFF;
+  --line: #EFE9E7;
+  --line-soft: #F6F1EF;
+
+  /* 语义色 */
+  --good: #10B981;
+  --bad: #EF4444;
+  --warn: #F59E0B;
+
+  /* 圆角 & 阴影 */
+  --r-lg: 18px;
+  --r-md: 14px;
+  --r-sm: 10px;
+  --shadow-s: 0 1px 2px rgba(34, 36, 47, .04), 0 4px 12px rgba(34, 36, 47, .05);
+  --shadow-m: 0 8px 28px rgba(34, 36, 47, .08);
+
+  /* 侧栏宽度 */
+  --sidebar-w: 242px;
+  --topbar-h: 66px;
+
+  color-scheme: light;
+}
+
+/* ---------- 10 套主题 ---------- */
+[data-theme="pink"] {
+  --brand: #FF6B9D; --brand-2: #8B5CF6; --brand-deep: #E9507F;
+  --brand-soft: rgba(255, 107, 157, .10); --brand-soft-2: rgba(255, 107, 157, .18);
+}
+[data-theme="purple"] {
+  --brand: #A855F7; --brand-2: #EC4899; --brand-deep: #8B3FE0;
+  --brand-soft: rgba(168, 85, 247, .10); --brand-soft-2: rgba(168, 85, 247, .18);
+}
+[data-theme="indigo"] {
+  --brand: #8B5CF6; --brand-2: #6366F1; --brand-deep: #7440E0;
+  --brand-soft: rgba(139, 92, 246, .10); --brand-soft-2: rgba(139, 92, 246, .18);
+}
+[data-theme="blue"] {
+  --brand: #3B82F6; --brand-2: #6366F1; --brand-deep: #2563EB;
+  --brand-soft: rgba(59, 130, 246, .10); --brand-soft-2: rgba(59, 130, 246, .18);
+}
+[data-theme="cyan"] {
+  --brand: #06B6D4; --brand-2: #3B82F6; --brand-deep: #0891B2;
+  --brand-soft: rgba(6, 182, 212, .10); --brand-soft-2: rgba(6, 182, 212, .18);
+}
+[data-theme="teal"] {
+  --brand: #14B8A6; --brand-2: #0EA5E9; --brand-deep: #0D9488;
+  --brand-soft: rgba(20, 184, 166, .10); --brand-soft-2: rgba(20, 184, 166, .18);
+}
+[data-theme="green"] {
+  --brand: #22C55E; --brand-2: #10B981; --brand-deep: #16A34A;
+  --brand-soft: rgba(34, 197, 94, .10); --brand-soft-2: rgba(34, 197, 94, .18);
+}
+[data-theme="yellow"] {
+  --brand: #EAB308; --brand-2: #F97316; --brand-deep: #CA8A04;
+  --brand-soft: rgba(234, 179, 8, .12); --brand-soft-2: rgba(234, 179, 8, .20);
+}
+[data-theme="orange"] {
+  --brand: #F97316; --brand-2: #EF4444; --brand-deep: #EA580C;
+  --brand-soft: rgba(249, 115, 22, .10); --brand-soft-2: rgba(249, 115, 22, .18);
+}
+[data-theme="red"] {
+  --brand: #EF4444; --brand-2: #F97316; --brand-deep: #DC2626;
+  --brand-soft: rgba(239, 68, 68, .10); --brand-soft-2: rgba(239, 68, 68, .18);
+}
+
+/* ---------- 基础样式 ---------- */
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; }
+
+/* ---------- 通用组件类 ---------- */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  padding: 11px 18px;
+  border-radius: var(--r-sm);
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 130%);
+  box-shadow: 0 6px 16px var(--brand-soft-2);
+  transition: transform .18s ease, box-shadow .18s ease;
+  white-space: nowrap;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 22px var(--brand-soft-2); }
+.btn-primary:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: .18s;
+  white-space: nowrap;
+}
+.btn-ghost:hover { border-color: #E2D8D5; color: var(--ink); }
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  cursor: pointer;
+  transition: .18s;
+}
+.icon-btn:hover { background: var(--brand-soft); border-color: var(--brand-soft-2); }

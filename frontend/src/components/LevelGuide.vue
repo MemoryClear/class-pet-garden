@@ -16,57 +16,17 @@
           <p class="guide-desc">通过课堂表现获得🍖分数，让宠物升级成长！</p>
           
           <div class="level-list">
-            <div class="level-item level-1">
-              <div class="level-icon">🐣</div>
+            <div
+              v-for="lv in LEVELS"
+              :key="lv.level"
+              class="level-item"
+              :class="`level-${lv.level}`"
+            >
+              <div class="level-icon">{{ lv.icon }}</div>
               <div class="level-info">
-                <div class="level-name">Lv.1 幼崽期</div>
-                <div class="level-range">0 - 9 分</div>
-                <div class="level-desc">刚刚破壳的小可爱，需要多多关爱！🥚</div>
-              </div>
-            </div>
-
-            <div class="level-item level-2">
-              <div class="level-icon">🌱</div>
-              <div class="level-info">
-                <div class="level-name">Lv.2 少年期</div>
-                <div class="level-range">10 - 29 分</div>
-                <div class="level-desc">开始散发光芒，出现星星装饰！✨</div>
-              </div>
-            </div>
-
-            <div class="level-item level-3">
-              <div class="level-icon">⚡</div>
-              <div class="level-info">
-                <div class="level-name">Lv.3 成长期</div>
-                <div class="level-range">30 - 59 分</div>
-                <div class="level-desc">实力提升，获得神秘光环！💫</div>
-              </div>
-            </div>
-
-            <div class="level-item level-4">
-              <div class="level-icon">💎</div>
-              <div class="level-info">
-                <div class="level-name">Lv.4 精英期</div>
-                <div class="level-range">60 - 99 分</div>
-                <div class="level-desc">精英气质，晶体边框闪耀！💠</div>
-              </div>
-            </div>
-
-            <div class="level-item level-5">
-              <div class="level-icon">🔥</div>
-              <div class="level-info">
-                <div class="level-name">Lv.5 大师期</div>
-                <div class="level-range">100 - 199 分</div>
-                <div class="level-desc">大师风范，烈焰燃烧特效！</div>
-              </div>
-            </div>
-
-            <div class="level-item level-6">
-              <div class="level-icon">👑</div>
-              <div class="level-info">
-                <div class="level-name">Lv.6 传说期</div>
-                <div class="level-range">200 分以上</div>
-                <div class="level-desc">传说降临，金色荣耀光环！🌟</div>
+                <div class="level-name">Lv.{{ lv.level }} {{ lv.name }}</div>
+                <div class="level-range">{{ levelRangeText(lv.level) }}</div>
+                <div class="level-desc">{{ lv.desc }}</div>
               </div>
             </div>
           </div>
@@ -82,7 +42,14 @@
 
 <script setup>
 import { ref } from 'vue'
+import { LEVELS, levelRangeText } from '../constants/petLevels.js'
+
 const visible = ref(false)
+
+defineExpose({
+  open: () => { visible.value = true },
+  close: () => { visible.value = false }
+})
 </script>
 
 <style scoped>
@@ -174,6 +141,24 @@ const visible = ref(false)
 .level-name { font-weight: 600; font-size: 15px; color: #2d3748; margin-bottom: 2px; }
 .level-range { font-size: 12px; color: #888; margin-bottom: 4px; }
 .level-desc { font-size: 13px; color: #666; }
+
+@media (max-width: 640px) {
+  .guide-overlay { align-items: flex-end; padding: 0; }
+  .guide-card {
+    max-width: none;
+    width: 100%;
+    max-height: 86dvh;
+    border-radius: 22px 22px 0 0;
+    animation: sheet-up .24s ease-out;
+  }
+  .guide-close { width: 40px; height: 40px; }
+  .guide-content { padding: 16px 16px calc(20px + env(safe-area-inset-bottom)); }
+  .level-item { padding: 12px; }
+}
+@keyframes sheet-up {
+  from { transform: translateY(16px); opacity: .6; }
+  to { transform: translateY(0); opacity: 1; }
+}
 
 .guide-tip {
   margin-top: 16px;
