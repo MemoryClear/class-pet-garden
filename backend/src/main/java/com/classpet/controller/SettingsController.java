@@ -71,6 +71,9 @@ public class SettingsController {
     private Map<String, Object> toMap(Teacher t) {
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("systemName", t.getSystemName());
+        // 教师码：学生登录第一步要用它定位到这位老师名下的班级。
+        // 目前直接复用登录用户名（老师不用记两个号），设置页可查看与复制。
+        m.put("teacherCode", t.getUsername());
         m.put("className", t.getClassName());
         // 兼容字段：前端可用 /api/classes 拿完整列表
         m.put("defaultClassId", classService.list(t.getId()).stream()

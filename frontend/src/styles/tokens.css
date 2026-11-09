@@ -190,3 +190,27 @@ button { font-family: inherit; }
   transition: .18s;
 }
 .icon-btn:hover { background: var(--brand-soft); border-color: var(--brand-soft-2); }
+
+/* ---------- 全局轻提示（composables/useToast.js） ---------- */
+.app-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 34px;
+  transform: translate(-50%, 8px);
+  z-index: 400;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: rgba(24, 27, 34, .93);
+  color: #fff;
+  font-size: 12.5px;
+  letter-spacing: .02em;
+  box-shadow: var(--shadow-m);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .18s ease, transform .18s ease;
+}
+.app-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 768px) {
+  .app-toast { bottom: calc(84px + env(safe-area-inset-bottom)); }
+}

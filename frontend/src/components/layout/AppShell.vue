@@ -50,7 +50,8 @@
               </button>
               <div class="cm-divider"></div>
               <button class="cm-action" @click="createClass">＋ 新建班级</button>
-              <button class="cm-action" @click="classMenu = false; go('/settings')">⚙️ 班级管理</button>
+              <button class="cm-action" @click="classMenu = false; go('/settings#student-access')">🎒 学生登录入口</button>
+              <button class="cm-action" @click="classMenu = false; go('/classes')">🏫 班级管理</button>
             </div>
           </transition>
         </Teleport>
@@ -223,6 +224,7 @@ const navGroups = computed(() => {
   const main = [
     { key: 'home', label: '宠物墙', icon: '🏠', path: '/home' },
     { key: 'students', label: '学生管理', icon: '👥', path: '/students', badge: appStore.students?.length },
+    { key: 'classes', label: '班级管理', icon: '🏫', path: '/classes' },
     { key: 'leaderboard', label: '光荣榜', icon: '🏆', path: '/leaderboard' },
     { key: 'shop', label: '小卖部', icon: '🏪', path: '/shop', badge: appStore.shopItems?.length }
   ]
@@ -273,7 +275,8 @@ function isActive(path) {
 
 function go(path) {
   drawerOpen.value = false
-  if (route.path !== path) router.push(path)
+  // 带 hash 的地址（如 /settings#student-access）要比较 fullPath，否则站内跳转会被忽略
+  if (route.fullPath !== path) router.push(path)
 }
 
 async function pickClass(c) {

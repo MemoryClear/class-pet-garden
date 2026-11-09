@@ -1,61 +1,54 @@
 <template>
-  <AppShell title="系统设置" subtitle="班级信息、外观、主题与评分项">
+  <AppShell title="系统设置" subtitle="班级、学生登录入口、外观与评分项">
     <div class="container">
-      <!-- 班级信息 -->
+      <!-- 系统信息 -->
       <div class="section-card">
-        <div class="section-title">📋 班级信息</div>
+        <div class="section-title">⚙️ 系统信息</div>
         <div class="form-group">
           <label class="form-label">系统名称</label>
           <input type="text" class="form-input" v-model="form.systemName" @change="save" placeholder="如：课堂宠物乐园">
         </div>
-        <div class="form-group">
-          <label class="form-label">当前班级名称</label>
-          <input type="text" class="form-input" v-model="clsForm.name" @change="renameCurrentClass" placeholder="如：初一(3)班">
-          <div class="form-hint">
-            班级号 <b>{{ currentClass?.code || '—' }}</b>，学生学号为「班级号-S0001」；
-            改这里只影响当前选中的班级。
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">公开看板</label>
-          <div style="display:flex; align-items:center; gap:12px;">
-            <label class="switch">
-              <input type="checkbox" v-model="clsForm.showOnBoard" @change="saveBoard">
-              <span class="slider"></span>
-            </label>
-            <span style="font-size:13px; color:var(--ink-3);">
-              开启后，「{{ currentClass?.name || '当前班级' }}」会出现在无需登录的公开看板中
+        <div class="current-class">
+          <div class="cc-main">
+            <span class="cc-label">当前班级</span>
+            <b>{{ currentClass?.name || '—' }}</b>
+            <span class="cc-meta">
+              班级号 <em>{{ currentClass?.code || '—' }}</em>
+              · {{ currentClass?.studentCount ?? 0 }} 人
+              · 学号 {{ currentClass?.code || 'C7F3' }}-S0001
             </span>
           </div>
+          <button class="btn-ghost sm" @click="router.push('/classes')">管理班级 →</button>
         </div>
+        <div class="form-hint">班级名称、公开看板、新增与删除都在「班级管理」页面里。</div>
       </div>
 
-      <!-- 班级管理 -->
-      <div class="section-card">
-        <div class="section-title">🏫 班级管理</div>
-        <div class="class-list" v-if="appStore.classes.length">
-          <div
-            v-for="c in appStore.classes"
-            :key="c.id"
-            class="class-row"
-            :class="{ on: c.id === appStore.currentClassId }"
-          >
-            <div class="class-row-main">
-              <b>{{ c.name }}</b>
-              <span>{{ c.code }} · {{ c.studentCount ?? 0 }} 人</span>
-            </div>
-            <span v-if="c.id === appStore.currentClassId" class="class-tag">当前</span>
-            <div class="class-row-actions">
-              <button class="icon-btn" title="重命名" @click="renameClass(c)">✏️</button>
-              <button class="icon-btn" title="删除班级" @click="deleteClass(c)">🗑️</button>
-            </div>
+      <!-- 学生登录入口 -->
+      <div class="section-card" id="student-access">
+        <div class="section-title">🎒 学生登录入口</div>
+
+        <div class="access-code">
+          <div class="ac-main">
+            <span class="ac-label">教师码</span>
+            <b class="ac-code">{{ teacherCode || '—' }}</b>
           </div>
+          <button class="btn-ghost sm" :disabled="!teacherCode" @click="copy(teacherCode, '教师码')">复制</button>
         </div>
-        <div class="add-row" style="margin-top:12px;">
-          <input class="form-input" v-model="newClassName" placeholder="新班级名称，如 初二(1)班" @keyup.enter="createClass">
-          <button class="btn-sm" @click="createClass">＋ 新建班级</button>
+
+        <ol class="access-steps">
+          <li>学生打开登录页，切到「学生」标签</li>
+          <li>输入教师码 <b>{{ teacherCode || '（同登录用户名）' }}</b>，选择自己的班级</li>
+          <li>学号只填 <b>S0001</b> 这一段，班级号由下拉框决定，不用手输</li>
+        </ol>
+
+        <div class="access-note">
+          💡 每个班级的登录说明，可以到「班级管理」页面点卡片上的 📋 图标复制。
         </div>
-        <div class="form-hint">学生、加减分历史、兑换记录、光荣榜都按班级隔离；评分项与商品是全教师共享的。</div>
+
+        <div class="form-hint">
+          教师码就是你的登录用户名，学生只靠它找到你名下的班级。
+          它是账号的一部分，不支持在这里修改。
+        </div>
       </div>
 
       <!-- 外观模式 -->
@@ -87,13 +80,16 @@
         </div>
       </div>
 
-      <!-- 学生管理入口 -->
+      <!-- 名单与班级 -->
       <div class="section-card">
-        <div class="section-title">👥 学生管理</div>
+        <div class="section-title">🗂️ 名单与班级</div>
         <p class="section-desc">
-          学生名单、学号与密码已移到独立页面：添加、批量导入、重置密码、随机领养都在那里完成。
+          学生名单、学号与密码在「学生管理」；班级的新建、改名、公开看板与切换在「班级管理」。两边都按当前班级隔离数据。
         </p>
-        <button class="btn-sm goto-students" @click="router.push('/students')">前往学生管理 →</button>
+        <div class="entry-row">
+          <button class="btn-sm" @click="router.push('/students')">👥 学生管理 →</button>
+          <button class="btn-ghost" @click="router.push('/classes')">🏫 班级管理 →</button>
+        </div>
       </div>
 
       <!-- 评分项管理 -->
@@ -129,22 +125,35 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch, onMounted } from 'vue'
+import { reactive, computed, watch, onMounted, nextTick } from 'vue'
 import { useAppStore } from '../stores/app.js'
 import { useAuthStore } from '../stores/auth.js'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import $confirm from '../composables/useConfirmModal.js'
 import AppShell from '../components/layout/AppShell.vue'
+import { copyText } from '../utils/clipboard.js'
+import { toast } from '../composables/useToast.js'
 
 
 const appStore = useAppStore()
 const authStore = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 
 const form = reactive({ systemName: '', theme: 'pink', themeMode: 'light' })
-const clsForm = reactive({ name: '', showOnBoard: false })
-const newClassName = ref('')
 const currentClass = computed(() => appStore.currentClass)
+
+// 教师码：后端 /api/settings 返回，兜底用登录信息里的用户名
+const teacherCode = computed(
+  () => appStore.settings.teacherCode || authStore.user?.username || ''
+)
+
+async function copy(value, label) {
+  if (!value) return
+  const ok = await copyText(value)
+  if (ok) toast(`${label}已复制`)
+  else $confirm.error('复制失败，请手动选中复制')
+}
 const scoreForm = reactive({ icon: '', name: '', point: null })
 
 const themes = [
@@ -168,93 +177,6 @@ async function selectTheme(t) {
   form.theme = t
   await save()
 }
-
-// ---------- 班级 ----------
-async function renameCurrentClass() {
-  const id = appStore.currentClassId
-  const name = (clsForm.name || '').trim()
-  if (!id || !name) return
-  try {
-    const { classApi } = await import('../api/index.js')
-    await classApi.rename(id, name)
-    await appStore.fetchClasses()
-  } catch (e) {
-    $confirm.error(e.response?.data?.error || e.message)
-    clsForm.name = currentClass.value?.name || ''
-  }
-}
-
-async function saveBoard() {
-  const id = appStore.currentClassId
-  if (!id) return
-  try {
-    const { classApi } = await import('../api/index.js')
-    await classApi.setBoard(id, clsForm.showOnBoard)
-    await appStore.fetchClasses()
-  } catch (e) {
-    $confirm.error(e.response?.data?.error || e.message)
-    clsForm.showOnBoard = !clsForm.showOnBoard
-  }
-}
-
-async function createClass() {
-  const name = (newClassName.value || '').trim()
-  if (!name) return
-  try {
-    const { classApi } = await import('../api/index.js')
-    const { data } = await classApi.create(name)
-    newClassName.value = ''
-    await appStore.fetchClasses()
-    await appStore.switchClass(data.id)
-    syncClassForm()
-    $confirm.success(`已创建「${data.name}」，班级号 ${data.code}`)
-  } catch (e) {
-    $confirm.error(e.response?.data?.error || e.message)
-  }
-}
-
-async function renameClass(c) {
-  const name = await $confirm.prompt(`修改「${c.name}」的名称：`, {
-    title: '重命名班级',
-    inputValue: c.name,
-    inputRequired: true,
-    okText: '保存'
-  })
-  if (name === null || !name.trim()) return
-  try {
-    const { classApi } = await import('../api/index.js')
-    await classApi.rename(c.id, name.trim())
-    await appStore.fetchClasses()
-    if (c.id === appStore.currentClassId) syncClassForm()
-  } catch (e) {
-    $confirm.error(e.response?.data?.error || e.message)
-  }
-}
-
-async function deleteClass(c) {
-  const ok = await $confirm.confirm(
-    `确定删除「${c.name}」吗？只有空班级可以删除，删除后该班级号不再使用。`,
-    { title: '删除班级', okText: '删除', icon: '🗑️', danger: true }
-  )
-  if (!ok) return
-  try {
-    const { classApi } = await import('../api/index.js')
-    await classApi.remove(c.id)
-    await appStore.fetchClasses()
-    await appStore.fetchStudents()
-    syncClassForm()
-  } catch (e) {
-    $confirm.error(e.response?.data?.error || e.message)
-  }
-}
-
-function syncClassForm() {
-  const c = appStore.currentClass
-  clsForm.name = c?.name || ''
-  clsForm.showOnBoard = !!c?.showOnBoard
-}
-
-watch(() => appStore.currentClassId, syncClassForm)
 
 async function selectMode(m) {
   if (form.themeMode === m) return
@@ -299,8 +221,19 @@ onMounted(async () => {
     themeMode: appStore.settings.themeMode === 'dark' ? 'dark' : 'light'
   })
   await appStore.fetchClasses()
-  syncClassForm()
+
+  scrollToAccess()
 })
+
+// 从侧栏「学生登录入口」跳过来时，滚到那张卡（同页重复点击也能生效）
+function scrollToAccess() {
+  if (route.hash !== '#student-access') return
+  nextTick(() => {
+    document.getElementById('student-access')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  })
+}
+
+watch(() => route.hash, scrollToAccess)
 </script>
 
 <style scoped>
@@ -314,7 +247,6 @@ onMounted(async () => {
 }
 .section-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
 .section-desc { font-size: 12.5px; line-height: 1.7; color: var(--ink-3); margin-bottom: 14px; }
-.goto-students { width: auto; }
 
 /* 外观模式 */
 .mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
@@ -344,30 +276,75 @@ onMounted(async () => {
 .form-hint { font-size: 11.5px; color: var(--ink-3); margin-top: 4px; line-height: 1.7; }
 .form-hint b { color: var(--brand-deep); }
 
-/* 班级列表 */
-.class-list { display: flex; flex-direction: column; gap: 8px; }
-.class-row {
+/* 学生登录入口 */
+.access-code {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
+  gap: 12px;
+  padding: 12px 14px;
   border-radius: var(--r-sm);
-  background: var(--surface);
+  background: var(--brand-soft);
+  border: 1px dashed var(--brand-soft-2);
+  margin-bottom: 12px;
 }
-.class-row.on { border-color: var(--brand-soft-2); background: var(--brand-soft); }
-.class-row-main { flex: 1; min-width: 0; }
-.class-row-main b { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink); }
-.class-row-main span { font-size: 11.5px; color: var(--ink-3); }
-.class-tag {
-  font-size: 10.5px;
-  font-weight: 600;
+.ac-main { display: flex; align-items: baseline; gap: 10px; flex: 1; min-width: 0; }
+.ac-label { font-size: 11.5px; color: var(--ink-3); flex: 0 0 auto; }
+.ac-code {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: .04em;
   color: var(--brand-deep);
-  background: var(--brand-soft-2);
-  padding: 2px 7px;
-  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  word-break: break-all;
 }
-.class-row-actions { display: flex; gap: 6px; }
+.access-steps {
+  margin: 0 0 12px;
+  padding-left: 18px;
+  font-size: 12.5px;
+  line-height: 1.95;
+  color: var(--ink-2);
+}
+.access-steps b { color: var(--ink); font-weight: 600; }
+.access-note {
+  padding: 9px 12px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2, #FAF7F6);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-3);
+}
+.btn-ghost.sm { padding: 6px 12px; font-size: 12px; flex: 0 0 auto; }
+
+@media (max-width: 768px) {
+  .access-steps { font-size: 12px; line-height: 1.85; }
+  .ac-code { font-size: 17px; }
+  .class-row { flex-wrap: wrap; row-gap: 6px; }
+  .class-row-main { flex: 1 1 100%; }
+  .class-row-actions { margin-left: auto; }
+}
+
+/* 当前班级摘要 */
+.current-class {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  margin-bottom: 8px;
+  border-radius: var(--r-sm);
+  background: var(--brand-soft);
+  border: 1px dashed var(--brand-soft-2);
+}
+.cc-main { flex: 1; min-width: 0; }
+.cc-label { display: block; font-size: 10.5px; color: var(--ink-3); margin-bottom: 2px; }
+.cc-main b { font-size: 14px; font-weight: 700; color: var(--ink); }
+.cc-meta { display: block; font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
+.cc-meta em { font-style: normal; font-weight: 600; color: var(--brand-deep); }
+
+/* 入口按钮组 */
+.entry-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.entry-row .btn-ghost { padding: 10px 16px; font-size: 14px; }
+
 .form-group { margin-bottom:12px; }
 .form-label { display:block; font-size:13px; color:#718096; margin-bottom:6px; }
 .form-input { width:100%; padding:10px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px; }
@@ -404,7 +381,23 @@ onMounted(async () => {
 .student-name { flex:1; }
 .student-no { color:#718096; font-size:12px; }
 .student-actions { display:flex; gap:4px; }
-.icon-btn { background:transparent; border:none; cursor:pointer; font-size:14px; }
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  transition: background .14s;
+  touch-action: manipulation;
+}
+.icon-btn:hover { background: var(--line-soft); }
 .error-msg { color:#ff4444; font-size:12px; display:none; }
 .error-msg.show { display:block; }
 .score-item-list { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
