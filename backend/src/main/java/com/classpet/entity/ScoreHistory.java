@@ -27,6 +27,10 @@ public class ScoreHistory {
     @Column(nullable = false)
     private String teacherId;
 
+    /** 所属班级（冗余字段，用于按班级分页查询） */
+    @Column(name = "class_id")
+    private String classId;
+
     @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean revoked = false;
 
@@ -57,6 +61,8 @@ public class ScoreHistory {
     public void setScoreItemIcon(String scoreItemIcon) { this.scoreItemIcon = scoreItemIcon; }
     public Integer getPoint() { return point; }
     public void setPoint(Integer point) { this.point = point; }
+    public String getClassId() { return classId; }
+    public void setClassId(String classId) { this.classId = classId; }
     public String getTeacherId() { return teacherId; }
     public void setTeacherId(String teacherId) { this.teacherId = teacherId; }
     public Boolean getRevoked() { return revoked; }

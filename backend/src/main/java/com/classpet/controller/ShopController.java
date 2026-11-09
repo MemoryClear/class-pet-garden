@@ -65,10 +65,12 @@ public class ShopController {
     @GetMapping("/records")
     public ResponseEntity<?> getRecords(
             @AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestParam(required = false) String classId,
             @RequestParam(required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME) java.time.LocalDateTime cursorTime,
             @RequestParam(required = false) String cursorId,
             @RequestParam(required = false, defaultValue = "20") int limit) {
-        return ResponseEntity.ok(shopService.getRecordsPage(principal.teacherId(), cursorTime, cursorId, limit));
+        String cid = classService.resolveId(classId, principal.teacherId());
+        return ResponseEntity.ok(shopService.getRecordsPage(cid, cursorTime, cursorId, limit));
     }
 
     // 赠送道具

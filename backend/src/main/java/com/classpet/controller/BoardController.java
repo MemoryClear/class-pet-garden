@@ -1,7 +1,9 @@
 package com.classpet.controller;
 
+import com.classpet.entity.SchoolClass;
 import com.classpet.entity.Teacher;
 import com.classpet.repository.ExchangeRecordRepository;
+import com.classpet.repository.SchoolClassRepository;
 import com.classpet.repository.ScoreHistoryRepository;
 import com.classpet.repository.StudentRepository;
 import com.classpet.repository.TeacherRepository;
@@ -15,10 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 公开看板（无需登录）：按教师（班级）维度展示排行榜与学生详情。
+ * 公开看板（无需登录）：按「班级」维度展示排行榜与学生详情。
  *
- * 一个教师账号对应一个班级（Teacher.className），教师在 SettingsView 开关 showOnBoard
- * 后，该教师班级会出现在公开看板。
+ * <p>多班级改造后，看板的最小单位从"教师"变成"班级"：
+ * 教师在某个班级开启 showOnBoard 后，该班级会单独出现在看板里。
+ * 一个教师带三个班，就会看到三条看板条目。</p>
  */
 @RestController
 @RequestMapping("/api/board")
@@ -28,31 +31,34 @@ public class BoardController {
     @Autowired private StudentRepository studentRepo;
     @Autowired private ScoreHistoryRepository scoreHistoryRepo;
     @Autowired private ExchangeRecordRepository exchangeRecordRepo;
+    @Autowired private SchoolClassRepository classRepo;
 
-    /** 看板：所有开启公开展示的教师班级列表 */
-    @GetMapping("/teachers")
-    public ResponseEntity<?> listBoardTeachers() {
+    /** 看板：所有开启公开展示的班级 */
+    @GetMapping("/classes")
+    public ResponseEntity<?> listBoardClasses() {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (Teacher t : teacherRepo.findByShowOnBoardTrue()) {
+        for (SchoolClass c : classRepo.findByShowOnBoardTrue()) {
+            String systemName = teacherRepo.findById(c.getTeacherId())
+                    .map(Teacher::getSystemName)
+                    .orElse("");
             list.add(Map.of(
-                    "id", t.getId(),
-                    "className", t.getClassName() != null ? t.getClassName() : "",
-                    "systemName", t.getSystemName() != null ? t.getSystemName() : ""
+                    "id", c.getId(),
+                    "className", c.getName() != null ? c.getName() : "",
+                    "systemName", systemName != null ? systemName : ""
             ));
         }
         return ResponseEntity.ok(list);
     }
 
-    /** 排行榜：某教师班级前 10 名（按食物降序） */
-    @GetMapping("/teachers/{teacherId}/leaderboard")
-    public ResponseEntity<?> leaderboard(@PathVariable String teacherId) {
-        var teachers = teacherRepo.findByShowOnBoardTrue().stream()
-                .filter(t -> t.getId().equals(teacherId))
-                .findFirst();
-        if (teachers.isEmpty()) {
+    /** 排行榜：某班级前 10 名（按食物降序） */
+    @GetMapping("/classes/{classId}/leaderboard")
+    public ResponseEntity<?> leaderboard(@PathVariable String classId) {
+        var clazz = classRepo.findById(classId)
+                .filter(c -> Boolean.TRUE.equals(c.getShowOnBoard()));
+        if (clazz.isEmpty()) {
             return ResponseEntity.status(404).body(Map.of("error", "班级未加入看板或不存在"));
         }
-        var students = studentRepo.findByTeacherIdOrderByFoodDesc(teacherId);
+        var students = studentRepo.findByClassIdOrderByFoodDesc(classId);
         List<Map<String, Object>> top = new ArrayList<>();
         int limit = Math.min(10, students.size());
         for (int i = 0; i < limit; i++) {
@@ -70,18 +76,17 @@ public class BoardController {
     }
 
     /** 学生详情：奖惩记录 + 礼物动向 + 宠物 */
-    @GetMapping("/teachers/{teacherId}/students/{studentId}/records")
+    @GetMapping("/classes/{classId}/students/{studentId}/records")
     public ResponseEntity<?> studentRecords(
-            @PathVariable String teacherId,
+            @PathVariable String classId,
             @PathVariable String studentId) {
-        var teacher = teacherRepo.findByShowOnBoardTrue().stream()
-                .filter(t -> t.getId().equals(teacherId))
-                .findFirst();
-        if (teacher.isEmpty()) {
+        var clazz = classRepo.findById(classId)
+                .filter(c -> Boolean.TRUE.equals(c.getShowOnBoard()));
+        if (clazz.isEmpty()) {
             return ResponseEntity.status(404).body(Map.of("error", "班级未加入看板或不存在"));
         }
         var stu = studentRepo.findById(studentId).orElse(null);
-        if (stu == null || !teacherId.equals(stu.getTeacherId())) {
+        if (stu == null || !classId.equals(stu.getClassId())) {
             return ResponseEntity.status(404).body(Map.of("error", "学生不存在或不属于该班级"));
         }
 

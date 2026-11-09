@@ -33,6 +33,10 @@ public class ExchangeRecord {
     @Column(name = "teacher_id", nullable = false)
     private String teacherId;
 
+    /** 所属班级（冗余字段，用于按班级分页查询） */
+    @Column(name = "class_id")
+    private String classId;
+
     // 赠送来源（null表示自己兑换，非null表示别人赠送）
     @Column(name = "gift_from")
     private String giftFrom;

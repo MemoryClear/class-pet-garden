@@ -19,21 +19,62 @@ export const useAppStore = defineStore('app', {
     exchangeRecordsNextCursor: null,
     exchangeRecordsLoading: false,
     settings: { systemName: '班级宠物园', className: '默认班级', theme: 'pink' },
+    // ===== 多班级 =====
+    classes: [],
+    currentClassId: localStorage.getItem('cp_current_class') || null,
     loading: false,
   }),
+  getters: {
+    /** 当前班级对象 */
+    currentClass(state) {
+      return state.classes.find(c => c.id === state.currentClassId) || null
+    },
+    /** 侧栏/标题用的班级名 */
+    className(state) {
+      const c = state.classes.find(x => x.id === state.currentClassId)
+      return c ? c.name : (state.settings.className || '未命名班级')
+    }
+  },
   actions: {
+    // ===== 班级 =====
+    async fetchClasses() {
+      const { data } = await api.get('/classes')
+      this.classes = Array.isArray(data) ? data : []
+      // 当前班级失效（被删 / 首次登录）时落到第一个
+      if (!this.currentClassId || !this.classes.some(c => c.id === this.currentClassId)) {
+        this.setCurrentClass(this.classes[0]?.id || null)
+      }
+      return this.classes
+    },
+    setCurrentClass(id) {
+      this.currentClassId = id || null
+      if (id) localStorage.setItem('cp_current_class', id)
+      else localStorage.removeItem('cp_current_class')
+    },
+    /** 切换班级：写本地偏好 + 重新拉取班级维度数据 */
+    async switchClass(id) {
+      if (!id || id === this.currentClassId) return
+      this.setCurrentClass(id)
+      await Promise.all([
+        this.fetchStudents(),
+        this.fetchLeaderboard(),
+        this.fetchHistory(),
+        this.fetchExchangeRecords({ reset: true })
+      ]).catch(() => {})
+    },
+
     // Students
     async fetchStudents() {
       const { data } = await api.get('/students')
       this.students = data
     },
     async createStudent(name) {
-      const { data } = await api.post('/students', { name })
+      const { data } = await api.post('/students', { name, classId: this.currentClassId })
       await this.fetchStudents()
       return data
     },
     async batchCreateStudents(names) {
-      const { data } = await api.post('/students/batch', { names })
+      const { data } = await api.post('/students/batch', { names, classId: this.currentClassId })
       this.students = data
     },
     async updateStudent(id, name) {
@@ -57,7 +98,9 @@ export const useAppStore = defineStore('app', {
       return data
     },
     async assignPetsRandomly() {
-      const { data } = await api.post('/students/assign-pets')
+      const { data } = await api.post('/students/assign-pets', null, {
+        params: { classId: this.currentClassId }
+      })
       this.students = data
     },
     async applyScore(studentId, scoreItemId, multiplier) {

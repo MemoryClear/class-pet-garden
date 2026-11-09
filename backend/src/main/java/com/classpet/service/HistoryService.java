@@ -62,7 +62,7 @@ public class HistoryService {
      * - cursorTime + cursorId 决定从哪条之后继续（首次为 null）
      * - limit 上限 100
      */
-    public Map<String, Object> getHistoryPage(String teacherId,
+    public Map<String, Object> getHistoryPage(String classId,
                                               String studentId,
                                               LocalDate from, LocalDate to,
                                               LocalDateTime cursorTime, String cursorId,
@@ -72,13 +72,13 @@ public class HistoryService {
         PageRequest pageReq = PageRequest.of(0, safeLimit + 1);
         List<ScoreHistory> rows;
         if (studentId != null && !studentId.isEmpty()) {
-            rows = historyRepo.findTeacherStudentPage(teacherId, studentId, cursorTime, cursorId, pageReq);
+            rows = historyRepo.findClassStudentPage(classId, studentId, cursorTime, cursorId, pageReq);
         } else if (from != null && to != null) {
             LocalDateTime fromDt = from.atStartOfDay();
             LocalDateTime toDt = to.plusDays(1).atStartOfDay();
-            rows = historyRepo.findTeacherBetweenPage(teacherId, fromDt, toDt, cursorTime, cursorId, pageReq);
+            rows = historyRepo.findClassBetweenPage(classId, fromDt, toDt, cursorTime, cursorId, pageReq);
         } else {
-            rows = historyRepo.findTeacherPage(teacherId, cursorTime, cursorId, pageReq);
+            rows = historyRepo.findClassPage(classId, cursorTime, cursorId, pageReq);
         }
         boolean hasMore = rows.size() > safeLimit;
         if (hasMore) rows = rows.subList(0, safeLimit);
@@ -97,7 +97,7 @@ public class HistoryService {
             m.put("revoked", sh.getRevoked());
             m.put("revokedAt", sh.getRevokedAt());
             m.put("createdAt", sh.getCreatedAt());
-            m.put("giftedOut", isGiftedOut(teacherId, sh));
+            m.put("giftedOut", isGiftedOut(sh.getTeacherId(), sh));
             items.add(m);
         }
 

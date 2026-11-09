@@ -17,7 +17,7 @@ public class SpaController {
     @GetMapping(value = {
         "/", "/home", "/activate", "/history",
         "/exchange-history", "/leaderboard", "/shop", "/settings",
-        "/student-home", "/classroom", "/pokemon-pool",
+        "/students", "/student-home", "/classroom", "/pokemon-pool",
         "/support",
     })
     public String forwardToIndex() {

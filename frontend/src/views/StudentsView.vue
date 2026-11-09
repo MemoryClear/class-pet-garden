@@ -298,7 +298,7 @@ async function submitAdd() {
   try {
     if (addMode.value === 'single') {
       if (!form.name.trim()) { addError.value = '请填写学生姓名'; submitting.value = false; return }
-      const payload = { name: form.name.trim() }
+      const payload = { name: form.name.trim(), classId: appStore.currentClassId }
       if (pwd) payload.initialPassword = pwd
       await api.post('/students', payload)
       await appStore.fetchStudents()
@@ -307,7 +307,7 @@ async function submitAdd() {
       showAdd.value = false
     } else {
       if (!form.names.trim()) { addError.value = '请粘贴学生名单'; submitting.value = false; return }
-      const payload = { names: form.names }
+      const payload = { names: form.names, classId: appStore.currentClassId }
       if (pwd) payload.initialPassword = pwd
       await api.post('/students/batch', payload)
       await appStore.fetchStudents()

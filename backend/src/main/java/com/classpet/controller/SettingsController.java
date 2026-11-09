@@ -17,6 +17,7 @@ import java.util.Map;
 public class SettingsController {
 
     @Autowired private AuthService authService;
+    @Autowired private com.classpet.service.SchoolClassService classService;
 
     // Public endpoint for login page — no auth required, returns system name/theme only
     // Must be kept in sync with SecurityConfig.requestMatchers("/api/settings").permitAll()
@@ -46,7 +47,18 @@ public class SettingsController {
         return authService.findById(principal.teacherId())
                 .map(t -> {
                     if (req.systemName != null && !req.systemName.isBlank()) t.setSystemName(req.systemName);
-                    if (req.className != null && !req.className.isBlank()) t.setClassName(req.className);
+                    if (req.className != null && !req.className.isBlank()) {
+                        // 多班级：优先改班级名，同时把教师级 className 作为"当前班级名"同步，
+                        // 保证老接口 / 看板 / 标题仍然有正确显示。
+                        t.setClassName(req.className);
+                        if (req.classId != null && !req.classId.isBlank()) {
+                            try {
+                                classService.rename(req.classId, t.getId(), req.className);
+                            } catch (IllegalArgumentException ignored) {
+                                // 班级不属于该教师时不阻断设置保存
+                            }
+                        }
+                    }
                     if (req.theme != null && !req.theme.isBlank()) t.setTheme(req.theme);
                     if ("dark".equals(req.themeMode) || "light".equals(req.themeMode)) t.setThemeMode(req.themeMode);
                     if (req.showOnBoard != null) t.setShowOnBoard(req.showOnBoard);
@@ -60,6 +72,9 @@ public class SettingsController {
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("systemName", t.getSystemName());
         m.put("className", t.getClassName());
+        // 兼容字段：前端可用 /api/classes 拿完整列表
+        m.put("defaultClassId", classService.list(t.getId()).stream()
+                .findFirst().map(c -> c.getId()).orElse(null));
         m.put("theme", t.getTheme());
         m.put("themeMode", t.getThemeMode() == null ? "light" : t.getThemeMode());
         m.put("activated", t.isActivated());

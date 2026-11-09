@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useAppStore } from '../stores/app.js'
 import AppShell from '../components/layout/AppShell.vue'
 import PetIcon from '../components/PetIcon.vue'
@@ -158,6 +158,9 @@ async function loadData() {
 }
 
 onMounted(() => loadData())
+
+// 切换班级后重新取榜
+watch(() => appStore.currentClassId, () => { if (appStore.currentClassId) loadData() })
 </script>
 
 <style scoped>

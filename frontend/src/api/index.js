@@ -6,10 +6,20 @@ const api = axios.create({
   timeout: 10000
 })
 
-// 请求拦截器：附加 JWT Token
+// 请求拦截器：附加 JWT Token + 当前班级
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('token')
   if (token) config.headers.Authorization = `Bearer ${token}`
+
+  // 多班级：GET 请求统一带上当前班级 id（后端按班级过滤）
+  // 写入类请求（新建学生等）需要目标班级语义更明确，由调用方显式传。
+  const method = (config.method || 'get').toLowerCase()
+  if (method === 'get') {
+    const classId = localStorage.getItem('cp_current_class')
+    if (classId && !(config.params && config.params.classId)) {
+      config.params = { ...(config.params || {}), classId }
+    }
+  }
   return config
 })
 
@@ -54,6 +64,15 @@ export const authApi = {
   activate: (code) => api.post('/auth/activate', { code }),
   validate: () => api.get('/auth/validate'),
   checkActivate: () => api.get('/auth/check-activate')
+}
+
+// ============== 班级管理 ==============
+export const classApi = {
+  getAll: () => api.get('/classes'),
+  create: (name) => api.post('/classes', { name }),
+  rename: (id, name) => api.put(`/classes/${id}`, { name }),
+  setBoard: (id, showOnBoard) => api.put(`/classes/${id}/board`, { showOnBoard }),
+  remove: (id) => api.delete(`/classes/${id}`)
 }
 
 // ============== 学生管理 ==============

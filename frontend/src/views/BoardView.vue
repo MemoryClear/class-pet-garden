@@ -141,7 +141,7 @@ const formatTime = (iso) => {
 const fetchTeachers = async () => {
   loading.value = true
   try {
-    const { data } = await axios.get('/api/board/teachers')
+    const { data } = await axios.get('/api/board/classes')
     teachers.value = data || []
     if (teachers.value.length > 0) {
       selectTeacher(teachers.value[0].id)
@@ -159,7 +159,7 @@ const selectTeacher = async (id) => {
   loadingLeaderboard.value = true
   leaderboard.value = []
   try {
-    const { data } = await axios.get(`/api/board/teachers/${id}/leaderboard`)
+    const { data } = await axios.get(`/api/board/classes/${id}/leaderboard`)
     leaderboard.value = data || []
   } catch (e) {
     console.error('fetch leaderboard failed', e)
@@ -173,7 +173,7 @@ const openStudent = async (student) => {
   selectedStudent.value = student
   loadingDetail.value = true
   try {
-    const { data } = await axios.get(`/api/board/teachers/${selectedId.value}/students/${student.id}/records`)
+    const { data } = await axios.get(`/api/board/classes/${selectedId.value}/students/${student.id}/records`)
     selectedStudent.value = { ...student, ...data }
   } catch (e) {
     console.error('fetch student records failed', e)

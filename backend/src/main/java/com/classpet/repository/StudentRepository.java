@@ -15,5 +15,14 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     java.util.Optional<Student> findByIdAndTeacherId(String id, String teacherId);
     List<Student> findByTeacherIdOrderByFoodDesc(String teacherId);
     Optional<Student> findByStudentNo(String studentNo);
+
+    // ===== 多班级：按班级过滤 =====
+    List<Student> findByClassIdOrderByCreatedAtAsc(String classId);
+    List<Student> findByClassIdOrderByFoodDesc(String classId);
+    List<Student> findByClassIdAndPetIdIsNull(String classId);
+    long countByClassId(String classId);
+    boolean existsByClassIdAndName(String classId, String name);
+    java.util.Optional<Student> findByClassIdAndStudentNo(String classId, String studentNo);
+    Optional<Student> findByIdAndClassId(String id, String classId);
     java.util.Optional<Student> findByTeacherIdAndStudentNo(String teacherId, String studentNo);
 }

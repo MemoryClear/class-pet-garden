@@ -50,6 +50,40 @@ public interface ScoreHistoryRepository extends JpaRepository<ScoreHistory, Stri
                                               @Param("cursorId") String cursorId,
                                               Pageable page);
 
+    // ===== 班级范围（多班级） =====
+    @Query("SELECT s FROM ScoreHistory s "
+         + "WHERE s.classId = :cid "
+         + "AND (:cursorTime IS NULL OR (s.createdAt < :cursorTime OR (s.createdAt = :cursorTime AND s.id < :cursorId))) "
+         + "ORDER BY s.createdAt DESC, s.id DESC")
+    List<ScoreHistory> findClassPage(@Param("cid") String cid,
+                                     @Param("cursorTime") LocalDateTime cursorTime,
+                                     @Param("cursorId") String cursorId,
+                                     Pageable page);
+
+    @Query("SELECT s FROM ScoreHistory s "
+         + "WHERE s.classId = :cid AND s.studentId = :sid "
+         + "AND (:cursorTime IS NULL OR (s.createdAt < :cursorTime OR (s.createdAt = :cursorTime AND s.id < :cursorId))) "
+         + "ORDER BY s.createdAt DESC, s.id DESC")
+    List<ScoreHistory> findClassStudentPage(@Param("cid") String cid,
+                                            @Param("sid") String sid,
+                                            @Param("cursorTime") LocalDateTime cursorTime,
+                                            @Param("cursorId") String cursorId,
+                                            Pageable page);
+
+    @Query("SELECT s FROM ScoreHistory s "
+         + "WHERE s.classId = :cid AND s.createdAt >= :from AND s.createdAt < :to "
+         + "AND (:cursorTime IS NULL OR (s.createdAt < :cursorTime OR (s.createdAt = :cursorTime AND s.id < :cursorId))) "
+         + "ORDER BY s.createdAt DESC, s.id DESC")
+    List<ScoreHistory> findClassBetweenPage(@Param("cid") String cid,
+                                            @Param("from") LocalDateTime from,
+                                            @Param("to") LocalDateTime to,
+                                            @Param("cursorTime") LocalDateTime cursorTime,
+                                            @Param("cursorId") String cursorId,
+                                            Pageable page);
+
+    /** 迁移用：补齐历史记录的 classId */
+    List<ScoreHistory> findByClassIdIsNull();
+
     // 学生范围
     @Query("SELECT s FROM ScoreHistory s "
          + "WHERE s.studentId = :sid "

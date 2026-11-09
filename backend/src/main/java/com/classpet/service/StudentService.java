@@ -50,6 +50,7 @@ public class StudentService {
     @Autowired private ExchangeRecordRepository exchangeRecordRepository;
     @Autowired private StudentPokemonRepository studentPokemonRepository;
     @Autowired private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    @Autowired private SchoolClassService schoolClassService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     
     // 宝可梦物种数据缓存（所有形态）
@@ -159,6 +160,11 @@ public class StudentService {
         return studentRepository.findByTeacherIdOrderByCreatedAtAsc(teacherId);
     }
 
+    /** 多班级：当前班级的学生 */
+    public List<Student> getStudentsByClass(String classId) {
+        return studentRepository.findByClassIdOrderByCreatedAtAsc(classId);
+    }
+
     @Transactional
     public Student createStudent(String name, String teacherId) {
         return createStudent(name, teacherId, null);
@@ -170,10 +176,24 @@ public class StudentService {
      */
     @Transactional
     public Student createStudent(String name, String teacherId, String initialPassword) {
+        return createStudent(name, teacherId, null, initialPassword);
+    }
+
+    /**
+     * 添加单个学生（多班级版）。
+     * @param classId 目标班级；为空则落到教师默认班级
+     */
+    @Transactional
+    public Student createStudent(String name, String teacherId, String classId, String initialPassword) {
+        var clazz = schoolClassService.resolve(classId, teacherId);
+        if (studentRepository.existsByClassIdAndName(clazz.getId(), name.trim())) {
+            throw new IllegalArgumentException("该班级已有同名学生");
+        }
         Student stu = new Student();
         stu.setName(name.trim());
         stu.setTeacherId(teacherId);
-        String studentNo = generateStudentNo(teacherId);
+        stu.setClassId(clazz.getId());
+        String studentNo = schoolClassService.nextStudentNo(clazz);
         stu.setStudentNo(studentNo);
         stu.setPetChangeCards(3);
         String pwd = (initialPassword == null || initialPassword.isBlank()) ? studentNo : initialPassword;
@@ -193,14 +213,22 @@ public class StudentService {
      */
     @Transactional
     public List<Student> batchCreateStudents(List<String> names, String teacherId, String initialPassword) {
-        int counter = getNextStudentNoCounter(teacherId);
-        String prefix = teacherPrefix(teacherId);
+        return batchCreateStudents(names, teacherId, null, initialPassword);
+    }
+
+    /** 批量添加学生（多班级版），学号按班级号递增 */
+    @Transactional
+    public List<Student> batchCreateStudents(List<String> names, String teacherId, String classId, String initialPassword) {
+        var clazz = schoolClassService.resolve(classId, teacherId);
+        int counter = nextCounterOfClass(clazz.getId(), clazz.getCode());
+        String prefix = clazz.getCode();
         List<Student> students = new ArrayList<>();
         boolean mustChange = (initialPassword == null || initialPassword.isBlank());
         for (String n : names) {
             Student s = new Student();
             s.setName(n.trim());
             s.setTeacherId(teacherId);
+            s.setClassId(clazz.getId());
             String sno = String.format("%s-S%04d", prefix, counter++);
             s.setStudentNo(sno);
             s.setPetChangeCards(3);
@@ -257,6 +285,33 @@ public class StudentService {
     }
 
     /**
+     * 学生登录时的学生定位：
+     * 有 classId → 班号 + 用户输入的短学号（S0001）；
+     * 没 classId（老客户端） → 直接用完整学号查，保持兼容。
+     */
+    private Student resolveLoginStudent(String classId, String studentNo) {
+        String raw = studentNo == null ? "" : studentNo.trim();
+        if (raw.isEmpty()) throw new IllegalArgumentException("请输入学号");
+        if (classId != null && !classId.isBlank()) {
+            var clazz = schoolClassService.find(classId)
+                    .orElseThrow(() -> new IllegalArgumentException("班级不存在"));
+            String full = schoolClassService.toFullStudentNo(clazz, raw);
+            return studentRepository.findByClassIdAndStudentNo(clazz.getId(), full)
+                    .or(() -> studentRepository.findByStudentNo(full))
+                    .orElseThrow(() -> new IllegalArgumentException("该班级下没有学号 " + raw));
+        }
+        return studentRepository.findByStudentNo(raw)
+                .or(() -> {
+                    // 只输入了 S0001 但没选班级：若全站唯一，直接放行
+                    var list = studentRepository.findAll().stream()
+                            .filter(x -> x.getStudentNo() != null && x.getStudentNo().endsWith("-" + raw.toUpperCase()))
+                            .toList();
+                    return list.size() == 1 ? java.util.Optional.of(list.get(0)) : java.util.Optional.<Student>empty();
+                })
+                .orElseThrow(() -> new IllegalArgumentException("学号不存在，请先选择班级"));
+    }
+
+    /**
      * 学生自己修改密码（不需要旧密码，符合 Q4=标志位拦截）。
      */
     @Transactional
@@ -278,9 +333,8 @@ public class StudentService {
      * 学生用学号+自己的密码登录（取代旧版"学号+教师密码"模式）。
      */
     @Transactional
-    public Map<String, Object> studentLoginByPassword(String studentNo, String password) {
-        Student stu = studentRepository.findByStudentNo(studentNo)
-                .orElseThrow(() -> new IllegalArgumentException("学号不存在"));
+    public Map<String, Object> studentLoginByPassword(String classId, String studentNo, String password) {
+        Student stu = resolveLoginStudent(classId, studentNo);
         if (stu.getPasswordHash() == null || stu.getPasswordHash().isEmpty()) {
             throw new IllegalArgumentException("该学生尚未设置登录密码，请联系教师重置");
         }
@@ -300,6 +354,21 @@ public class StudentService {
      * 根据 teacher UUID 生成班级前缀（取前 4 个十六进制字符，转大写）。
      * 例：e8dc4add-52f3-4049-b8d8-b9337213afae → "E8DC"
      */
+    /** 班级内下一个学号序号 */
+    private int nextCounterOfClass(String classId, String code) {
+        int max = 0;
+        String prefix = code + "-S";
+        for (Student s : studentRepository.findByClassIdOrderByCreatedAtAsc(classId)) {
+            String sno = s.getStudentNo();
+            if (sno != null && sno.startsWith(prefix)) {
+                try {
+                    max = Math.max(max, Integer.parseInt(sno.substring(prefix.length())));
+                } catch (NumberFormatException ignored) { }
+            }
+        }
+        return max + 1;
+    }
+
     private String teacherPrefix(String teacherId) {
         if (teacherId == null || teacherId.length() < 4) return "T000";
         return teacherId.replace("-", "").substring(0, 4).toUpperCase();
@@ -373,7 +442,15 @@ public class StudentService {
 
     @Transactional
     public List<Student> assignPetsRandomly(String teacherId) {
-        List<Student> students = studentRepository.findByTeacherIdOrderByCreatedAtAsc(teacherId);
+        return assignPetsRandomlyByClass(studentRepository.findByTeacherIdOrderByCreatedAtAsc(teacherId));
+    }
+
+    /** 多班级：只给当前班级未领养的学生随机分配 */
+    public List<Student> assignPetsRandomlyByClass(String classId) {
+        return assignPetsRandomlyByClass(studentRepository.findByClassIdOrderByCreatedAtAsc(classId));
+    }
+
+    private List<Student> assignPetsRandomlyByClass(List<Student> students) {
         int[][] petIds = {{1, 2}, {3, 4}, {5, 6}, {7, 8}, {9, 10}};
         for (int i = 0; i < students.size(); i++) {
             students.get(i).setPetId(petIds[i % petIds.length][i % 2]);
@@ -404,6 +481,7 @@ public class StudentService {
             itemName, itemIcon,
             totalPoint, teacherId
         );
+        history.setClassId(stu.getClassId());
         scoreHistoryRepository.save(history);
 
         return stu;
@@ -411,6 +489,11 @@ public class StudentService {
 
     public List<Student> getLeaderboard(String teacherId) {
         return studentRepository.findByTeacherIdOrderByFoodDesc(teacherId);
+    }
+
+    /** 多班级：按班级出榜 */
+    public List<Student> getLeaderboardByClass(String classId) {
+        return studentRepository.findByClassIdOrderByFoodDesc(classId);
     }
 
     // 学生答题加分（无需教师身份验证，仅限课堂答题使用）
@@ -427,13 +510,22 @@ public class StudentService {
             "\uD83D\uDCDA",
             points, stu.getTeacherId()
         );
+        history.setClassId(stu.getClassId());
         scoreHistoryRepository.save(history);
         return stu;
     }
 
     // 总积分排名：历史所有加分 - 历史所有扣分（不包括道具消耗）
     public List<Map<String, Object>> getTotalScoreLeaderboard(String teacherId) {
-        List<Student> students = studentRepository.findByTeacherIdOrderByCreatedAtAsc(teacherId);
+        return getTotalScoreLeaderboardByClass(studentRepository.findByTeacherIdOrderByCreatedAtAsc(teacherId));
+    }
+
+    /** 多班级：总积分榜按班级 */
+    public List<Map<String, Object>> getTotalScoreLeaderboardByClass(String classId) {
+        return getTotalScoreLeaderboardByClass(studentRepository.findByClassIdOrderByCreatedAtAsc(classId));
+    }
+
+    private List<Map<String, Object>> getTotalScoreLeaderboardByClass(List<Student> students) {
         List<Map<String, Object>> result = new ArrayList<>();
         
         for (Student stu : students) {
@@ -1492,15 +1584,34 @@ public class StudentService {
         return Map.of("success", true, "equippedItems", stu.getEquippedItems());
     }
 
+    /**
+     * 在"赠送者所在班级"里找接收者：
+     * 允许输入 S0005 或完整学号 C7F3-S0005，最终都按班级定位，
+     * 因此天然不可能跨班赠送。
+     */
+    private Student resolveClassmate(Student giver, String input) {
+        String raw = input == null ? "" : input.trim();
+        if (raw.isEmpty()) throw new IllegalArgumentException("请输入同学学号");
+        if (giver.getClassId() == null) {
+            throw new IllegalArgumentException("你还没有归属班级，请联系老师");
+        }
+        var clazz = schoolClassService.find(giver.getClassId())
+                .orElseThrow(() -> new IllegalArgumentException("班级不存在，请联系老师"));
+        String full = schoolClassService.toFullStudentNo(clazz, raw);
+        Student target = studentRepository.findByClassIdAndStudentNo(clazz.getId(), full)
+                .or(() -> studentRepository.findByStudentNo(full))
+                .orElseThrow(() -> new IllegalArgumentException("本班没有学号 " + raw + " 的同学"));
+        if (!clazz.getId().equals(target.getClassId())) {
+            throw new IllegalArgumentException("只能赠送给同班同学");
+        }
+        return target;
+    }
+
     @Transactional
     public Map<String, Object> giftItem(String studentId, String itemId, String targetStudentNo) {
         Student giver = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
-        Student target = studentRepository.findByStudentNo(targetStudentNo)
-                .orElseThrow(() -> new IllegalArgumentException("未找到学号为 " + targetStudentNo + " 的同学"));
-        if (!target.getTeacherId().equals(giver.getTeacherId())) {
-            throw new IllegalArgumentException("只能赠送给同班同学");
-        }
+        Student target = resolveClassmate(giver, targetStudentNo);
         if (target.getId().equals(studentId)) {
             throw new IllegalArgumentException("不能赠送给自己");
         }
@@ -1537,6 +1648,7 @@ public class StudentService {
         newRecord.setItemIcon(giftRecord.getItemIcon());
         newRecord.setFoodSpent(0);
         newRecord.setTeacherId(giver.getTeacherId());
+        newRecord.setClassId(giver.getClassId());
         newRecord.setGiftFrom(studentId);
         newRecord.setGiftFromName(giver.getName());
         newRecord.setActionType(ExchangeRecord.ActionType.GIFT_IN.name());

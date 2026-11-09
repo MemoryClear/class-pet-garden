@@ -152,10 +152,10 @@
           <div v-if="showGiftModal" class="modal-overlay" @click.self="showGiftModal=false">
             <div class="gift-modal">
               <h4>🎁 赠送给同学</h4>
-              <p style="margin:8px 0;color:#64748b;font-size:13px">将「{{ giftTarget?.itemName }}」赠送给：</p>
+              <p style="margin:8px 0;color:#64748b;font-size:13px">将「{{ giftTarget?.itemName }}」赠送给同班同学：</p>
               <div class="classmates-list">
                 <div v-for="mate in classmates" :key="mate.studentNo" class="classmate-item" @click="confirmGift(mate)">
-                  <span class="classmate-no">{{ mate.studentNo }}</span>
+                  <span class="classmate-no">{{ shortNo(mate.studentNo) }}</span>
                   <span class="classmate-name">{{ mate.name }}</span>
                 </div>
                 <div v-if="classmates.length===0" class="empty-hint">暂无同班同学</div>
@@ -621,6 +621,13 @@ async function fetchClassmates() {
     const { data } = await api.get('/student/classmates')
     classmates.value = data
   } catch { classmates.value = [] }
+}
+
+// 同学都在同一个班，学号前缀相同，列表里只显示 S0005 这一段
+function shortNo(no) {
+  const s = String(no || '')
+  const i = s.lastIndexOf('-')
+  return i >= 0 ? s.slice(i + 1) : s
 }
 
 async function giftItem(item) {

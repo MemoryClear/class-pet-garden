@@ -13,10 +13,47 @@
         <button class="drawer-close" @click="drawerOpen = false" aria-label="关闭菜单">✕</button>
       </div>
 
-      <div class="side-class" @click="go('/settings')" :title="appStore.settings.className">
-        <span>🏫</span>
-        <span class="cls-name">{{ appStore.settings.className || '未命名班级' }}</span>
-        <span class="caret">▾</span>
+      <!-- 班级切换 -->
+      <div class="class-switch">
+        <button
+          ref="switchEl"
+          class="side-class"
+          :title="'切换班级：' + appStore.className"
+          @click.stop="toggleClassMenu"
+        >
+          <span>🏫</span>
+          <span class="cls-name">{{ appStore.className }}</span>
+          <span class="caret" :class="{ up: classMenu }">▾</span>
+        </button>
+
+        <Teleport to="body">
+          <transition name="pop">
+            <div
+              v-if="classMenu"
+              class="class-menu"
+              :style="{ top: menuPos.top + 'px', left: menuPos.left + 'px' }"
+              @click.stop
+            >
+              <div class="cm-title">我的班级</div>
+              <button
+                v-for="c in appStore.classes"
+                :key="c.id"
+                class="cm-item"
+                :class="{ on: c.id === appStore.currentClassId }"
+                @click="pickClass(c)"
+              >
+                <span class="cm-check">{{ c.id === appStore.currentClassId ? '✓' : '' }}</span>
+                <span class="cm-main">
+                  <b>{{ c.name }}</b>
+                  <i>{{ c.code }} · {{ c.studentCount ?? 0 }} 人</i>
+                </span>
+              </button>
+              <div class="cm-divider"></div>
+              <button class="cm-action" @click="createClass">＋ 新建班级</button>
+              <button class="cm-action" @click="classMenu = false; go('/settings')">⚙️ 班级管理</button>
+            </div>
+          </transition>
+        </Teleport>
       </div>
 
       <nav class="side-nav">
@@ -144,6 +181,22 @@ const authStore = useAuthStore()
 
 const drawerOpen = ref(false)
 const guideRef = ref(null)
+const classMenu = ref(false)
+const switchEl = ref(null)
+const menuPos = ref({ top: 0, left: 0 })
+
+function toggleClassMenu() {
+  if (!classMenu.value) {
+    const r = switchEl.value?.getBoundingClientRect()
+    if (r) {
+      menuPos.value = {
+        top: Math.round(r.bottom + 6),
+        left: Math.round(Math.min(r.left, window.innerWidth - 250))
+      }
+    }
+  }
+  classMenu.value = !classMenu.value
+}
 
 // 侧栏折叠：桌面端偏好存在本地，刷新后保持
 const COLLAPSE_KEY = 'cp_sidebar_collapsed'
@@ -223,6 +276,33 @@ function go(path) {
   if (route.path !== path) router.push(path)
 }
 
+async function pickClass(c) {
+  classMenu.value = false
+  if (c.id === appStore.currentClassId) return
+  await appStore.switchClass(c.id)
+}
+
+async function createClass() {
+  classMenu.value = false
+  const name = await $confirm.prompt('给新班级起个名字：', {
+    title: '新建班级',
+    inputPlaceholder: '如：初二(1)班',
+    inputRequired: true,
+    okText: '创建',
+    icon: '🏫'
+  })
+  if (!name || !name.trim()) return
+  try {
+    const { classApi } = await import('../../api/index.js')
+    const { data } = await classApi.create(name.trim())
+    await appStore.fetchClasses()
+    await appStore.switchClass(data.id)
+    $confirm.success(`已创建「${data.name}」，班级号 ${data.code}`)
+  } catch (e) {
+    $confirm.error(e.response?.data?.error || e.message)
+  }
+}
+
 function openGuide() {
   drawerOpen.value = false
   guideRef.value?.open()
@@ -251,12 +331,23 @@ watch(drawerOpen, (open) => {
 })
 
 function onKeydown(e) {
-  if (e.key === 'Escape') drawerOpen.value = false
+  if (e.key === 'Escape') {
+    drawerOpen.value = false
+    classMenu.value = false
+  }
 }
 
-onMounted(() => window.addEventListener('keydown', onKeydown))
+function onDocClick() {
+  if (classMenu.value) classMenu.value = false
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', onKeydown)
+  document.addEventListener('click', onDocClick)
+})
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
+  document.removeEventListener('click', onDocClick)
   mq.removeEventListener('change', onMqChange)
   document.body.style.overflow = ''
 })
@@ -335,10 +426,14 @@ onBeforeUnmount(() => {
   cursor: pointer;
 }
 
+.class-switch { position: relative; }
 .side-class {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
   margin: 0 4px 14px;
   padding: 9px 11px;
   border-radius: 11px;
@@ -352,7 +447,76 @@ onBeforeUnmount(() => {
 }
 .side-class:hover { filter: brightness(.98); }
 .cls-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.caret { font-size: 9px; opacity: .55; }
+.caret { font-size: 9px; opacity: .55; transition: transform .18s ease; }
+.caret.up { transform: rotate(180deg); }
+
+/* 班级下拉（Teleport 到 body，避免被侧栏 overflow 裁掉） */
+.class-menu {
+  position: fixed;
+  z-index: 300;
+  width: 232px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-m);
+}
+.cm-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-4);
+  letter-spacing: .08em;
+  padding: 4px 8px 6px;
+}
+.cm-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  padding: 8px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: .14s;
+}
+.cm-item:hover { background: var(--line-soft); }
+.cm-item.on { background: var(--brand-soft); }
+.cm-check { width: 13px; flex: 0 0 13px; font-size: 11px; font-weight: 700; color: var(--brand-deep); line-height: 1.5; }
+.cm-main { min-width: 0; }
+.cm-main b {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cm-main i { font-style: normal; font-size: 10.5px; color: var(--ink-3); }
+.cm-divider { height: 1px; background: var(--line); margin: 6px 4px; }
+.cm-action {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: .14s;
+}
+.cm-action:hover { background: var(--line-soft); color: var(--ink); }
+
+.pop-enter-active, .pop-leave-active { transition: opacity .14s ease, transform .14s ease; }
+.pop-enter-from, .pop-leave-to { opacity: 0; transform: translateY(-4px); }
 
 .side-nav { flex: 1; }
 .nav-label {

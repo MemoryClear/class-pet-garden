@@ -104,6 +104,7 @@ public class ShopService {
         history.setScoreItemIcon(item.getIcon());
         history.setPoint(-spent);
         history.setTeacherId(teacherId);
+        history.setClassId(student.getClassId());
         scoreHistoryRepo.save(history);
 
         // 特殊商品处理：宠物更换卡（购买时不创建兑换记录）
@@ -137,6 +138,7 @@ public class ShopService {
         record.setItemIcon(item.getIcon());
         record.setFoodSpent(item.getPrice());
         record.setTeacherId(teacherId);
+        record.setClassId(student.getClassId());
         record.setActionType(ExchangeRecord.ActionType.PURCHASE.name());
         ExchangeRecord saved = exchangeRecordRepo.save(record);
 
@@ -160,11 +162,11 @@ public class ShopService {
     /**
      * 兑换记录游标分页：响应 {items, hasMore, nextCursor}
      */
-    public Map<String, Object> getRecordsPage(String teacherId,
+    public Map<String, Object> getRecordsPage(String classId,
                                                java.time.LocalDateTime cursorTime, String cursorId, int limit) {
         int safeLimit = Math.max(1, Math.min(100, limit));
-        java.util.List<ExchangeRecord> rows = exchangeRecordRepo.findTeacherPage(
-                teacherId, cursorTime, cursorId,
+        java.util.List<ExchangeRecord> rows = exchangeRecordRepo.findClassPage(
+                classId, cursorTime, cursorId,
                 org.springframework.data.domain.PageRequest.of(0, safeLimit + 1));
         boolean hasMore = rows.size() > safeLimit;
         if (hasMore) rows = rows.subList(0, safeLimit);
@@ -202,6 +204,10 @@ public class ShopService {
         // 不能赠送给自己
         if (req.getFromStudentId().equals(req.getToStudentId())) {
             throw new RuntimeException("不能赠送给自己");
+        }
+        // 只能赠送给同班同学
+        if (!java.util.Objects.equals(fromStudent.getClassId(), toStudent.getClassId())) {
+            throw new RuntimeException("只能赠送给同班同学");
         }
 
         // 查找兑换记录
@@ -250,6 +256,7 @@ public class ShopService {
         inRecord.setItemIcon(record.getItemIcon());
         inRecord.setFoodSpent(0);
         inRecord.setTeacherId(teacherId);
+        inRecord.setClassId(toStudent.getClassId());
         inRecord.setGiftFrom(fromStudent.getId());
         inRecord.setGiftFromName(fromStudent.getName());
         inRecord.setActionType(ExchangeRecord.ActionType.GIFT_IN.name());

@@ -35,6 +35,8 @@ onMounted(async () => {
   if (authStore.isLoggedIn) {
     try {
       await appStore.fetchSettings()
+      // 多班级：启动时同步班级列表与当前班级
+      await appStore.fetchClasses()
     } catch (e) { /* 静默失败，保留默认值 */ }
   }
 })

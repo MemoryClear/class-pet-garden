@@ -19,6 +19,7 @@ import java.util.Map;
 public class HistoryController {
 
     @Autowired private HistoryService historyService;
+    @Autowired private com.classpet.service.SchoolClassService classService;
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getHistory(
@@ -28,8 +29,10 @@ public class HistoryController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime cursorTime,
             @RequestParam(required = false) String cursorId,
-            @RequestParam(required = false, defaultValue = "20") int limit) {
-        return ResponseEntity.ok(historyService.getHistoryPage(principal.teacherId(), studentId, from, to,
+            @RequestParam(required = false, defaultValue = "20") int limit,
+            @RequestParam(required = false) String classId) {
+        String cid = classService.resolveId(classId, principal.teacherId());
+        return ResponseEntity.ok(historyService.getHistoryPage(cid, studentId, from, to,
                 cursorTime, cursorId, limit));
     }
 

@@ -59,8 +59,8 @@ export const useAuthStore = defineStore('auth', {
       this.setAuth(data.token, { ...data, role: 'teacher' })
       return data
     },
-    async studentLogin(studentNo, password) {
-      const { data } = await api.post('/auth/student-login', { studentNo, password })
+    async studentLogin(studentNo, password, classId) {
+      const { data } = await api.post('/auth/student-login', { studentNo, password, classId })
       this.setAuth(data.token, {
         role: 'student',
         studentId: data.studentId,

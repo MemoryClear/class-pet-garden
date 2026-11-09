@@ -333,6 +333,11 @@ watch(activeTab, (tab) => {
 onMounted(() => {
   fetchItems()
 })
+
+// 切换班级后刷新兑换记录（商品目录是教师级的，不用重载）
+watch(() => appStore.currentClassId, () => {
+  if (activeTab.value === 'records') fetchRecords()
+})
 </script>
 
 <style scoped>

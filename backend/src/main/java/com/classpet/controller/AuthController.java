@@ -28,6 +28,26 @@ public class AuthController {
     @Autowired private TeacherRepository teacherRepository;
     @Autowired private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     @Autowired private StudentService studentService;
+    @Autowired private com.classpet.service.SchoolClassService classService;
+
+    /**
+     * 学生登录页第一步：用"学校/教师码"（即教师的登录用户名）换班级列表。
+     * 必须带 code，避免任何人拿到全站班级名单。
+     */
+    @GetMapping("/classes")
+    public ResponseEntity<?> classes(@RequestParam(required = false) String code) {
+        if (code == null || code.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "请输入学校/教师码"));
+        }
+        Teacher teacher = teacherRepository.findByUsername(code.trim()).orElse(null);
+        if (teacher == null) {
+            return ResponseEntity.status(404).body(Map.of("error", "教师码不存在，请向老师确认"));
+        }
+        Map<String, Object> resp = new java.util.LinkedHashMap<>();
+        resp.put("schoolName", teacher.getSystemName());
+        resp.put("classes", classService.classOptionsOfTeacher(teacher.getId()));
+        return ResponseEntity.ok(resp);
+    }
 
     @GetMapping("/test")
     public ResponseEntity<?> test() {
@@ -104,13 +124,14 @@ public class AuthController {
         try {
             String studentNo = body.get("studentNo");
             String password = body.get("password");
+            String classId = body.get("classId");
             if (studentNo == null || studentNo.isBlank()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "请输入学号"));
             }
             if (password == null || password.isBlank()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "请输入密码"));
             }
-            Map<String, Object> info = studentService.studentLoginByPassword(studentNo, password);
+            Map<String, Object> info = studentService.studentLoginByPassword(classId, studentNo, password);
             Student student = studentRepository.findById((String) info.get("studentId"))
                     .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
             String token = tokenProvider.generateStudentToken(

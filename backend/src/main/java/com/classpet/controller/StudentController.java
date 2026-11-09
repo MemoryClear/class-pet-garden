@@ -21,23 +21,30 @@ import java.util.stream.Collectors;
 public class StudentController {
 
     @Autowired private StudentService studentService;
+    @Autowired private com.classpet.service.SchoolClassService classService;
 
     @GetMapping
     public ResponseEntity<List<Student>> getStudents(
-            @AuthenticationPrincipal AuthenticatedUser principal) {
-        return ResponseEntity.ok(studentService.getStudents(principal.teacherId()));
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestParam(required = false) String classId) {
+        String cid = classService.resolveId(classId, principal.teacherId());
+        return ResponseEntity.ok(studentService.getStudentsByClass(cid));
     }
 
     @GetMapping("/leaderboard")
     public ResponseEntity<List<Student>> getLeaderboard(
-            @AuthenticationPrincipal AuthenticatedUser principal) {
-        return ResponseEntity.ok(studentService.getLeaderboard(principal.teacherId()));
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestParam(required = false) String classId) {
+        String cid = classService.resolveId(classId, principal.teacherId());
+        return ResponseEntity.ok(studentService.getLeaderboardByClass(cid));
     }
 
     @GetMapping("/leaderboard/total")
     public ResponseEntity<List<Map<String, Object>>> getTotalScoreLeaderboard(
-            @AuthenticationPrincipal AuthenticatedUser principal) {
-        return ResponseEntity.ok(studentService.getTotalScoreLeaderboard(principal.teacherId()));
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestParam(required = false) String classId) {
+        String cid = classService.resolveId(classId, principal.teacherId());
+        return ResponseEntity.ok(studentService.getTotalScoreLeaderboardByClass(cid));
     }
 
     @PostMapping
@@ -45,7 +52,8 @@ public class StudentController {
             @AuthenticationPrincipal AuthenticatedUser principal,
             @Valid @RequestBody StudentDto.CreateRequest req) {
         try {
-            return ResponseEntity.ok(studentService.createStudent(req.name, principal.teacherId(), req.initialPassword));
+            return ResponseEntity.ok(studentService.createStudent(
+                    req.name, principal.teacherId(), req.classId, req.initialPassword));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -63,7 +71,8 @@ public class StudentController {
             if (names.isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "未提供有效姓名"));
             }
-            return ResponseEntity.ok(studentService.batchCreateStudents(names, principal.teacherId(), req.initialPassword));
+            return ResponseEntity.ok(studentService.batchCreateStudents(
+                    names, principal.teacherId(), req.classId, req.initialPassword));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -136,8 +145,10 @@ public class StudentController {
 
     @PostMapping("/assign-pets")
     public ResponseEntity<?> assignPetsRandomly(
-            @AuthenticationPrincipal AuthenticatedUser principal) {
-        return ResponseEntity.ok(studentService.assignPetsRandomly(principal.teacherId()));
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @RequestParam(required = false) String classId) {
+        String cid = classService.resolveId(classId, principal.teacherId());
+        return ResponseEntity.ok(studentService.assignPetsRandomlyByClass(cid));
     }
 
     // 装备商品

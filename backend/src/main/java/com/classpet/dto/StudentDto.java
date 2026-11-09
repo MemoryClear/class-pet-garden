@@ -9,6 +9,8 @@ public class StudentDto {
     public static class CreateRequest {
         @NotBlank @Size(max = 10)
         public String name;
+        // 目标班级；为空 = 教师默认班级
+        public String classId;
         // 初始密码，可选；留空 = 默认 = 学号 + 强制改密
         @Size(min = 0, max = 50)
         public String initialPassword;
@@ -22,6 +24,8 @@ public class StudentDto {
     public static class BatchCreateRequest {
         @NotBlank
         public String names; // newline-separated names
+        // 目标班级；为空 = 教师默认班级
+        public String classId;
         // 统一初始密码，可选；留空 = 默认 = 学号 + 强制改密
         @Size(min = 0, max = 50)
         public String initialPassword;

@@ -77,16 +77,28 @@ public class StudentApiController {
         return ResponseEntity.ok(result);
     }
 
-    // 光荣榜（只读）
+    // 光荣榜（只读）：只显示自己所在班级
     @GetMapping("/leaderboard")
     public ResponseEntity<?> getLeaderboard(@AuthenticationPrincipal AuthenticatedUser principal) {
+        String classId = myClassId(principal);
+        if (classId != null) return ResponseEntity.ok(studentService.getLeaderboardByClass(classId));
         return ResponseEntity.ok(studentService.getLeaderboard(principal.teacherId()));
     }
 
     // 总积分光荣榜（只读）
     @GetMapping("/leaderboard/total")
     public ResponseEntity<?> getTotalScoreLeaderboard(@AuthenticationPrincipal AuthenticatedUser principal) {
+        String classId = myClassId(principal);
+        if (classId != null) return ResponseEntity.ok(studentService.getTotalScoreLeaderboardByClass(classId));
         return ResponseEntity.ok(studentService.getTotalScoreLeaderboard(principal.teacherId()));
+    }
+
+    /** 当前学生所属班级 id（老数据没有 classId 时返回 null，回落到教师维度） */
+    private String myClassId(AuthenticatedUser principal) {
+        if (principal == null || principal.studentId() == null) return null;
+        return studentRepository.findById(principal.studentId())
+                .map(Student::getClassId)
+                .orElse(null);
     }
 
     // 宠物图鉴
@@ -267,7 +279,11 @@ public class StudentApiController {
         String studentId = principal.studentId();
         Student me = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("学生不存在"));
-        var classmateList = studentRepository.findByTeacherIdOrderByCreatedAtAsc(me.getTeacherId()).stream()
+        // 只列同班同学（多班级模型下不能跨班赠送）
+        var list = me.getClassId() != null
+                ? studentRepository.findByClassIdOrderByCreatedAtAsc(me.getClassId())
+                : studentRepository.findByTeacherIdOrderByCreatedAtAsc(me.getTeacherId());
+        var classmateList = list.stream()
                 .filter(s -> !s.getId().equals(studentId))
                 .map(s -> Map.of("studentNo", s.getStudentNo(), "name", s.getName() != null ? s.getName() : s.getStudentNo()))
                 .toList();

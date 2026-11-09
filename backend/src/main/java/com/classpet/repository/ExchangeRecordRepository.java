@@ -23,6 +23,19 @@ public interface ExchangeRecordRepository extends JpaRepository<ExchangeRecord, 
                                          @Param("cursorId") String cursorId,
                                          Pageable page);
 
+    // ===== 班级范围（多班级） =====
+    @Query("SELECT e FROM ExchangeRecord e "
+         + "WHERE e.classId = :cid "
+         + "AND (:cursorTime IS NULL OR (e.createdAt < :cursorTime OR (e.createdAt = :cursorTime AND e.id < :cursorId))) "
+         + "ORDER BY e.createdAt DESC, e.id DESC")
+    List<ExchangeRecord> findClassPage(@Param("cid") String cid,
+                                       @Param("cursorTime") LocalDateTime cursorTime,
+                                       @Param("cursorId") String cursorId,
+                                       Pageable page);
+
+    /** 迁移用：补齐兑换记录的 classId */
+    List<ExchangeRecord> findByClassIdIsNull();
+
     @Query("SELECT e FROM ExchangeRecord e "
          + "WHERE e.studentId = :sid "
          + "AND (:cursorTime IS NULL OR (e.createdAt < :cursorTime OR (e.createdAt = :cursorTime AND e.id < :cursorId))) "

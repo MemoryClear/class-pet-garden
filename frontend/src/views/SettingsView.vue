@@ -9,21 +9,53 @@
           <input type="text" class="form-input" v-model="form.systemName" @change="save" placeholder="如：课堂宠物乐园">
         </div>
         <div class="form-group">
-          <label class="form-label">班级名称</label>
-          <input type="text" class="form-input" v-model="form.className" @change="save" placeholder="如：初一(3)班">
+          <label class="form-label">当前班级名称</label>
+          <input type="text" class="form-input" v-model="clsForm.name" @change="renameCurrentClass" placeholder="如：初一(3)班">
+          <div class="form-hint">
+            班级号 <b>{{ currentClass?.code || '—' }}</b>，学生学号为「班级号-S0001」；
+            改这里只影响当前选中的班级。
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">公开看板</label>
           <div style="display:flex; align-items:center; gap:12px;">
             <label class="switch">
-              <input type="checkbox" v-model="form.showOnBoard" @change="save">
+              <input type="checkbox" v-model="clsForm.showOnBoard" @change="saveBoard">
               <span class="slider"></span>
             </label>
-            <span style="font-size:13px; color:#718096;">
-              开启后，本班会出现在无需登录的公开看板中
+            <span style="font-size:13px; color:var(--ink-3);">
+              开启后，「{{ currentClass?.name || '当前班级' }}」会出现在无需登录的公开看板中
             </span>
           </div>
         </div>
+      </div>
+
+      <!-- 班级管理 -->
+      <div class="section-card">
+        <div class="section-title">🏫 班级管理</div>
+        <div class="class-list" v-if="appStore.classes.length">
+          <div
+            v-for="c in appStore.classes"
+            :key="c.id"
+            class="class-row"
+            :class="{ on: c.id === appStore.currentClassId }"
+          >
+            <div class="class-row-main">
+              <b>{{ c.name }}</b>
+              <span>{{ c.code }} · {{ c.studentCount ?? 0 }} 人</span>
+            </div>
+            <span v-if="c.id === appStore.currentClassId" class="class-tag">当前</span>
+            <div class="class-row-actions">
+              <button class="icon-btn" title="重命名" @click="renameClass(c)">✏️</button>
+              <button class="icon-btn" title="删除班级" @click="deleteClass(c)">🗑️</button>
+            </div>
+          </div>
+        </div>
+        <div class="add-row" style="margin-top:12px;">
+          <input class="form-input" v-model="newClassName" placeholder="新班级名称，如 初二(1)班" @keyup.enter="createClass">
+          <button class="btn-sm" @click="createClass">＋ 新建班级</button>
+        </div>
+        <div class="form-hint">学生、加减分历史、兑换记录、光荣榜都按班级隔离；评分项与商品是全教师共享的。</div>
       </div>
 
       <!-- 外观模式 -->
@@ -97,7 +129,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, onMounted } from 'vue'
+import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useAppStore } from '../stores/app.js'
 import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
@@ -109,7 +141,10 @@ const appStore = useAppStore()
 const authStore = useAuthStore()
 const router = useRouter()
 
-const form = reactive({ systemName: '', className: '', theme: 'pink', themeMode: 'light', showOnBoard: false })
+const form = reactive({ systemName: '', theme: 'pink', themeMode: 'light' })
+const clsForm = reactive({ name: '', showOnBoard: false })
+const newClassName = ref('')
+const currentClass = computed(() => appStore.currentClass)
 const scoreForm = reactive({ icon: '', name: '', point: null })
 
 const themes = [
@@ -133,6 +168,93 @@ async function selectTheme(t) {
   form.theme = t
   await save()
 }
+
+// ---------- 班级 ----------
+async function renameCurrentClass() {
+  const id = appStore.currentClassId
+  const name = (clsForm.name || '').trim()
+  if (!id || !name) return
+  try {
+    const { classApi } = await import('../api/index.js')
+    await classApi.rename(id, name)
+    await appStore.fetchClasses()
+  } catch (e) {
+    $confirm.error(e.response?.data?.error || e.message)
+    clsForm.name = currentClass.value?.name || ''
+  }
+}
+
+async function saveBoard() {
+  const id = appStore.currentClassId
+  if (!id) return
+  try {
+    const { classApi } = await import('../api/index.js')
+    await classApi.setBoard(id, clsForm.showOnBoard)
+    await appStore.fetchClasses()
+  } catch (e) {
+    $confirm.error(e.response?.data?.error || e.message)
+    clsForm.showOnBoard = !clsForm.showOnBoard
+  }
+}
+
+async function createClass() {
+  const name = (newClassName.value || '').trim()
+  if (!name) return
+  try {
+    const { classApi } = await import('../api/index.js')
+    const { data } = await classApi.create(name)
+    newClassName.value = ''
+    await appStore.fetchClasses()
+    await appStore.switchClass(data.id)
+    syncClassForm()
+    $confirm.success(`已创建「${data.name}」，班级号 ${data.code}`)
+  } catch (e) {
+    $confirm.error(e.response?.data?.error || e.message)
+  }
+}
+
+async function renameClass(c) {
+  const name = await $confirm.prompt(`修改「${c.name}」的名称：`, {
+    title: '重命名班级',
+    inputValue: c.name,
+    inputRequired: true,
+    okText: '保存'
+  })
+  if (name === null || !name.trim()) return
+  try {
+    const { classApi } = await import('../api/index.js')
+    await classApi.rename(c.id, name.trim())
+    await appStore.fetchClasses()
+    if (c.id === appStore.currentClassId) syncClassForm()
+  } catch (e) {
+    $confirm.error(e.response?.data?.error || e.message)
+  }
+}
+
+async function deleteClass(c) {
+  const ok = await $confirm.confirm(
+    `确定删除「${c.name}」吗？只有空班级可以删除，删除后该班级号不再使用。`,
+    { title: '删除班级', okText: '删除', icon: '🗑️', danger: true }
+  )
+  if (!ok) return
+  try {
+    const { classApi } = await import('../api/index.js')
+    await classApi.remove(c.id)
+    await appStore.fetchClasses()
+    await appStore.fetchStudents()
+    syncClassForm()
+  } catch (e) {
+    $confirm.error(e.response?.data?.error || e.message)
+  }
+}
+
+function syncClassForm() {
+  const c = appStore.currentClass
+  clsForm.name = c?.name || ''
+  clsForm.showOnBoard = !!c?.showOnBoard
+}
+
+watch(() => appStore.currentClassId, syncClassForm)
 
 async function selectMode(m) {
   if (form.themeMode === m) return
@@ -173,11 +295,11 @@ onMounted(async () => {
   await appStore.fetchSettings()
   Object.assign(form, {
     systemName: appStore.settings.systemName || '',
-    className: appStore.settings.className || '',
     theme: appStore.settings.theme || 'pink',
-    themeMode: appStore.settings.themeMode === 'dark' ? 'dark' : 'light',
-    showOnBoard: !!appStore.settings.showOnBoard
+    themeMode: appStore.settings.themeMode === 'dark' ? 'dark' : 'light'
   })
+  await appStore.fetchClasses()
+  syncClassForm()
 })
 </script>
 
@@ -219,7 +341,33 @@ onMounted(async () => {
 .mode-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .mode-txt b { font-size: 13.5px; font-weight: 600; color: var(--ink); }
 .mode-txt i { font-style: normal; font-size: 11.5px; color: var(--ink-3); }
-.form-hint { font-size: 11.5px; color: var(--ink-3); margin-top: 4px; }
+.form-hint { font-size: 11.5px; color: var(--ink-3); margin-top: 4px; line-height: 1.7; }
+.form-hint b { color: var(--brand-deep); }
+
+/* 班级列表 */
+.class-list { display: flex; flex-direction: column; gap: 8px; }
+.class-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+}
+.class-row.on { border-color: var(--brand-soft-2); background: var(--brand-soft); }
+.class-row-main { flex: 1; min-width: 0; }
+.class-row-main b { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.class-row-main span { font-size: 11.5px; color: var(--ink-3); }
+.class-tag {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--brand-deep);
+  background: var(--brand-soft-2);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+.class-row-actions { display: flex; gap: 6px; }
 .form-group { margin-bottom:12px; }
 .form-label { display:block; font-size:13px; color:#718096; margin-bottom:6px; }
 .form-input { width:100%; padding:10px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px; }

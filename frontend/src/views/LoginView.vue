@@ -131,11 +131,41 @@
           <div class="auth-tip"><b>学号登录：</b>输入老师给你的学号和密码（初始密码 = 学号）。</div>
 
           <div class="field">
+            <label>学校 / 教师码</label>
+            <div class="wrap">
+              <span class="ico">🔑</span>
+              <input
+                type="text"
+                v-model="teacherCode"
+                placeholder="向老师要的教师码"
+                autocomplete="off"
+                @keyup.enter="loadClasses"
+                @blur="onCodeBlur"
+              >
+              <span class="eye" v-if="codeLoading">…</span>
+            </div>
+            <div v-if="codeError" class="form-tip err">{{ codeError }}</div>
+            <div v-else-if="schoolName" class="form-tip">已找到「{{ schoolName }}」</div>
+          </div>
+
+          <div class="field">
+            <label>班级</label>
+            <div class="wrap">
+              <span class="ico">👥</span>
+              <select v-model="studentForm.classId" class="form-select" :disabled="!classOptions.length">
+                <option value="" disabled>{{ classOptions.length ? '请选择班级' : '请先填写教师码' }}</option>
+                <option v-for="c in classOptions" :key="c.id" :value="c.id">{{ c.name }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
             <label>学号</label>
             <div class="wrap">
               <span class="ico">🔢</span>
-              <input type="text" v-model="studentForm.studentNo" placeholder="请输入学号，如 S0001">
+              <input type="text" v-model="studentForm.studentNo" placeholder="只需填 S0001 这一段" @keyup.enter="handleStudentLogin">
             </div>
+            <div class="form-tip">学号前面不用加班级号，选好班级即可。</div>
           </div>
           <div class="field">
             <label>密码</label>
@@ -180,7 +210,12 @@ const systemName = ref('课堂宠物乐园')
 
 const loginForm = reactive({ username: '', password: '' })
 const regForm = reactive({ username: '', password: '', confirmPassword: '' })
-const studentForm = reactive({ studentNo: '', password: '' })
+const studentForm = reactive({ studentNo: '', password: '', classId: '' })
+const classOptions = ref([])
+const teacherCode = ref(localStorage.getItem('cp_student_code') || '')
+const schoolName = ref('')
+const codeLoading = ref(false)
+const codeError = ref('')
 
 const headline = computed(() => ({
   login: '欢迎回来 👋',
@@ -205,7 +240,45 @@ onMounted(async () => {
     const { data } = await api.get('/settings')
     if (data.systemName) systemName.value = data.systemName
   } catch (e) {}
+  if (teacherCode.value.trim()) await loadClasses()
 })
+
+/**
+ * 学生登录第一步：教师码（老师登录用的用户名）→ 该老师名下的班级列表。
+ * 选过班级后换个教师码，要清掉已选班级避免串班。
+ */
+async function loadClasses() {
+  const code = teacherCode.value.trim()
+  codeError.value = ''
+  schoolName.value = ''
+  if (!code) {
+    classOptions.value = []
+    return
+  }
+  codeLoading.value = true
+  try {
+    const { data } = await api.get(`/auth/classes?code=${encodeURIComponent(code)}`)
+    classOptions.value = Array.isArray(data?.classes) ? data.classes : []
+    schoolName.value = data?.schoolName || ''
+    if (!classOptions.value.length) codeError.value = '这位老师还没有创建班级'
+    localStorage.setItem('cp_student_code', code)
+    // 只有 1 个班时直接选中
+    if (classOptions.value.length === 1) studentForm.classId = classOptions.value[0].id
+    else if (!classOptions.value.some(c => c.id === studentForm.classId)) studentForm.classId = ''
+  } catch (e) {
+    classOptions.value = []
+    studentForm.classId = ''
+    codeError.value = e.response?.data?.error || '教师码校验失败，请重试'
+  } finally {
+    codeLoading.value = false
+  }
+}
+
+function onCodeBlur() {
+  const code = teacherCode.value.trim()
+  const loaded = localStorage.getItem('cp_student_code') || ''
+  if (code && code !== loaded) loadClasses()
+}
 
 async function handleLogin() {
   error.value = ''
@@ -241,11 +314,14 @@ async function handleRegister() {
 
 async function handleStudentLogin() {
   error.value = ''
+  if (!teacherCode.value.trim()) { error.value = '请先填写学校/教师码'; return }
+  if (!classOptions.value.length) { error.value = '教师码未校验通过，请检查后重试'; return }
+  if (!studentForm.classId) { error.value = '请先选择班级'; return }
   if (!studentForm.studentNo) { error.value = '请输入学号'; return }
   if (!studentForm.password) { error.value = '请输入密码'; return }
   loading.value = true
   try {
-    const data = await authStore.studentLogin(studentForm.studentNo, studentForm.password)
+    const data = await authStore.studentLogin(studentForm.studentNo, studentForm.password, studentForm.classId)
     loading.value = false
     if (data.mustChangePassword) {
       router.push('/change-password')
@@ -461,7 +537,24 @@ async function handleStudentLogin() {
   transition: .18s;
 }
 .field input::placeholder { color: #BCC1CB; }
-.field input:focus { outline: 0; border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-soft); }
+.field input:focus, .field select:focus { outline: 0; border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-soft); }
+.field select.form-select {
+  width: 100%;
+  height: 46px;
+  border: 1.5px solid #EDE6E4;
+  background: #fff;
+  border-radius: 12px;
+  padding: 0 38px 0 42px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ink);
+  transition: .18s;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #B0B6C2 50%), linear-gradient(135deg, #B0B6C2 50%, transparent 50%);
+  background-position: calc(100% - 20px) 20px, calc(100% - 15px) 20px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
 .field .ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: .55; }
 .field .eye {
   position: absolute;
@@ -475,6 +568,8 @@ async function handleStudentLogin() {
 }
 .field .eye:hover { opacity: .85; }
 .form-tip { font-size: 11.5px; color: var(--ink-3); margin-top: 6px; line-height: 1.6; }
+.form-tip.err { color: #C0392B; }
+.field select.form-select:disabled { opacity: .6; cursor: not-allowed; }
 
 .error-msg {
   font-size: 12.5px;

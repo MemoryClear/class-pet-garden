@@ -20,6 +20,10 @@ public class Student {
     @Column(nullable = false)
     private String teacherId;
 
+    /** 所属班级；老数据迁移前为 null，启动迁移会补齐 */
+    @Column(name = "class_id")
+    private String classId;
+
     private Integer petId;
     private String petName;
     private String petIcon;
@@ -68,6 +72,8 @@ public class Student {
     public void setStudentNo(String studentNo) { this.studentNo = studentNo; }
     public String getTeacherId() { return teacherId; }
     public void setTeacherId(String teacherId) { this.teacherId = teacherId; }
+    public String getClassId() { return classId; }
+    public void setClassId(String classId) { this.classId = classId; }
     public Integer getPetId() { return petId; }
     public void setPetId(Integer petId) { this.petId = petId; }
     public String getPetName() { return petName; }
