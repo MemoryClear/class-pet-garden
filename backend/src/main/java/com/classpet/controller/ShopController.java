@@ -2,6 +2,7 @@ package com.classpet.controller;
 
 import com.classpet.dto.ShopDto.*;
 import com.classpet.security.JwtAuthenticationFilter.AuthenticatedUser;
+import com.classpet.service.SchoolClassService;
 import com.classpet.service.ShopService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,11 @@ import java.util.Map;
 public class ShopController {
 
     private final ShopService shopService;
+    private final SchoolClassService classService;
 
-    public ShopController(ShopService shopService) {
+    public ShopController(ShopService shopService, SchoolClassService classService) {
         this.shopService = shopService;
+        this.classService = classService;
     }
 
     // 获取商品列表
