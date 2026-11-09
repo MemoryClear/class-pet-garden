@@ -1,5 +1,5 @@
 <template>
-  <AppShell title="系统设置" subtitle="班级信息、主题、学生与评分项都在这里">
+  <AppShell title="系统设置" subtitle="班级信息、外观、主题与评分项">
     <div class="container">
       <!-- 班级信息 -->
       <div class="section-card">
@@ -55,51 +55,13 @@
         </div>
       </div>
 
-      <!-- 学生管理 -->
+      <!-- 学生管理入口 -->
       <div class="section-card">
         <div class="section-title">👥 学生管理</div>
-        <!-- 添加单个 -->
-        <div class="form-group">
-          <label class="form-label">添加单个学生</label>
-          <div class="add-row">
-            <input type="text" class="form-input" v-model="newName" placeholder="输入姓名" @keyup.enter="addSingle">
-            <input type="text" class="form-input small-input" v-model="newPassword" placeholder="初始密码（可选）">
-            <button class="btn-sm" @click="addSingle">添加</button>
-          </div>
-          <div class="form-hint">留空则默认密码 = 学号，学生首次登录需强制修改密码</div>
-        </div>
-        <!-- 批量导入 -->
-        <div class="form-group">
-          <label class="form-label">批量导入（每行一个姓名）</label>
-          <textarea class="form-textarea" v-model="batchNames" placeholder="张三&#10;李四&#10;王五"></textarea>
-          <div class="add-row">
-            <input type="text" class="form-input" v-model="batchPassword" placeholder="统一初始密码（可选，留空=学号）">
-            <button class="btn-sm" @click="addBatch" :disabled="appStore.loading">
-              {{ appStore.loading ? '导入中...' : '批量导入' }}
-            </button>
-          </div>
-        </div>
-        <p v-if="manageError" class="error-msg show">{{ manageError }}</p>
-        <!-- 学生列表 -->
-        <div class="student-list" v-if="appStore.students.length > 0">
-          <div class="list-toolbar">
-            <label class="checkbox-label">
-              <input type="checkbox" v-model="selectAll" @change="toggleSelectAll"> 全选
-            </label>
-            <button class="btn-sm" @click="batchResetSelected" :disabled="selectedIds.length === 0">
-              批量重置密码（{{ selectedIds.length }}）
-            </button>
-          </div>
-          <div v-for="stu in appStore.students" :key="stu.id" class="student-item">
-            <input type="checkbox" :value="stu.id" v-model="selectedIds" class="student-checkbox">
-            <span class="student-name">{{ stu.name }} <span class="student-no">({{ stu.studentNo }})</span></span>
-            <div class="student-actions">
-              <button class="icon-btn" @click="promptEdit(stu)" title="修改">✏️</button>
-              <button class="icon-btn" @click="promptResetPwd(stu)" title="重置密码">🔑</button>
-              <button class="icon-btn" @click="deleteStudent(stu.id)" title="删除">🗑️</button>
-            </div>
-          </div>
-        </div>
+        <p class="section-desc">
+          学生名单、学号与密码已移到独立页面：添加、批量导入、重置密码、随机领养都在那里完成。
+        </p>
+        <button class="btn-sm goto-students" @click="router.push('/students')">前往学生管理 →</button>
       </div>
 
       <!-- 评分项管理 -->
@@ -131,13 +93,6 @@
         <button class="btn-logout" @click="handleLogout">↩️ 退出登录</button>
       </div>
     </div>
-
-    <StudentEditModal
-      v-if="editingStudent"
-      :student="editingStudent"
-      @close="editingStudent = null"
-      @updated="onStudentUpdated"
-    />
   </AppShell>
 </template>
 
@@ -147,7 +102,6 @@ import { useAppStore } from '../stores/app.js'
 import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
 import $confirm from '../composables/useConfirmModal.js'
-import StudentEditModal from '../components/StudentEditModal.vue'
 import AppShell from '../components/layout/AppShell.vue'
 
 
@@ -156,14 +110,6 @@ const authStore = useAuthStore()
 const router = useRouter()
 
 const form = reactive({ systemName: '', className: '', theme: 'pink', themeMode: 'light', showOnBoard: false })
-const newName = ref('')
-const newPassword = ref('')
-const batchNames = ref('')
-const batchPassword = ref('')
-const selectedIds = ref([])
-const selectAll = ref(false)
-const manageError = ref('')
-const editingStudent = ref(null)
 const scoreForm = reactive({ icon: '', name: '', point: null })
 
 const themes = [
@@ -192,96 +138,6 @@ async function selectMode(m) {
   if (form.themeMode === m) return
   form.themeMode = m
   await save()
-}
-
-async function addSingle() {
-  manageError.value = ''
-  if (!newName.value.trim()) return
-  try {
-    const payload = { name: newName.value.trim() }
-    if (newPassword.value.trim()) payload.initialPassword = newPassword.value.trim()
-    const { default: api } = await import('../api/index.js')
-    await api.post('/students', payload)
-    await appStore.fetchStudents()
-    newName.value = ''
-    newPassword.value = ''
-  } catch (e) { manageError.value = e.response?.data?.error || e.message }
-}
-
-async function addBatch() {
-  manageError.value = ''
-  if (!batchNames.value.trim()) return
-  try {
-    const payload = { names: batchNames.value }
-    if (batchPassword.value.trim()) payload.initialPassword = batchPassword.value.trim()
-    const { default: api } = await import('../api/index.js')
-    await api.post('/students/batch', payload)
-    await appStore.fetchStudents()
-    batchNames.value = ''
-    batchPassword.value = ''
-    manageError.value = ''
-  } catch (e) { manageError.value = e.response?.data?.error || e.message }
-}
-
-function toggleSelectAll() {
-  if (selectAll.value) {
-    selectedIds.value = appStore.students.map(s => s.id)
-  } else {
-    selectedIds.value = []
-  }
-}
-
-async function promptResetPwd(stu) {
-  const pwd = await $confirm.prompt(`为「${stu.name}」设置新密码：`, {
-    title: '重置密码',
-    inputType: 'text',
-    inputPlaceholder: '留空则重置为学号',
-    inputHint: `学号：${stu.studentNo}（留空将使用此学号作为新密码）`,
-    okText: '重置',
-  })
-  if (pwd === null) return
-  try {
-    const { default: api } = await import('../api/index.js')
-    await api.post(`/students/${stu.id}/reset-password`, { newPassword: pwd.trim() || null })
-    const actual = pwd.trim() || stu.studentNo
-    $confirm.success(`已将「${stu.name}」的密码重置为：${actual}`)
-  } catch (e) { $confirm.error(e.response?.data?.error || e.message) }
-}
-
-async function batchResetSelected() {
-  if (selectedIds.value.length === 0) return
-  const pwd = await $confirm.prompt(`即将批量重置 ${selectedIds.value.length} 个学生的密码：`, {
-    title: '批量重置密码',
-    inputType: 'text',
-    inputPlaceholder: '留空则全部重置为各自学号',
-    okText: '开始重置',
-  })
-  if (pwd === null) return
-  try {
-    const { default: api } = await import('../api/index.js')
-    const { data } = await api.post('/students/batch-reset-password', {
-      studentIds: selectedIds.value,
-      newPassword: pwd.trim() || null
-    })
-    $confirm.success(`批量重置完成：成功 ${data.success}，失败 ${data.failed}`)
-    selectedIds.value = []
-    selectAll.value = false
-  } catch (e) { $confirm.error(e.response?.data?.error || e.message) }
-}
-
-async function deleteStudent(id) {
-  if (!await $confirm.confirm('确认删除？')) return
-  try { await appStore.deleteStudent(id) } catch (e) { manageError.value = e.message }
-}
-
-function promptEdit(stu) {
-  editingStudent.value = stu
-}
-
-async function onStudentUpdated(updated) {
-  editingStudent.value = null
-  // store.fetchStudents 后台刷新，不影响 UI
-  try { await appStore.fetchStudents() } catch (e) { /* ignore */ }
 }
 
 async function deleteScoreItem(id) {
@@ -335,6 +191,8 @@ onMounted(async () => {
   padding: 18px 20px;
 }
 .section-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
+.section-desc { font-size: 12.5px; line-height: 1.7; color: var(--ink-3); margin-bottom: 14px; }
+.goto-students { width: auto; }
 
 /* 外观模式 */
 .mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }

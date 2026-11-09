@@ -22,6 +22,12 @@ const routes = [
     meta: { requiresAuth: true, activated: true, teacherOnly: true }
   },
   {
+    path: '/students',
+    name: 'Students',
+    component: () => import('../views/StudentsView.vue'),
+    meta: { requiresAuth: true, activated: true, teacherOnly: true }
+  },
+  {
     path: '/student-home',
     name: 'StudentHome',
     component: () => import('../views/StudentHomeView.vue'),

@@ -169,6 +169,7 @@ async function toggleMode() {
 const navGroups = computed(() => {
   const main = [
     { key: 'home', label: '宠物墙', icon: '🏠', path: '/home' },
+    { key: 'students', label: '学生管理', icon: '👥', path: '/students', badge: appStore.students?.length },
     { key: 'leaderboard', label: '光荣榜', icon: '🏆', path: '/leaderboard' },
     { key: 'shop', label: '小卖部', icon: '🏪', path: '/shop', badge: appStore.shopItems?.length }
   ]
@@ -192,9 +193,9 @@ const navGroups = computed(() => {
 
 const tabItems = [
   { key: 'home', label: '宠物墙', icon: '🏠', path: '/home' },
+  { key: 'students', label: '学生', icon: '👥', path: '/students' },
   { key: 'leaderboard', label: '光荣榜', icon: '🏆', path: '/leaderboard' },
-  { key: 'shop', label: '小卖部', icon: '🏪', path: '/shop' },
-  { key: 'history', label: '历史', icon: '📜', path: '/history' }
+  { key: 'shop', label: '小卖部', icon: '🏪', path: '/shop' }
 ]
 
 const initial = computed(() => {

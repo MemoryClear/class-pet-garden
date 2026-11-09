@@ -11,7 +11,7 @@
     <!-- 顶栏操作 -->
     <template #actions>
       <div class="guide-wrap"><LevelGuide /></div>
-      <button class="btn-primary add-btn" @click="router.push('/settings')">＋ 添加学生</button>
+      <button class="btn-primary add-btn" @click="router.push('/students')">＋ 添加学生</button>
     </template>
 
     <!-- 班级概览 -->
@@ -66,8 +66,8 @@
     <div v-if="appStore.students.length === 0" class="empty-state">
       <div class="empty-icon">📄</div>
       <div class="empty-text">还没有学生名单</div>
-      <div class="empty-hint">去设置里添加学生后，他们就能领养自己的伙伴了</div>
-      <button class="btn-primary" @click="router.push('/settings')">去添加学生</button>
+      <div class="empty-hint">先建好班级名单，学生就能领养自己的伙伴了</div>
+      <button class="btn-primary" @click="router.push('/students')">去添加学生</button>
     </div>
 
     <div v-else-if="filteredStudents.length === 0" class="empty-state">

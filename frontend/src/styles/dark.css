@@ -377,6 +377,33 @@ html[data-mode="dark"] .stat-num {
   color: var(--ink);
 }
 
+/* ---------- 学生管理 ---------- */
+html[data-mode="dark"] .trow:hover {
+  background: var(--surface-2);
+}
+html[data-mode="dark"] .trow.picked {
+  background: var(--brand-soft);
+}
+html[data-mode="dark"] .c-food {
+  color: #F0C08A;
+}
+html[data-mode="dark"] .row-btn {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .row-btn:hover {
+  background: var(--line-soft);
+}
+html[data-mode="dark"] .mini-avatar {
+  background: var(--line-soft);
+}
+html[data-mode="dark"] .error-msg {
+  background: rgba(248, 113, 113, .12);
+  border-color: rgba(248, 113, 113, .28);
+  color: #FCA5A5;
+}
+
 /* ---------- 光荣榜 ---------- */
 html[data-mode="dark"] .podium-item.gold {
   background: linear-gradient(170deg, #241E10, #2A2212);
