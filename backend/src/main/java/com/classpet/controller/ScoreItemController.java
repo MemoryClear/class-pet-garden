@@ -33,6 +33,19 @@ public class ScoreItemController {
                 req.icon, req.name, req.point, principal.teacherId()));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateScoreItem(
+            @PathVariable String id,
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @Valid @RequestBody ScoreItemDto.UpdateRequest req) {
+        try {
+            return ResponseEntity.ok(scoreItemService.updateScoreItem(
+                    id, req.icon, req.name, req.point, principal.teacherId()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteScoreItem(
             @PathVariable String id,

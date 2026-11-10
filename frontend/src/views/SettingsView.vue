@@ -1,5 +1,5 @@
 <template>
-  <AppShell title="系统设置" subtitle="班级、学生登录入口、外观与评分项">
+  <AppShell title="系统设置" subtitle="系统名称、学生登录入口、外观与主题">
     <div class="container">
       <!-- 系统信息 -->
       <div class="section-card">
@@ -80,39 +80,16 @@
         </div>
       </div>
 
-      <!-- 名单与班级 -->
+      <!-- 管理入口 -->
       <div class="section-card">
-        <div class="section-title">🗂️ 名单与班级</div>
+        <div class="section-title">🧩 管理入口</div>
         <p class="section-desc">
-          学生名单、学号与密码在「学生管理」；班级的新建、改名、公开看板与切换在「班级管理」。两边都按当前班级隔离数据。
+          学生、班级、评分项都已独立成页：学生管理维护名单与密码；班级管理负责新建 / 改名 / 看板 / 切换；评分项管理维护加减分模板。
         </p>
         <div class="entry-row">
           <button class="btn-sm" @click="router.push('/students')">👥 学生管理 →</button>
           <button class="btn-ghost" @click="router.push('/classes')">🏫 班级管理 →</button>
-        </div>
-      </div>
-
-      <!-- 评分项管理 -->
-      <div class="section-card">
-        <div class="section-title">🏷️ 评分项管理</div>
-        <div class="score-item-list">
-          <div v-for="item in appStore.scoreItems" :key="item.id" class="score-item">
-            <span class="score-icon">{{ item.icon }}</span>
-            <span class="score-name">{{ item.name }}</span>
-            <span class="score-pt" :class="item.point > 0 ? 'pos' : 'neg'">
-              {{ item.point > 0 ? '+' : '' }}{{ item.point }}
-            </span>
-            <button class="icon-btn" @click="deleteScoreItem(item.id)">🗑️</button>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">添加评分项</label>
-          <div class="add-score-row">
-            <input type="text" class="form-input small" v-model="scoreForm.icon" placeholder="emoji" maxlength="2">
-            <input type="text" class="form-input" v-model="scoreForm.name" placeholder="名称" style="flex:1">
-            <input type="number" class="form-input small" v-model="scoreForm.point" placeholder="分值" style="width:60px">
-            <button class="btn-sm" @click="addScoreItem">添加</button>
-          </div>
+          <button class="btn-ghost" @click="router.push('/score-items')">🏷️ 评分项 →</button>
         </div>
       </div>
 
@@ -154,8 +131,6 @@ async function copy(value, label) {
   if (ok) toast(`${label}已复制`)
   else $confirm.error('复制失败，请手动选中复制')
 }
-const scoreForm = reactive({ icon: '', name: '', point: null })
-
 const themes = [
   { value: 'pink', bg: '#fff0f3', emoji: '🌸' },
   { value: 'purple', bg: '#f3f0ff', emoji: '💜' },
@@ -184,18 +159,6 @@ async function selectMode(m) {
   await save()
 }
 
-async function deleteScoreItem(id) {
-  await appStore.deleteScoreItem(id)
-}
-
-async function addScoreItem() {
-  if (!scoreForm.icon || !scoreForm.name || scoreForm.point == null) return
-  await appStore.createScoreItem(scoreForm.icon, scoreForm.name, Number(scoreForm.point))
-  scoreForm.icon = ''
-  scoreForm.name = ''
-  scoreForm.point = null
-}
-
 function handleLogout() {
   authStore.logout()
   router.push('/')
@@ -213,7 +176,6 @@ watch(() => appStore.settings.theme, (t) => {
 
 onMounted(async () => {
   await appStore.fetchStudents()
-  await appStore.fetchScoreItems()
   await appStore.fetchSettings()
   Object.assign(form, {
     systemName: appStore.settings.systemName || '',
@@ -400,12 +362,5 @@ watch(() => route.hash, scrollToAccess)
 .icon-btn:hover { background: var(--line-soft); }
 .error-msg { color:#ff4444; font-size:12px; display:none; }
 .error-msg.show { display:block; }
-.score-item-list { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
-.score-item { display:flex; align-items:center; gap:8px; padding:8px 12px; background:#f7fafc; border-radius:8px; }
-.score-icon { font-size:20px; }
-.score-name { flex:1; }
-.score-pt { font-weight:600; }
-.score-pt.pos { color:#52c41a; }
-.score-pt.neg { color:#ef4444; }
 .btn-logout { width:100%; padding:12px; background:#fff; border:1px solid #ff4444; border-radius:8px; color:#ff4444; cursor:pointer; font-size:14px; }
 </style>

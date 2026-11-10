@@ -36,6 +36,16 @@ public class ScoreItemService {
         return scoreItemRepo.findByTeacherIdOrderByCreatedAtAsc(teacherId).get(0);
     }
 
+    public ScoreItem updateScoreItem(String id, String icon, String name, Integer point, String teacherId) {
+        ScoreItem item = scoreItemRepo.findById(id)
+                .filter(i -> i.getTeacherId().equals(teacherId))
+                .orElseThrow(() -> new IllegalArgumentException("评分项不存在"));
+        if (icon != null && !icon.isBlank()) item.setIcon(icon.trim());
+        if (name != null && !name.isBlank()) item.setName(name.trim());
+        if (point != null) item.setPoint(point);
+        return scoreItemRepo.save(item);
+    }
+
     public void deleteScoreItem(String id, String teacherId) {
         scoreItemRepo.findById(id)
                 .filter(i -> i.getTeacherId().equals(teacherId))

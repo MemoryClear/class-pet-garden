@@ -225,6 +225,7 @@ const navGroups = computed(() => {
     { key: 'home', label: '宠物墙', icon: '🏠', path: '/home' },
     { key: 'students', label: '学生管理', icon: '👥', path: '/students', badge: appStore.students?.length },
     { key: 'classes', label: '班级管理', icon: '🏫', path: '/classes' },
+    { key: 'score-items', label: '评分项', icon: '🏷️', path: '/score-items', badge: appStore.scoreItems?.length },
     { key: 'leaderboard', label: '光荣榜', icon: '🏆', path: '/leaderboard' },
     { key: 'shop', label: '小卖部', icon: '🏪', path: '/shop', badge: appStore.shopItems?.length }
   ]

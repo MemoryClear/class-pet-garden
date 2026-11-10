@@ -324,9 +324,9 @@ html[data-mode="dark"] .sort button.on {
   color: var(--ink);
 }
 html[data-mode="dark"] .chip.on {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: #14161B;
+  background: var(--pill-active-bg);
+  border-color: var(--brand-soft-2);
+  color: var(--pill-active-fg);
 }
 html[data-mode="dark"] .search input {
   background: var(--surface);
@@ -871,3 +871,259 @@ html[data-mode="dark"] .error-msg {
 html[data-mode="dark"] .form-tip.err { color: #FCA5A5; }
 html[data-mode="dark"] .auth-hr { color: var(--ink-4); }
 html[data-mode="dark"] .auth-copyright { color: var(--ink-4); }
+
+/* ============================================================
+ * 弹窗与局部组件补完（第二轮审计）
+ * 这些组件用的是 .modal / .modal-content 自有结构，
+ * 早期只覆盖了 .modal-card 一套，需要按组件补。
+ * ============================================================ */
+
+/* ---------- 通用 .modal（小卖部添加商品等） ---------- */
+html[data-mode="dark"] .modal {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  box-shadow: var(--shadow-m);
+}
+html[data-mode="dark"] .modal h2,
+html[data-mode="dark"] .modal h3 { color: var(--ink); }
+html[data-mode="dark"] .modal label { color: var(--ink-2); }
+html[data-mode="dark"] .modal input,
+html[data-mode="dark"] .modal select,
+html[data-mode="dark"] .modal textarea {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink);
+}
+html[data-mode="dark"] .modal input::placeholder { color: var(--ink-4); }
+html[data-mode="dark"] .modal .cancel-btn {
+  background: rgba(255, 255, 255, .08);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .modal-close {
+  background: rgba(255, 255, 255, .08);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .modal-close:hover { background: rgba(255, 255, 255, .14); }
+
+/* ---------- 兑换商品弹窗（琥珀主题 → 深棕） ---------- */
+html[data-mode="dark"] .modal.exchange-modal {
+  background: linear-gradient(135deg, #241B0E 0%, #191510 100%);
+  border-color: rgba(245, 158, 11, .28);
+}
+html[data-mode="dark"] .exchange-modal h2 { color: #FCD34D; }
+html[data-mode="dark"] .student-info { background: rgba(255, 255, 255, .06); color: var(--ink); }
+html[data-mode="dark"] .student-info .food-remaining { color: #FCD34D; }
+html[data-mode="dark"] .step-indicator { color: #FBBF24; }
+html[data-mode="dark"] .step-indicator span.active { color: #FCD34D; }
+html[data-mode="dark"] .step-indicator span.done { color: #34D399; }
+html[data-mode="dark"] .step-indicator .arrow { color: rgba(251, 191, 36, .5); }
+html[data-mode="dark"] .tab-bar button {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(245, 158, 11, .4);
+  color: #FCD34D;
+}
+html[data-mode="dark"] .tab-bar button.active { background: #F59E0B; color: #1B1305; }
+html[data-mode="dark"] .filter-bar {
+  background: rgba(245, 158, 11, .10);
+  border-color: rgba(245, 158, 11, .24);
+}
+html[data-mode="dark"] .search-input {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(245, 158, 11, .4);
+  color: var(--ink);
+}
+html[data-mode="dark"] .search-input::placeholder { color: rgba(252, 211, 77, .5); }
+html[data-mode="dark"] .cat-tab {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(251, 191, 36, .4);
+  color: #FCD34D;
+}
+html[data-mode="dark"] .cat-tab:hover { background: rgba(245, 158, 11, .16); }
+html[data-mode="dark"] .cat-tab.active {
+  background: linear-gradient(135deg, #F59E0B, #EA580C);
+  color: #fff;
+}
+html[data-mode="dark"] .filter-summary {
+  color: #FBBF24;
+  border-top-color: rgba(245, 158, 11, .24);
+}
+html[data-mode="dark"] .clear-filter { color: #FCD34D; }
+html[data-mode="dark"] .exchange-modal .item-card {
+  background: rgba(255, 255, 255, .06);
+  border-color: transparent;
+}
+html[data-mode="dark"] .exchange-modal .item-card:hover { border-color: #D97706; }
+html[data-mode="dark"] .exchange-modal .item-card.selected {
+  background: rgba(5, 150, 105, .18);
+  border-color: #059669;
+}
+html[data-mode="dark"] .exchange-modal .item-name { color: var(--ink); }
+html[data-mode="dark"] .exchange-modal .item-stock { color: var(--ink-3); }
+html[data-mode="dark"] .exchange-modal .item-price { color: #F87171; }
+html[data-mode="dark"] .rebuy-hint { background: rgba(5, 150, 105, .16); color: #6EE7B7; }
+html[data-mode="dark"] .equip-question,
+html[data-mode="dark"] .done-step p { color: #FCD34D; }
+html[data-mode="dark"] .btn-skip {
+  background: rgba(255, 255, 255, .06);
+  color: #FCD34D;
+  border-color: rgba(245, 158, 11, .4);
+}
+html[data-mode="dark"] .empty-inventory { color: #FCD34D; }
+html[data-mode="dark"] .empty-inventory .sub { color: #FBBF24; }
+html[data-mode="dark"] .gift-modal { background: var(--surface-2); }
+html[data-mode="dark"] .gift-hint { color: var(--ink-3); }
+html[data-mode="dark"] .student-option:hover { background: rgba(236, 72, 153, .12); }
+html[data-mode="dark"] .student-option.selected {
+  background: rgba(236, 72, 153, .18);
+  border-color: #EC4899;
+}
+html[data-mode="dark"] .stu-name { color: var(--ink); }
+html[data-mode="dark"] .error-banner,
+html[data-mode="dark"] .gift-error {
+  background: rgba(239, 68, 68, .14);
+  border-color: rgba(239, 68, 68, .3);
+  color: #FCA5A5;
+}
+html[data-mode="dark"] .items-container::-webkit-scrollbar-track { background: rgba(255, 255, 255, .06); }
+
+/* ---------- 选择宠物 / 学生编辑 / 学生明细 / 宝可梦图鉴 ---------- */
+html[data-mode="dark"] .pet-tabs,
+html[data-mode="dark"] .tab-bar { border-bottom-color: var(--line); }
+html[data-mode="dark"] .pet-tabs .tab-btn,
+html[data-mode="dark"] .tab-btn {
+  background: var(--line-soft);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .tab-btn:hover { background: rgba(255, 255, 255, .1); }
+html[data-mode="dark"] .tab-btn.active { color: #fff; }
+html[data-mode="dark"] .pet-option { background: var(--surface-2); }
+html[data-mode="dark"] .pet-option:hover { background: var(--line-soft); }
+html[data-mode="dark"] .pet-option.selected {
+  background: var(--brand-soft);
+  border-color: var(--brand);
+}
+html[data-mode="dark"] .pet-option.pokemon-option.selected {
+  background: rgba(79, 172, 254, .18);
+  border-color: #4FACFE;
+}
+html[data-mode="dark"] .card-warning { background: rgba(245, 158, 11, .14); }
+html[data-mode="dark"] .card-warning .has-card { color: #FCD34D; }
+html[data-mode="dark"] .card-warning .no-card { color: #FCA5A5; }
+
+html[data-mode="dark"] .field-row label { color: var(--ink-2); }
+html[data-mode="dark"] .field-row input {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--ink);
+}
+html[data-mode="dark"] .studentno-input { border-color: var(--line); }
+html[data-mode="dark"] .studentno-prefix {
+  background: var(--line-soft);
+  color: var(--ink-3);
+  border-right-color: var(--line);
+}
+html[data-mode="dark"] .studentno-suffix {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+html[data-mode="dark"] .field-tip { color: var(--ink-3); }
+
+html[data-mode="dark"] .stat-bar { background: var(--surface-2); }
+html[data-mode="dark"] .stat-item { color: var(--ink-3); }
+html[data-mode="dark"] .stat-item b { color: var(--ink); }
+html[data-mode="dark"] .record-item { background: var(--surface-2); }
+html[data-mode="dark"] .record-item:hover { background: var(--line-soft); }
+html[data-mode="dark"] .record-item.revoked { background: var(--line-soft); }
+html[data-mode="dark"] .record-icon { background: rgba(255, 255, 255, .06); }
+html[data-mode="dark"] .reason { color: var(--ink); }
+html[data-mode="dark"] .record-time,
+html[data-mode="dark"] .empty-tip { color: var(--ink-3); }
+html[data-mode="dark"] .point.positive { color: #34D399; }
+html[data-mode="dark"] .point.negative { color: #F87171; }
+html[data-mode="dark"] .filter-btn {
+  background: var(--line-soft);
+  color: var(--ink-2);
+}
+
+html[data-mode="dark"] .modal-content {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+html[data-mode="dark"] .modal-content .info-bar { color: var(--ink-2); }
+html[data-mode="dark"] .modal-content .pokemon-item {
+  background: var(--surface);
+  border-color: var(--line);
+}
+html[data-mode="dark"] .modal-content .pokemon-item.is-represent {
+  background: rgba(245, 158, 11, .14);
+  border-color: #F59E0B;
+}
+html[data-mode="dark"] .modal-content .poke-name { color: var(--ink); }
+html[data-mode="dark"] .modal-content .poke-food { color: var(--ink-4); }
+html[data-mode="dark"] .modal-content .empty { color: var(--ink-3); }
+html[data-mode="dark"] .represent-badge { background: rgba(245, 158, 11, .18); color: #FCD34D; }
+
+/* ---------- 小卖部 / 兑换明细 的彩色标签 ---------- */
+html[data-mode="dark"] .item-type-badge.type-decoration { background: rgba(99, 102, 241, .18); color: #C7D2FE; }
+html[data-mode="dark"] .item-type-badge.type-pet_change_card { background: rgba(245, 158, 11, .18); color: #FCD34D; }
+html[data-mode="dark"] .item-type-badge.type-pokemon_ball { background: rgba(239, 68, 68, .18); color: #FCA5A5; }
+html[data-mode="dark"] .item-type-badge.type-evolution_item { background: rgba(16, 185, 129, .18); color: #6EE7B7; }
+html[data-mode="dark"] .action-badge.gift-out { background: rgba(59, 130, 246, .18); color: #BFDBFE; }
+html[data-mode="dark"] .action-badge.gift-in { background: rgba(168, 85, 247, .18); color: #E9D5FF; }
+html[data-mode="dark"] .action-badge.purchase { background: rgba(16, 185, 129, .18); color: #A7F3D0; }
+html[data-mode="dark"] .action-badge.revoked { background: var(--line-soft); color: var(--ink-3); }
+html[data-mode="dark"] .rec-tab {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .rec-tab.active {
+  background: #F97316;
+  border-color: #F97316;
+  color: #fff;
+}
+html[data-mode="dark"] .badge.purchase { background: rgba(16, 185, 129, .16); color: #6EE7B7; }
+html[data-mode="dark"] .badge.gift-out { background: rgba(59, 130, 246, .18); color: #BFDBFE; }
+html[data-mode="dark"] .badge.gift-in { background: rgba(236, 72, 153, .18); color: #FBCFE8; }
+html[data-mode="dark"] .badge.revoked { background: var(--line-soft); color: var(--ink-3); }
+html[data-mode="dark"] .not-owned-tag { background: var(--line-soft); color: var(--ink-3); }
+
+/* ---------- 宝可梦池的小控件 ---------- */
+html[data-mode="dark"] .pool-count {
+  background: var(--line-soft);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .weight-dec,
+html[data-mode="dark"] .weight-inc {
+  background: var(--line-soft);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+html[data-mode="dark"] .batch-weight-bar {
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+html[data-mode="dark"] .weight-input {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+/* ---------- 文字对比度补丁（第三轮审计：深底上的深字） ---------- */
+html[data-mode="dark"] .food-val { color: #E0B07A; }
+html[data-mode="dark"] .pet-card.level-4 .food-val { color: #93C5FD; }
+html[data-mode="dark"] .pet-card.level-5 .food-val { color: #FDBA74; }
+html[data-mode="dark"] .pet-card.level-6 .food-val { color: #FCD34D; }
+
+html[data-mode="dark"] .multiplier-label { color: var(--ink-2); }
+
+html[data-mode="dark"] .item-stock { color: var(--ink-3); }
+html[data-mode="dark"] .item-stock.low-stock { color: #F87171; }
+
+html[data-mode="dark"] .scard.minus .sc-pt { color: #F87171; }
+html[data-mode="dark"] .scard.plus .sc-pt { color: #34D399; }
+
+html[data-mode="dark"] .batch-label { color: var(--ink-2); }
+
+html[data-mode="dark"] .theme-emoji { color: #2A2A2A; }

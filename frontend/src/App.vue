@@ -50,6 +50,8 @@ onMounted(async () => {
       await appStore.fetchSettings()
       // 多班级：启动时同步班级列表与当前班级
       await appStore.fetchClasses()
+      // 侧栏「评分项」角标要用，全局拉一次
+      appStore.fetchScoreItems().catch(() => {})
     } catch (e) { /* 静默失败，保留默认值 */ }
   }
 })

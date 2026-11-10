@@ -197,6 +197,10 @@ export const useAppStore = defineStore('app', {
       await api.post('/score-items', { icon, name, point })
       await this.fetchScoreItems()
     },
+    async updateScoreItem(id, icon, name, point) {
+      await api.put(`/score-items/${id}`, { icon, name, point })
+      await this.fetchScoreItems()
+    },
     async deleteScoreItem(id) {
       await api.delete(`/score-items/${id}`)
       await this.fetchScoreItems()

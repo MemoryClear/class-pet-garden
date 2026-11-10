@@ -1,6 +1,6 @@
 <template>
   <div class="modal-overlay" @click.self="handleClose">
-    <div class="modal">
+    <div class="modal exchange-modal">
       <h2>🏪 兑换商品</h2>
       <div class="student-info">
         <span class="pet-icon"><PetIcon :icon="student.petIcon" size="20" /></span>
@@ -97,7 +97,7 @@
           <div v-else-if="items.length === 0" class="empty-inventory">
             <div class="empty-icon">🛍️</div>
             <p>商品列表为空</p>
-            <p class="sub">去设置页添加商品吧~</p>
+            <p class="sub">去「小卖部」页面添加商品吧~</p>
           </div>
           <div v-else-if="filteredItems.length === 0" class="empty-inventory">
             <div class="empty-icon">🔍</div>

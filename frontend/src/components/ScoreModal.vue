@@ -45,7 +45,7 @@
           </div>
         </div>
         <div v-if="appStore.scoreItems.length === 0" class="empty-tip">
-          暂无评分项，请先去设置添加
+          暂无评分项，请先去「评分项」页面添加
         </div>
       </div>
     </div>

@@ -22,6 +22,12 @@ const routes = [
     meta: { requiresAuth: true, activated: true, teacherOnly: true }
   },
   {
+    path: '/score-items',
+    name: 'ScoreItems',
+    component: () => import('../views/ScoreItemsView.vue'),
+    meta: { requiresAuth: true, activated: true, teacherOnly: true }
+  },
+  {
     path: '/classes',
     name: 'Classes',
     component: () => import('../views/ClassesView.vue'),
