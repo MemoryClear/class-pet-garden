@@ -2,6 +2,7 @@ package com.classpet.service;
 
 import com.classpet.entity.SchoolClass;
 import com.classpet.entity.Student;
+import com.classpet.repository.ClassroomPokemonPoolRepository;
 import com.classpet.repository.SchoolClassRepository;
 import com.classpet.repository.StudentRepository;
 import org.slf4j.Logger;
@@ -31,11 +32,14 @@ public class SchoolClassService {
 
     private final SchoolClassRepository classRepository;
     private final StudentRepository studentRepository;
+    private final ClassroomPokemonPoolRepository poolRepository;
 
     public SchoolClassService(SchoolClassRepository classRepository,
-                              StudentRepository studentRepository) {
+                              StudentRepository studentRepository,
+                              ClassroomPokemonPoolRepository poolRepository) {
         this.classRepository = classRepository;
         this.studentRepository = studentRepository;
+        this.poolRepository = poolRepository;
     }
 
     // ---------------- 查询 ----------------
@@ -117,6 +121,8 @@ public class SchoolClassService {
             throw new IllegalArgumentException("至少保留一个班级");
         }
         classRepository.delete(c);
+        // 班级没了，班级级宝可梦池也一起清掉
+        poolRepository.deleteByClassroomId(classId);
     }
 
     @Transactional

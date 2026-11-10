@@ -2,7 +2,11 @@ package com.classpet.controller;
 
 import com.classpet.config.MonthlyBallScheduler;
 import com.classpet.entity.ClassroomPokemonPool;
+import com.classpet.entity.SchoolClass;
+import com.classpet.entity.Student;
 import com.classpet.repository.ClassroomPokemonPoolRepository;
+import com.classpet.repository.SchoolClassRepository;
+import com.classpet.repository.StudentRepository;
 import com.classpet.security.JwtAuthenticationFilter.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +36,12 @@ public class PokemonPoolController {
     @Autowired
     private MonthlyBallScheduler monthlyBallScheduler;
 
+    @Autowired
+    private SchoolClassRepository classRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
     private final Map<Integer, Map<String, Object>> speciesMap = new HashMap<>();
 
     @PostConstruct
@@ -51,6 +61,15 @@ public class PokemonPoolController {
     }
 
     /**
+     * 校验 classId 是否属于该教师（多班级后池子按班级存，必须先确认归属）。
+     */
+    private boolean ownsClass(String classId, AuthenticatedUser principal) {
+        if (principal == null || principal.isStudent()) return false;
+        if (classId == null || classId.isBlank()) return false;
+        return classRepository.findByIdAndTeacherId(classId, principal.teacherId()).isPresent();
+    }
+
+    /**
      * 获取班级的宝可梦池
      */
     @GetMapping("/classroom-pool")
@@ -58,8 +77,7 @@ public class PokemonPoolController {
             @RequestParam String classroomId,
             @AuthenticationPrincipal AuthenticatedUser principal) {
         
-        // 验证教师权限（班级ID = 教师ID）
-        if (principal.isStudent() || principal.teacherId() == null || !principal.teacherId().equals(classroomId)) {
+        if (!ownsClass(classroomId, principal)) {
             return ResponseEntity.status(403).body(Map.of("error", "无权限访问该班级"));
         }
         
@@ -118,8 +136,7 @@ public class PokemonPoolController {
             return ResponseEntity.badRequest().body(Map.of("error", "classroomId不能为空"));
         }
         
-        // 验证教师权限
-        if (principal.isStudent() || principal.teacherId() == null || !principal.teacherId().equals(classroomId)) {
+        if (!ownsClass(classroomId, principal)) {
             return ResponseEntity.status(403).body(Map.of("error", "无权限设置该班级"));
         }
         
@@ -145,7 +162,7 @@ public class PokemonPoolController {
             @RequestParam String classroomId,
             @AuthenticationPrincipal AuthenticatedUser principal) {
         
-        if (principal.isStudent() || principal.teacherId() == null || !principal.teacherId().equals(classroomId)) {
+        if (!ownsClass(classroomId, principal)) {
             return ResponseEntity.status(403).body(Map.of("error", "无权限操作该班级"));
         }
         
@@ -165,11 +182,16 @@ public class PokemonPoolController {
      * 给当前教师班级所有学生各发放1个精灵球
      */
     @PostMapping("/distribute-balls")
-    public ResponseEntity<?> distributeBalls(@AuthenticationPrincipal AuthenticatedUser principal) {
+    public ResponseEntity<?> distributeBalls(@AuthenticationPrincipal AuthenticatedUser principal,
+                                             @RequestParam(required = false) String classId) {
         if (principal.isStudent()) {
             return ResponseEntity.status(403).body(Map.of("error", "仅限教师使用"));
         }
-        int count = monthlyBallScheduler.manualDistribute();
+        if (classId != null && !classId.isBlank() && !ownsClass(classId, principal)) {
+            return ResponseEntity.status(403).body(Map.of("error", "无权限给该班级发球"));
+        }
+        String teacherId = principal.teacherId();
+        int count = monthlyBallScheduler.manualDistribute(teacherId, classId);
         return ResponseEntity.ok(Map.of(
                 "success", true,
                 "message", "精灵球发放成功",
@@ -183,7 +205,20 @@ public class PokemonPoolController {
      */
     @GetMapping("/classroom-pool/current")
     public ResponseEntity<?> getCurrentMonthPool(@AuthenticationPrincipal AuthenticatedUser principal) {
-        String classroomId = principal.teacherId();
+        if (principal == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "请先登录"));
+        }
+        // 学生端：按学生自己所在的班级取池子（多班级后池子是班级级的）
+        String classroomId = null;
+        if (principal.studentId() != null) {
+            classroomId = studentRepository.findById(principal.studentId())
+                    .map(Student::getClassId)
+                    .orElse(null);
+        }
+        if (classroomId == null || classroomId.isEmpty()) {
+            // 兜底：老数据没有 classId 时退回教师第一个班级
+            classroomId = principal.teacherId();
+        }
         if (classroomId == null || classroomId.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "未找到班级信息"));
         }

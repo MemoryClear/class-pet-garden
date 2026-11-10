@@ -1,7 +1,6 @@
 package com.classpet.config;
 
-import com.classpet.entity.Student;
-import com.classpet.repository.StudentRepository;
+import com.classpet.service.PokemonBallService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.classpet.entity.PokemonBall;
 
 /**
  * 每月精灵球发放定时任务
@@ -25,7 +24,7 @@ public class MonthlyBallScheduler {
     private static final Logger logger = LoggerFactory.getLogger(MonthlyBallScheduler.class);
     
     @Autowired
-    private StudentRepository studentRepository;
+    private PokemonBallService pokemonBallService;
     
     /**
      * 每月1日 00:00 发放精灵球
@@ -35,35 +34,24 @@ public class MonthlyBallScheduler {
     @Transactional
     public void distributeMonthlyBalls() {
         logger.info("开始发放每月精灵球...");
-        
-        List<Student> students = studentRepository.findAll();
-        int count = 0;
-        
-        for (Student student : students) {
-            int currentBalls = student.getPokemonBalls() != null ? student.getPokemonBalls() : 0;
-            student.setPokemonBalls(currentBalls + 1);
-            studentRepository.save(student);
-            count++;
-        }
-        
+        int count = pokemonBallService.grantToAllStudents(PokemonBall.SOURCE_MONTHLY);
         logger.info("精灵球发放完成，共发放 {} 个学生", count);
     }
     
     /**
-     * 手动触发发放（用于测试或补发）
+     * 手动触发发放（用于测试或补发）。
+     *
+     * <p>只发给指定教师名下的学生 —— 之前用的是 findAll()，
+     * 多教师部署时会连别人的学生一起发球。</p>
      */
     @Transactional
-    public int manualDistribute() {
-        List<Student> students = studentRepository.findAll();
-        int count = 0;
-        
-        for (Student student : students) {
-            int currentBalls = student.getPokemonBalls() != null ? student.getPokemonBalls() : 0;
-            student.setPokemonBalls(currentBalls + 1);
-            studentRepository.save(student);
-            count++;
+    public int manualDistribute(String teacherId, String classId) {
+        if (teacherId == null || teacherId.isBlank()) {
+            throw new IllegalArgumentException("缺少教师信息，无法发放精灵球");
         }
-        
-        return count;
+        if (classId != null && !classId.isBlank()) {
+            return pokemonBallService.grantToClass(classId, teacherId, PokemonBall.SOURCE_MANUAL);
+        }
+        return pokemonBallService.grantToTeacher(teacherId, PokemonBall.SOURCE_MANUAL);
     }
 }

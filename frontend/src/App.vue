@@ -56,6 +56,8 @@ watch(() => authStore.isLoggedIn, async (loggedIn) => {
   if (!loggedIn) return
   try {
     await appStore.fetchSettings()
+    // 站内登录时也把班级列表补上，否则 currentClassId 为空会导致班级维度页面取不到数据
+    await appStore.fetchClasses()
   } catch (e) { /* 忽略：保留默认外观 */ }
 })
 </script>

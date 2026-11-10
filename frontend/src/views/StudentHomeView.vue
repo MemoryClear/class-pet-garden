@@ -507,6 +507,7 @@
           </div>
           <p class="ball-hint">{{ usingBall ? '🎲 抽取中...' : '点击精灵球开始抽取！' }}</p>
           <p class="ball-count">剩余 {{ myInfo.pokemonBalls }} 个精灵球</p>
+          <p class="ball-note">每颗球锁定了发放时班级的池子，之后老师调整卡池不会影响它</p>
         </div>
         <!-- 宝可梦展示 -->
         <div v-else class="ball-content pokemon-reveal">
@@ -1405,6 +1406,7 @@ onMounted(async () => {
 .pokeball-button { width: 24px; height: 24px; background: #fff; border-radius: 50%; border: 4px solid #1f2937; }
 .ball-hint { font-size: 1.1rem; color: #666; margin-bottom: 10px; }
 .ball-count { font-size: 0.9rem; color: #888; }
+.ball-note { font-size: 0.72rem; color: #94a3b8; margin-top: 4px; line-height: 1.6; }
 
 .pokemon-reveal { }
 .reveal-animation { animation: revealBounce 0.6s ease-out; }

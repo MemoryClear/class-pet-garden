@@ -71,11 +71,14 @@ export const useAppStore = defineStore('app', {
     async createStudent(name) {
       const { data } = await api.post('/students', { name, classId: this.currentClassId })
       await this.fetchStudents()
+      // 学生数变了，班级列表里的 studentCount 也要跟着变（班级管理页直接用这份数据）
+      this.fetchClasses().catch(() => {})
       return data
     },
     async batchCreateStudents(names) {
       const { data } = await api.post('/students/batch', { names, classId: this.currentClassId })
       this.students = data
+      this.fetchClasses().catch(() => {})
     },
     async updateStudent(id, name) {
       const { data } = await api.put(`/students/${id}`, { name })
@@ -85,6 +88,7 @@ export const useAppStore = defineStore('app', {
     async deleteStudent(id) {
       await api.delete(`/students/${id}`)
       await this.fetchStudents()
+      this.fetchClasses().catch(() => {})
     },
     async adoptPet(studentId, petId, petName, petIcon) {
       const name = petName || this.petLibrary.find(p => p.id === petId)?.name || ''

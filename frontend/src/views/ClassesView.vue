@@ -159,7 +159,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useAppStore } from '../stores/app.js'
 import { useAuthStore } from '../stores/auth.js'
 import AppShell from '../components/layout/AppShell.vue'
@@ -179,6 +179,9 @@ const createError = ref('')
 const nameInput = ref(null)
 const boardBusy = ref({})
 const form = reactive({ name: '' })
+
+// 从学生管理切过来时，学生数可能刚变过，进页面重新拉一次班级列表
+onMounted(() => { appStore.fetchClasses().catch(() => {}) })
 
 const subtitle = computed(() => {
   const n = appStore.classes.length

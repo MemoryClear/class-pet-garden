@@ -13,6 +13,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.classpet.entity.ClassroomPokemonPool;
+import com.classpet.entity.PokemonBall;
 import com.classpet.repository.ClassroomPokemonPoolRepository;
 import java.util.Random;
 import java.util.HashSet;
@@ -51,6 +52,8 @@ public class StudentService {
     @Autowired private StudentPokemonRepository studentPokemonRepository;
     @Autowired private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     @Autowired private SchoolClassService schoolClassService;
+    @Autowired private com.classpet.service.PokemonBallService pokemonBallService;
+    @Autowired private com.classpet.repository.PokemonBallRepository pokemonBallRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
     
     // 宝可梦物种数据缓存（所有形态）
@@ -418,6 +421,8 @@ public class StudentService {
     @Transactional
     public void deleteStudent(String id, String teacherId) {
         Student stu = findByIdAndTeacherId(id, teacherId);
+        // 球记录跟着学生走，避免留下孤儿数据
+        pokemonBallRepository.deleteByStudentId(id);
         studentRepository.delete(stu);
     }
 
@@ -693,6 +698,7 @@ public class StudentService {
                 item.getIcon(), -item.getPrice(), teacherId);
             scoreHistoryRepository.save(history);
             studentRepository.save(student);
+            pokemonBallService.attach(student, PokemonBall.SOURCE_SHOP);
             return Map.of("success", true, "food", student.getFood(), "pokemonBalls", student.getPokemonBalls());
         }
 
@@ -1418,16 +1424,23 @@ public class StudentService {
             throw new IllegalArgumentException("没有可用的精灵球，当前数量: " + balls);
         }
         
-        // 2. 获取班级的宝可梦池
-        ClassroomPokemonPool pool = classroomPokemonPoolRepository
-                .findByClassroomId(student.getTeacherId())
-                .orElse(null);
+        // 2. 决定用哪份池子：
+        //    优先取最早那颗未开球里保存的"发放时快照"；
+        //    历史遗留的球（只有计数没有记录）回退到当前班级池子。
+        PokemonBall ball = pokemonBallService.peekOldestUnopened(studentId).orElse(null);
+        // 有球记录 → 严格用发球时的快照（快照为空说明当时池子是空的，抽默认池）；
+        // 没有记录（升级前的老球）→ 才回退到当前班级池子。
+        String poolJson;
+        if (ball != null) {
+            poolJson = ball.getPoolSnapshot();
+        } else {
+            poolJson = pokemonBallService.snapshotOfStudent(student);
+        }
         
-        // 2. 获取班级的宝可梦池（带权重的条目列表）
         List<Map<String, Object>> weightedEntries = new ArrayList<>();
-        if (pool != null && pool.getPokedexEntries() != null && !pool.getPokedexEntries().isEmpty()) {
+        if (poolJson != null && !poolJson.isBlank() && !"[]".equals(poolJson.trim())) {
             try {
-                weightedEntries = objectMapper.readValue(pool.getPokedexEntries(),
+                weightedEntries = objectMapper.readValue(poolJson,
                         objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
             } catch (Exception e) {
                 logger.error("解析宝可梦池JSON失败", e);
@@ -1520,11 +1533,15 @@ public class StudentService {
         StudentPokemon pokemon = new StudentPokemon(studentId, selectedPokedexId, name, image, types, null);
         studentPokemonRepository.save(pokemon);
         
-        // 6. 扣除精灵球
+        // 6. 扣除精灵球，并把消费的那颗球标记为已开
         student.setPokemonBalls(balls - 1);
         studentRepository.save(student);
-        
-        logger.info("学生 {} 使用精灵球获得了 {} ({})", studentId, name, selectedPokedexId);
+        if (ball != null) {
+            pokemonBallService.markOpened(ball, selectedPokedexId);
+        }
+
+        logger.info("学生 {} 使用精灵球获得了 {} ({}，池来源 {})",
+                studentId, name, selectedPokedexId, ball != null ? "快照" : "当前池子");
         
         return pokemon;
     }

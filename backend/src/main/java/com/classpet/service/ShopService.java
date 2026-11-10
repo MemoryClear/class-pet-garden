@@ -7,6 +7,7 @@ import com.classpet.dto.ShopDto.GiftRequest;
 import com.classpet.dto.ShopDto.ExchangeRecordResponse;
 import com.classpet.entity.ShopItem;
 import com.classpet.entity.ExchangeRecord;
+import com.classpet.entity.PokemonBall;
 import com.classpet.entity.ScoreHistory;
 import com.classpet.entity.Student;
 import com.classpet.repository.*;
@@ -24,12 +25,14 @@ public class ShopService {
     private final ExchangeRecordRepository exchangeRecordRepo;
     private final StudentRepository studentRepo;
     private final ScoreHistoryRepository scoreHistoryRepo;
+    private final PokemonBallService ballService;
 
-    public ShopService(ShopItemRepository shopItemRepo, ExchangeRecordRepository exchangeRecordRepo, StudentRepository studentRepo, ScoreHistoryRepository scoreHistoryRepo) {
+    public ShopService(ShopItemRepository shopItemRepo, ExchangeRecordRepository exchangeRecordRepo, StudentRepository studentRepo, ScoreHistoryRepository scoreHistoryRepo, PokemonBallService ballService) {
         this.shopItemRepo = shopItemRepo;
         this.exchangeRecordRepo = exchangeRecordRepo;
         this.studentRepo = studentRepo;
         this.scoreHistoryRepo = scoreHistoryRepo;
+        this.ballService = ballService;
     }
 
     // ============== 商店商品管理 ==============
@@ -121,6 +124,8 @@ public class ShopService {
             int balls = student.getPokemonBalls() != null ? student.getPokemonBalls() : 0;
             student.setPokemonBalls(balls + 1);
             studentRepo.save(student);
+            // 买的球同样要带上当时的池子快照
+            ballService.attach(student, PokemonBall.SOURCE_SHOP);
             // 精灵球不创建兑换记录，只需积分历史（已在上方写入）
             return null;
         }

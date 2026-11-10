@@ -158,7 +158,7 @@ export const pokemonApi = {
   getClassroomPool: (classroomId) => api.get('/pokemon/classroom-pool', { params: { classroomId } }),
   setClassroomPool: (data) => api.post('/pokemon/classroom-pool', data),
   clearClassroomPool: (classroomId) => api.delete('/pokemon/classroom-pool', { params: { classroomId } }),
-  distributeBalls: () => api.post('/pokemon/distribute-balls')
+  distributeBalls: (classId) => api.post('/pokemon/distribute-balls', null, { params: classId ? { classId } : {} })
 }
 
 export default api

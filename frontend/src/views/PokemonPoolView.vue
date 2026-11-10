@@ -8,7 +8,7 @@
       <button class="btn-ghost pool-btn" :disabled="distributing" @click="distributeBalls">
         🔮<span class="btn-txt"> {{ distributing ? '发放中…' : '发放精灵球' }}</span>
       </button>
-      <button class="btn-primary" :disabled="saving || selectedEntries.length === 0" @click="savePool">
+      <button class="btn-primary" :disabled="saving || selectedEntries.length === 0" @click="savePool()">
         {{ saving ? '保存中…' : '保存设置' }}
       </button>
     </template>
@@ -19,6 +19,25 @@
       <!-- 说明 -->
       <div class="info-banner">
         <span>ℹ️ 点击宝可梦选中，点击"+"调整抽取概率权重（权重越高越容易被抽到）。拖动滑块可批量调整权重。</span>
+        <span class="banner-sub">🏫 池子按班级保存，左上角切换班级会切换到那个班的池子。</span>
+        <span class="banner-sub">🔮 每个精灵球在<b>发放时</b>就锁定了当时的池子，之后改池子不会影响已经发出去的球。</span>
+      </div>
+
+      <!-- 快捷操作 -->
+      <div class="quick-actions">
+        <button class="btn-ghost" :disabled="randomBusy || !allPokemon.length" @click="randomSelect">
+          🎲<span class="btn-txt"> 一键随机选择</span>
+        </button>
+        <button
+          class="btn-ghost qa-accent"
+          :disabled="randomBusy || distributing || !allPokemon.length"
+          @click="randomSelectAndDistribute"
+        >
+          🔮<span class="btn-txt"> 一键随机发放精灵球</span>
+        </button>
+        <span class="qa-hint">
+          随机选择只改名单，还要点「保存设置」才生效；随机发放会同时保存新池子并给全班各发 1 个精灵球。
+        </span>
       </div>
 
       <!-- 批量权重控制 -->
@@ -94,17 +113,20 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import AppShell from '../components/layout/AppShell.vue'
-import { useAuthStore } from '../stores/auth.js'
 import { useAppStore } from '../stores/app.js'
 import { petApi, pokemonApi } from '../api/index.js'
+import { toast } from '../composables/useToast.js'
+import $confirm from '../composables/useConfirmModal.js'
 
 const subtitle = computed(() => {
+  const cls = appStore.className || '当前班级'
   const n = selectedEntries.value.length
-  return n ? `已选择 ${n} 只 · 权重越高越容易被抽到` : '点击宝可梦加入抽取池，再点「保存设置」生效'
+  return n
+    ? `${cls} · 已选择 ${n} 只 · 权重越高越容易被抽到`
+    : `${cls} · 点击宝可梦加入抽取池，再点「保存设置」生效`
 })
-const authStore = useAuthStore()
 const appStore = useAppStore()
 
 const allPokemon = ref([])
@@ -118,6 +140,7 @@ const distributing = ref(false)
 const distSuccess = ref(false)
 const distError = ref(false)
 const batchWeight = ref(3)
+const randomBusy = ref(false)
 
 // —— 图片懒加载 + 数据缓存 ——
 const placeholderSrc =
@@ -173,6 +196,9 @@ function scrollToTop() {
   window.scrollTo(0, 0)
 }
 
+// 切换班级：池子跟着换
+watch(() => appStore.currentClassId, (id) => { if (id) loadPool() })
+
 onMounted(async () => {
   await loadData()
   // 数据加载完后，DOM 也已经渲染，再挂 IntersectionObserver
@@ -196,6 +222,28 @@ onBeforeUnmount(() => {
   scrollToTop()
 })
 
+/** 读取当前班级的池子（多班级后池子按 classId 存） */
+async function loadPool() {
+  const classId = appStore.currentClassId
+  if (!classId) {
+    selectedEntries.value = []
+    return
+  }
+  try {
+    const poolRes = await pokemonApi.getClassroomPool(classId)
+    const pool = poolRes.data
+    const raw = pool && pool.pokedexEntries
+    const entries = typeof raw === 'string' ? JSON.parse(raw || '[]') : (raw || [])
+    selectedEntries.value = entries.map(e => ({
+      pokedexId: Number(e.pokedexId),
+      weight: parseFloat(e.weight || 1.0)
+    }))
+  } catch (e) {
+    console.error('读取宝可梦池失败:', e)
+    selectedEntries.value = []
+  }
+}
+
 async function loadData() {
   loading.value = true
   try {
@@ -209,20 +257,7 @@ async function loadData() {
       appStore.pokemonLibraryLoadedAt = Date.now()
     }
 
-    const teacherId = authStore.teacherId
-    if (teacherId) {
-      const poolRes = await pokemonApi.getClassroomPool(teacherId)
-      const pool = poolRes.data
-      if (pool && pool.pokedexEntries) {
-        const entries = typeof pool.pokedexEntries === 'string'
-          ? JSON.parse(pool.pokedexEntries)
-          : pool.pokedexEntries
-        selectedEntries.value = entries.map(e => ({
-          pokedexId: Number(e.pokedexId),
-          weight: parseFloat(e.weight || 1.0)
-        }))
-      }
-    }
+    await loadPool()
   } catch (e) {
     console.error('加载失败:', e)
   } finally {
@@ -275,27 +310,134 @@ const totalWeight = computed(() =>
   selectedEntries.value.reduce((sum, e) => sum + e.weight, 0)
 )
 
-async function savePool() {
+async function savePool({ quiet = false } = {}) {
   saving.value = true
   saveSuccess.value = false
   saveError.value = false
   try {
-    const teacherId = authStore.teacherId
+    const classId = appStore.currentClassId
+    if (!classId) {
+      saveError.value = '还没有选中班级'
+      setTimeout(() => { saveError.value = false }, 4000)
+      return false
+    }
     const entries = selectedEntries.value.map(e => ({
       pokedexId: e.pokedexId,
       weight: parseFloat(e.weight.toFixed(1))
     }))
     await pokemonApi.setClassroomPool({
-      classroomId: teacherId,
+      classroomId: classId,
       pokedexEntries: entries
     })
-    saveSuccess.value = true
-    setTimeout(() => { saveSuccess.value = false }, 3000)
+    if (!quiet) {
+      saveSuccess.value = true
+      setTimeout(() => { saveSuccess.value = false }, 3000)
+    }
+    return true
   } catch (e) {
     saveError.value = e.response?.data?.error || '保存失败'
     setTimeout(() => { saveError.value = false }, 5000)
+    return false
   } finally {
     saving.value = false
+  }
+}
+
+/* ---------------- 一键随机 ---------------- */
+
+/** 从宝可梦库里随机抽 count 只（不重复），权重取当前批量权重 */
+function pickRandomEntries(count) {
+  const pool = allPokemon.value.slice()
+  for (let i = 0; i < count; i++) {
+    const j = i + Math.floor(Math.random() * (pool.length - i))
+    const t = pool[i]
+    pool[i] = pool[j]
+    pool[j] = t
+  }
+  return pool.slice(0, count).map(p => ({
+    pokedexId: Number(p.pokedexId),
+    weight: batchWeight.value
+  }))
+}
+
+/** 问用户要抽几只，取消返回 null */
+async function askRandomCount(title, okText) {
+  const max = allPokemon.value.length
+  if (!max) {
+    $confirm.error('宝可梦库还没加载好，请稍后再试')
+    return null
+  }
+  const def = Math.min(6, max)
+  const val = await $confirm.prompt(`随机选择几只宝可梦？（1 - ${max}）`, {
+    title,
+    okText,
+    icon: '🎲',
+    inputType: 'number',
+    inputValue: String(def),
+    inputRequired: true
+  })
+  if (val === null) return null
+  const n = Math.floor(Number(val))
+  if (!Number.isFinite(n) || n < 1 || n > max) {
+    $confirm.error(`数量需要在 1 到 ${max} 之间`)
+    return null
+  }
+  return n
+}
+
+/** 只做随机选择：替换当前名单，等待教师再点「保存设置」 */
+async function randomSelect() {
+  const n = await askRandomCount('一键随机选择', '开始随机')
+  if (!n) return
+  if (selectedEntries.value.length > 0) {
+    const ok = await $confirm.confirm(
+      `当前已选 ${selectedEntries.value.length} 只，随机选择会替换这份名单（保存后才写入池子）。继续吗？`,
+      { title: '替换当前选择', okText: '替换', icon: '🎲' }
+    )
+    if (!ok) return
+  }
+  randomBusy.value = true
+  try {
+    selectedEntries.value = pickRandomEntries(n)
+    toast(`已随机选中 ${n} 只，记得点「保存设置」生效`, { icon: '🎲' })
+  } finally {
+    randomBusy.value = false
+  }
+}
+
+/** 随机选择 + 保存池子 + 发放精灵球 */
+async function randomSelectAndDistribute() {
+  const n = await askRandomCount('一键随机发放精灵球', '下一步')
+  if (!n) return
+
+  if (!appStore.students?.length) {
+    try { await appStore.fetchStudents() } catch (e) { /* 数量仅用于提示 */ }
+  }
+  const total = appStore.students?.length || 0
+
+  const ok = await $confirm.confirm(
+    `将把宝可梦池替换为随机选出的 ${n} 只，并给全班 ${total} 位学生各发放 1 个精灵球。确定吗？`,
+    { title: '随机发放精灵球', okText: '开始发放', icon: '🔮' }
+  )
+  if (!ok) return
+
+  randomBusy.value = true
+  distributing.value = true
+  try {
+    selectedEntries.value = pickRandomEntries(n)
+    const saved = await savePool({ quiet: true })
+    if (!saved) {
+      $confirm.error('宝可梦池保存失败，已中止发放精灵球')
+      return
+    }
+    const { data } = await pokemonApi.distributeBalls(appStore.currentClassId)
+    const affected = data?.studentsAffected ?? total
+    toast(`池子已换成 ${n} 只，精灵球已发放给 ${affected} 位学生`, { icon: '🔮' })
+  } catch (e) {
+    $confirm.error(e.response?.data?.error || e.message || '发放失败')
+  } finally {
+    randomBusy.value = false
+    distributing.value = false
   }
 }
 
@@ -311,7 +453,7 @@ async function distributeBalls() {
   distSuccess.value = false
   distError.value = false
   try {
-    await pokemonApi.distributeBalls()
+    await pokemonApi.distributeBalls(appStore.currentClassId)
     distSuccess.value = true
     setTimeout(() => { distSuccess.value = false }, 3000)
   } catch (e) {
@@ -451,12 +593,38 @@ function handleImageError(e) {
 .back-btn:hover { background: #e0e0e0; }
 
 .info-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
   padding: 12px 16px;
   border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  line-height: 1.7;
+}
+.banner-sub { font-size: 12.5px; color: var(--ink-3); }
+
+/* 一键随机 */
+.quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
   margin-bottom: 16px;
-  font-size: 14px;
-  color: #555;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  background: var(--surface-2, #FAF7F6);
+}
+.quick-actions .btn-ghost { padding: 8px 12px; font-size: 12.5px; }
+.qa-accent { border-color: var(--brand-soft-2); color: var(--brand-deep); }
+.qa-hint { font-size: 11.5px; line-height: 1.6; color: var(--ink-3); flex: 1 1 240px; }
+
+@media (max-width: 768px) {
+  .quick-actions .btn-txt { display: none; }
+  .quick-actions { gap: 6px; }
 }
 
 .batch-weight-bar {
