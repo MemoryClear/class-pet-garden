@@ -9,7 +9,7 @@ import ConfirmModal from './components/ConfirmModal.vue'
 import { setConfirmModal } from './composables/useConfirmModal.js'
 import { useAppStore } from './stores/app.js'
 import { useAuthStore } from './stores/auth.js'
-import { studentMode, currentMode } from './composables/useAppearance.js'
+import { studentMode, guestMode, currentMode } from './composables/useAppearance.js'
 
 const confirmModal = ref(null)
 const appStore = useAppStore()
@@ -23,9 +23,13 @@ watch(theme, (t) => document.documentElement.setAttribute('data-theme', t), { im
 //   教师：跟账号设置 teachers.theme_mode
 //   学生：默认跟所属教师的设置；本机手动切过就用本机选择（见 composables/useAppearance.js）
 const mode = computed(() => {
-  // 未登录（登录页 / 退出后）固定亮色：登录页是浅色设计，硬套深色会半黑半白
-  if (!authStore.isLoggedIn) return 'light'
-  if (authStore.role === 'student' && studentMode.value) return studentMode.value
+  // 未登录（登录页 / 退出后）：用登录页自己的开关（默认亮色）
+  if (!authStore.isLoggedIn) return guestMode.value === 'dark' ? 'dark' : 'light'
+  if (authStore.role === 'student') {
+    // 学生：本机选过就用本机的（学生端顶栏开关 / 登录页开关）
+    const pref = studentMode.value || guestMode.value
+    if (pref) return pref
+  }
   return appStore.settings?.themeMode === 'dark' ? 'dark' : 'light'
 })
 watch(mode, (m) => {

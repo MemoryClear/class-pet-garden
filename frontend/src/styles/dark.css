@@ -804,3 +804,70 @@ html[data-mode="dark"] .exchange-btn:disabled {
   background: var(--line);
   color: var(--ink-4);
 }
+
+/* ---------- 登录页 ----------
+ * 登录页是浅色设计的双栏布局，深色下：
+ *   - 左侧品牌区从"粉紫渐变"换成"品牌色压暗后的夜幕渐变"
+ *   - 玻璃卡片、圆点纹理、宠物球降低白色透明度
+ *   - 右侧表单用 tokens，输入框/分段器统一到 surface-2
+ */
+html[data-mode="dark"] .auth-art {
+  background: linear-gradient(158deg,
+      color-mix(in srgb, var(--brand) 26%, #12141A) 0%,
+      color-mix(in srgb, var(--brand-2) 20%, #0F1115) 46%,
+      #0C0E13 100%);
+}
+html[data-mode="dark"] .auth-art::before {
+  background-image: radial-gradient(rgba(255, 255, 255, .18) 1.2px, transparent 1.2px);
+  opacity: .3;
+}
+html[data-mode="dark"] .auth-art::after {
+  background:
+    radial-gradient(560px 420px at 12% 8%, rgba(255, 255, 255, .07), transparent 70%),
+    radial-gradient(420px 380px at 92% 92%, rgba(255, 255, 255, .045), transparent 72%);
+}
+html[data-mode="dark"] .logo-mark {
+  background: rgba(255, 255, 255, .08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .10);
+}
+html[data-mode="dark"] .art-logo span,
+html[data-mode="dark"] .art-foot,
+html[data-mode="dark"] .feat span {
+  color: var(--ink-3);
+}
+html[data-mode="dark"] .art-copy h1 { color: var(--ink); }
+html[data-mode="dark"] .art-copy p { color: var(--ink-2); }
+html[data-mode="dark"] .feat {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(255, 255, 255, .10);
+  box-shadow: none;
+}
+html[data-mode="dark"] .feat b { color: var(--ink); }
+html[data-mode="dark"] .pet-bub {
+  background: rgba(255, 255, 255, .08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .38), inset 0 0 0 1px rgba(255, 255, 255, .08);
+}
+
+html[data-mode="dark"] .seg { background: var(--line-soft); }
+html[data-mode="dark"] .seg button { color: var(--ink-2); }
+html[data-mode="dark"] .seg button.on {
+  background: var(--surface-2);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .45);
+}
+html[data-mode="dark"] .field label { color: var(--ink-2); }
+html[data-mode="dark"] .field input,
+html[data-mode="dark"] .field select.form-select {
+  background-color: var(--surface-2);
+  border-color: var(--line);
+  color: var(--ink);
+}
+html[data-mode="dark"] .field input::placeholder { color: var(--ink-4); }
+html[data-mode="dark"] .error-msg {
+  background: rgba(239, 68, 68, .12);
+  border-color: rgba(239, 68, 68, .32);
+  color: #FCA5A5;
+}
+html[data-mode="dark"] .form-tip.err { color: #FCA5A5; }
+html[data-mode="dark"] .auth-hr { color: var(--ink-4); }
+html[data-mode="dark"] .auth-copyright { color: var(--ink-4); }

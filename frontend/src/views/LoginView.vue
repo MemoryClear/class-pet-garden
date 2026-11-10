@@ -1,5 +1,13 @@
 <template>
   <div class="auth-page">
+    <!-- 外观切换（未登录时也能用，记在本机） -->
+    <button
+      class="mode-toggle"
+      :title="isDark ? '切换到亮色' : '切换到深色'"
+      :aria-label="isDark ? '切换到亮色' : '切换到深色'"
+      @click="toggleMode"
+    >{{ isDark ? '☀️' : '🌙' }}</button>
+
     <!-- ============ 左侧品牌区 ============ -->
     <section class="auth-art">
       <div class="blob b1"></div>
@@ -194,6 +202,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth.js'
+import { currentMode, setGuestMode } from '../composables/useAppearance.js'
 import { useAppStore } from '../stores/app.js'
 import { useRouter } from 'vue-router'
 import api from '../api/index.js'
@@ -203,6 +212,12 @@ const appStore = useAppStore()
 const router = useRouter()
 
 const tab = ref('login')
+
+// 登录页外观：默认亮色，选择记在 localStorage，登录后由账号设置接管
+const isDark = computed(() => currentMode.value === 'dark')
+function toggleMode() {
+  setGuestMode(isDark.value ? 'light' : 'dark')
+}
 const loading = ref(false)
 const error = ref('')
 const showPwd = ref(false)
@@ -337,9 +352,38 @@ async function handleStudentLogin() {
 
 <style scoped>
 .auth-page {
+  position: relative;
   display: flex;
   min-height: 100vh;
   background: var(--bg);
+}
+
+/* 外观切换按钮 */
+.mode-toggle {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  z-index: 20;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-s);
+  transition: transform .16s, box-shadow .16s, border-color .16s;
+  touch-action: manipulation;
+}
+.mode-toggle:hover {
+  transform: translateY(-1px);
+  border-color: var(--brand-soft-2);
+  box-shadow: var(--shadow-m);
 }
 
 /* ============ 左侧品牌区 ============ */
@@ -635,6 +679,7 @@ async function handleStudentLogin() {
 
 @media (max-width: 860px) {
   .auth-page { flex-direction: column; background: var(--bg); }
+  .mode-toggle { top: 14px; right: 14px; width: 36px; height: 36px; font-size: 15px; }
   .auth-art { display: none; }
   .auth-side { padding: 26px 20px 40px; justify-content: flex-start; }
   .auth-mobile-brand {
