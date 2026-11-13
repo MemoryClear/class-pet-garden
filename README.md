@@ -3,6 +3,8 @@
 一款面向中小学教师的课堂行为管理系统——以"宠物养成"为情感化载体，将学生的课堂表现转化为宠物食物积累与等级成长。让课堂管理从"奖惩压力"变成"成长陪伴"。
 
 > 演示激活码（不区分大小写）：`memory_clear`
+<img width="1920" height="920" alt="image" src="https://github.com/user-attachments/assets/0011d069-013e-4b3b-8475-d0b366d9ae90" />
+<img width="1920" height="929" alt="image" src="https://github.com/user-attachments/assets/cef7de31-c528-4d23-a87c-a99e21213bd6" />
 
 ---
 
